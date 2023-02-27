@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19a458f41b3f70248a4b5abdb6472f4a, type: 3}
+  m_Name: 02_GameTutorial_Keo
+  m_EditorClassIdentifier: 
+  Key: 2
+  KeyName: GameTutorial_Keo
+  NeedDoneKeys: 01000000
+  NotShowWhenDoneKeys: 
+  SaveAtStep: 4
+  steps:
+  - {fileID: 11400000, guid: 6844b5cc520220141b00a026b8e08159, type: 2}
+  - {fileID: 11400000, guid: 716d2ba8b865909439c7404d233e626f, type: 2}
+  - {fileID: 11400000, guid: 21174319806b2aa4493128f2c6d562e1, type: 2}
+  - {fileID: 11400000, guid: d8b9cb960a75f0b4aa15e76949b7d991, type: 2}
+  - {fileID: 11400000, guid: 852dc4756be4949469459d48df5c5c31, type: 2}
+  - {fileID: 11400000, guid: 04121430a7eb1f34b8340400cf3140bd, type: 2}
+  AutoNextStep: 0
+  IsActive: 1

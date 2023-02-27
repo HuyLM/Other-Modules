@@ -1,4 +1,5 @@
 using AtoGame.Base;
+using Ftech.Lib.Helper;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -43,6 +44,8 @@ namespace AtoGame.OtherModules.Tutorial
 
         public void ShowStep(Action onStepCompleted)
         {
+            Debug.LogError(DescriptionKey);
+
             this.onStepCompleted = onStepCompleted;
             onStartCallback?.Invoke();
             if (DelayShow > 0)
@@ -73,16 +76,17 @@ namespace AtoGame.OtherModules.Tutorial
             }
             if (IsShowTextBox)
             {
-                tutorialUI.ShowDescriptionText(tutorialUI.GetTranslate(DescriptionKey));
+                tutorialUI.SetDescriptionText(tutorialUI.GetTranslate(DescriptionKey));
                 if(UseCustomTextBoxPosition)
                 {
-                    tutorialUI.ShowDescriptionPosition();
+                    tutorialUI.SetDescriptionAutoPosition();
                 }
                 else
                 {
-                    tutorialUI.ShowDescriptionCustomPosition(MinAnchor, MaxAnchor, TextBoxPosition);
+                    tutorialUI.SetDescriptionCustomPosition(MinAnchor, MaxAnchor, TextBoxPosition);
                 }
 
+                tutorialUI.ShowDescription();
                 tutorialUI.IgnoreInput(true);
                 tutorialUI.SetOnShowTextBoxCompleted(OnShowTextBoxCompleted);
             }
@@ -104,6 +108,7 @@ namespace AtoGame.OtherModules.Tutorial
             {
                 tutorialUI.SetBgColor(previousColor);
             }
+            tutorialUI.SetShowBG(false);
             if (IsShowTextBox)
             {
                 tutorialUI.HideDescription(IsHideImmediate);

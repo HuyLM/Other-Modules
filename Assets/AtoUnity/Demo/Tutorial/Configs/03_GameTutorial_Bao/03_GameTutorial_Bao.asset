@@ -10,13 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 19a458f41b3f70248a4b5abdb6472f4a, type: 3}
-  m_Name: TutorialData
+  m_Name: 03_GameTutorial_Bao
   m_EditorClassIdentifier: 
-  Key: 2
-  KeyName: Key1
-  NeedDoneKeys: 
-  NotShowWhenDoneKeys: 
-  SaveAtStep: 0
-  steps: []
-  AutoNextStep: 1
+  Key: 3
+  KeyName: GameTutorial_Bao
+  NeedDoneKeys: 02000000
+  NotShowWhenDoneKeys: 04000000
+  SaveAtStep: 1
+  steps:
+  - {fileID: 11400000, guid: e48872f71ed469d46b53efddb54e00d4, type: 2}
+  - {fileID: 11400000, guid: 61164a195bfc34c499dee3b7b2b52c08, type: 2}
+  - {fileID: 11400000, guid: 46935945203d4a744b3a52b5e9327b5d, type: 2}
+  AutoNextStep: 0
   IsActive: 1

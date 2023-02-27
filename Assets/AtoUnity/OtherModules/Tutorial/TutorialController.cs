@@ -21,12 +21,47 @@ namespace AtoGame.OtherModules.Tutorial
         public ITutorialSave Saver { get => saver; }
         public ITutorialUI UI { get => ui; }
 
+        protected override void Initialize()
+        {
+            base.Initialize();
+            isInitialized = false;
+        }
+
         public void Init(ITutorialConfig config, ITutorialSave save, ITutorialUI ui)
         {
+            isInitialized = false;
             this.config = config;
             saver = save;
             this.ui = ui;
-            isInitialized = true;
+
+            int doingTaskNumber = 3;
+
+            config.Init(() =>
+            {
+                doingTaskNumber--;
+                if(doingTaskNumber == 0)
+                {
+                    isInitialized = true;
+                }
+            });
+
+            ui.Init(()=> {
+                doingTaskNumber--;
+                if (doingTaskNumber == 0)
+                {
+                    isInitialized = true;
+                }
+            });
+
+            saver.Init(()=> {
+                Saver.Load((result) => {
+                    doingTaskNumber--;
+                    if (doingTaskNumber == 0)
+                    {
+                        isInitialized = true;
+                    }
+                });
+            });
         }
 
 
@@ -204,7 +239,7 @@ namespace AtoGame.OtherModules.Tutorial
 
         public void ShowCurrentStep()
         {
-            if (isInitialized)
+            if (!isInitialized)
             {
                 Log($"Tutorial is not initialize");
                 return;
@@ -230,7 +265,7 @@ namespace AtoGame.OtherModules.Tutorial
 
         public void EndCurrentStep()
         {
-            if (isInitialized)
+            if (!isInitialized)
             {
                 Log($"Tutorial is not initialize");
                 return;
@@ -250,7 +285,7 @@ namespace AtoGame.OtherModules.Tutorial
 
         public void AssignTarget(int key, int stepIndex, GameObject target)
         {
-            if (isInitialized)
+            if (!isInitialized)
             {
                 return;
             }
@@ -271,7 +306,7 @@ namespace AtoGame.OtherModules.Tutorial
 
         public void AssignCallBackStep(int key, int stepIndex, Action onStart = null, Action onEnd = null)
         {
-            if (isInitialized)
+            if (!isInitialized)
             {
                 return;
             }
@@ -296,7 +331,7 @@ namespace AtoGame.OtherModules.Tutorial
 
         public void AssignSkipCallBack(int key, Action onSkip = null)
         {
-            if (isInitialized)
+            if (!isInitialized)
             {
                 return;
             }
@@ -353,7 +388,7 @@ namespace AtoGame.OtherModules.Tutorial
 
         public void ForceSave()
         {
-            Saver.ForceSave((result) => {
+            Saver.PushSave((result) => {
                 ForceSave();
             });
         }

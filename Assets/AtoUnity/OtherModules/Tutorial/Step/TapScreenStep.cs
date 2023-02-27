@@ -31,7 +31,7 @@ namespace AtoGame.OtherModules.Tutorial
 
         private void Show()
         {
-            tutorialUI.SetOnTapContinue(OnTapContinueClicked);
+            tutorialUI.SetOnTapScreenButton(OnTapContinueClicked);
             if (target != null)
             {
                 tutorialUI.HighlightObject(target);
@@ -61,7 +61,7 @@ namespace AtoGame.OtherModules.Tutorial
         private void Hide()
         {
             tutorialUI.SetShowTapScreenButton(false);
-            tutorialUI.SetOnTapContinue(null);
+            tutorialUI.SetOnTapScreenButton(null);
             if (target != null)
             {
                 tutorialUI.LowlightObject(target);

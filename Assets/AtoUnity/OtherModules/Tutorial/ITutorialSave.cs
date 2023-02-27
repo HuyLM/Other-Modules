@@ -7,10 +7,12 @@ namespace AtoGame.OtherModules.Tutorial
 {
     public interface ITutorialSave
     {
+        void Init(Action onCompleted);
+        void Load(Action<bool> onLoaded);
         void Save(int[] keys, Action<bool> onResult);
-        void ForceSave(Action<bool> onResult);
+        void PushSave(Action<bool> onResult);
         bool IsTutorialCompleted();
-        bool SetTutorialCompleted();
+        void SetTutorialCompleted();
         bool CheckHasKey(int key);
     }
 

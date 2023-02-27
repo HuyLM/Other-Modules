@@ -10,13 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 19a458f41b3f70248a4b5abdb6472f4a, type: 3}
-  m_Name: TutorialData 1
+  m_Name: 01_ShopBuyTutorial
   m_EditorClassIdentifier: 
-  Key: 3
-  KeyName: Key1
+  Key: 1
+  KeyName: ShopBuyTutorial
   NeedDoneKeys: 
   NotShowWhenDoneKeys: 
-  SaveAtStep: 0
-  steps: []
+  SaveAtStep: 3
+  steps:
+  - {fileID: 11400000, guid: 67b6d33d44e845649832b2e31b4cef30, type: 2}
+  - {fileID: 11400000, guid: c6c234d637cb1b64090195ef4c06935f, type: 2}
+  - {fileID: 11400000, guid: d2028295562f5aa4d932da49eb3f4bd5, type: 2}
+  - {fileID: 11400000, guid: 75767c421ac23bc4c82f10242580625a, type: 2}
   AutoNextStep: 1
   IsActive: 1

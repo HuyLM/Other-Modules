@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,6 +14,20 @@ namespace AtoGame.OtherModules.Tutorial
         [SerializeField] private bool enableLog = true;
         [SerializeField] private bool enableTutorial = true;
         [SerializeField] private bool enableSkipAll;
+
+        public void Init(Action onCompleted)
+        {
+            for(int i = 0; i < tutorialDatas.Length; ++i)
+            {
+                tutorialDatas[i].Init();
+            }
+
+            for (int i = 0; i < extraTutorialDatas.Length; ++i)
+            {
+                extraTutorialDatas[i].Init();
+            }
+            onCompleted?.Invoke();
+        }
 
         public bool EnableLog()
         {

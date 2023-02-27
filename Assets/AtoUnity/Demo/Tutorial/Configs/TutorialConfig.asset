@@ -15,7 +15,9 @@ MonoBehaviour:
   tutorialDatas:
   - {fileID: 11400000, guid: d47498218d5959e41a1f951be32bba68, type: 2}
   - {fileID: 11400000, guid: ce383437645b9a743ae371cbbdeacbdd, type: 2}
-  endTutorialKeys: 
+  - {fileID: 11400000, guid: 5af38292384702042afaeee2ef9a1ca3, type: 2}
+  - {fileID: 11400000, guid: bcfe9cd1d964eeb469824d24137460ad, type: 2}
+  endTutorialKeys: 04000000
   extraTutorialDatas: []
   enableLog: 1
   enableTutorial: 1

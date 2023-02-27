@@ -26,18 +26,21 @@ namespace AtoGame.OtherModules.Assets.AtoUnity.OtherModules.Tutorial.Editor.Gene
         /// </summary>
         public virtual string TransformText()
         {
-            this.Write("\r\n\r\npublic static class ");
+            this.Write("\nnamespace AtoGame.OtherModules.Tutorial");
+            this.Write("\n{");
+            this.Write("\r\tpublic static class ");
             this.Write(this.ToStringHelper.ToStringWithCulture(m_ClassName));
-            this.Write("\r\n{\r\n");
+            this.Write("\r\n\t{");
             foreach (var key in m_TutorialKeys)
             {
-                this.Write("  public const int ");
+                this.Write("\r\n\t\tpublic const int ");
                 this.Write(this.ToStringHelper.ToStringWithCulture(key.Value.Replace(" ", "")));
                 this.Write(" = ");
                 this.Write(this.ToStringHelper.ToStringWithCulture(key.Key.ToString()));
-                this.Write("; \r\n");
+                this.Write(";");
             }
-            this.Write("  \r\n}");
+            this.Write("\r\t}");
+            this.Write("\r}");
             return this.GenerationEnvironment.ToString();
         }
 

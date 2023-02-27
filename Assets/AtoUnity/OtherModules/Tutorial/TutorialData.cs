@@ -69,6 +69,7 @@ namespace AtoGame.OtherModules.Tutorial
         public void Show(Action onCompleted)
         {
             // data
+            isShowingStep = false;
             this.onCompleted = onCompleted;
             stepIndex = 0;
             ShowCurrentStep();

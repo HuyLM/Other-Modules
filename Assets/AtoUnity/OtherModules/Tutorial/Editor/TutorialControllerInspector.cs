@@ -44,6 +44,7 @@ namespace AtoGame.OtherModules.Tutorial
 
             bool hasDupplicated = false;
             Dictionary<int, string> keyDic = new Dictionary<int, string>();
+            keyDic.Add(0, "Empty");
 
             TutorialData[] tutorialDatas = tutorialConfig.GetTutorialDatas();
             for (int i = 0; i < tutorialDatas.Length; ++i)

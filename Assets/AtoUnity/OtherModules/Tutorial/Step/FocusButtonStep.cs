@@ -8,6 +8,7 @@ namespace AtoGame.OtherModules.Tutorial
     [CreateAssetMenu(fileName = "FocusButtonStep", menuName = "Data/OtherModules/Tutorial/Step/FocusButton")]
     public class FocusButtonStep : TutorialStep
     {
+        [Header("FocusButton Configs")]
         [SerializeField] private bool useManualEndStep;
 
         private Button btnTarget;
@@ -42,7 +43,7 @@ namespace AtoGame.OtherModules.Tutorial
 
         public override void EndStep()
         {
-            if(useManualEndStep)
+            if(useManualEndStep == false)
             {
                 Hide();
             }
