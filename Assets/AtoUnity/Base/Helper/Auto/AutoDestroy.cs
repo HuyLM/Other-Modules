@@ -1,7 +1,6 @@
-﻿using AtoGame.Base;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Ftech.Lib.Helper
+namespace AtoGame.Base.Helper
 {
     public class AutoDestroy : MonoBehaviour
     {

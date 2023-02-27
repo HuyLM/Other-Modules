@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.UI;
-using Ftech.Lib.Helper;
+using AtoGame.Base.Helper;
 /// <summary>
 /// ScrollRectOcclusion - disables the objects outside of the scrollrect viewport. 
 /// Usefull for scrolls with lots of content, reduces geometry and drawcalls (if content is not batched)

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
-namespace Ftech.Lib.Helper
+namespace AtoGame.Base.Helper
 {
     public class Yielder
     {

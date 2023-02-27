@@ -29,7 +29,7 @@ namespace AtoGame.Base.UI
             }
 
             EditorGUI.BeginDisabledGroup(isPlaying);
-            if (GUILayout.Button("play"))
+            if (GUILayout.Button("Play"))
             {
                 Play();
             }

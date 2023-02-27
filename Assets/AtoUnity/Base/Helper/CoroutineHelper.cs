@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace AtoGame.Base
+namespace AtoGame.Base.Helper
 {
     public class CoroutineHelper : MonoBehaviour
     {

@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-namespace Ftech.Lib.Helper
+namespace AtoGame.Base.Helper
 {
     [RequireComponent(typeof(TrailRenderer))]
     public class HideTrail : MonoBehaviour

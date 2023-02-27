@@ -5,7 +5,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Ftech.Lib.Helper
+namespace AtoGame.Base.Helper
 {
     public static class UnityHelper
     {

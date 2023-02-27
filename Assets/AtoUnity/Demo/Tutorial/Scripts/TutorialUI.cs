@@ -1,5 +1,4 @@
 ﻿using AtoGame.Base.UI;
-using Ftech.Lib.Helper;
 using System;
 using System.Collections;
 using System.Collections.Generic;
