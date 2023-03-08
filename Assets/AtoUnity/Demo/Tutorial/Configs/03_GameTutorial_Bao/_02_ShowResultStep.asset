@@ -15,7 +15,7 @@ MonoBehaviour:
   DelayShow: 0.5
   CanSkip: 0
   IsShowTextBox: 1
-  DescriptionKey: O lai win nua nay, game cho a Tien choi ak
+  DescriptionKey: O lai win nua nay, game de qua!
   UseCustomTextBoxPosition: 0
   TextBoxPosition: {x: 0, y: 0}
   MinAnchor: {x: 0.5, y: 0.5}
