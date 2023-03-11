@@ -2,7 +2,7 @@
 
 using System;
 
-namespace Ftech.Lib
+namespace AtoGame.Base.Helper
 {
     [Serializable]
     struct JsonDateTime

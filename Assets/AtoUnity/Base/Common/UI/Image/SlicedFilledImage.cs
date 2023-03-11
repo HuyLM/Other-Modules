@@ -10,7 +10,7 @@ using UnityEngine.U2D;
 #endif
 using UnityEngine.UI;
 
-namespace Ftech.BattleText
+namespace AtoGame.Base.UI
 {
     // Credit: https://bitbucket.org/Unity-Technologies/ui/src/2018.4/UnityEngine.UI/UI/Core/Image.cs
     [RequireComponent(typeof(CanvasRenderer))]

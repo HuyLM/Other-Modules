@@ -1,3 +1,4 @@
+using AtoGame.Base;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -18,8 +19,8 @@ namespace AtoGame.OtherModules.Tutorial.Demo
 
         public void Load(Action<bool> onLoaded)
         {
-            isCompleteTutorial = PlayerPrefs.GetInt("IsCompleteTutorial", 0) == 1;
-            string keys = PlayerPrefs.GetString("TutorialKeys", string.Empty);
+            isCompleteTutorial = PlayerPrefExtension.GetBool("IsCompleteTutorial", false);
+            string keys = PlayerPrefExtension.GetString("TutorialKeys", string.Empty);
             lsTutorialKey = new List<int>();
             if (keys.Length == 0)
             {
@@ -70,7 +71,7 @@ namespace AtoGame.OtherModules.Tutorial.Demo
 
         private void Save()
         {
-            PlayerPrefs.SetInt("IsCompleteTutorial", isCompleteTutorial ? 1 : 0);
+            PlayerPrefExtension.SetBool("IsCompleteTutorial", isCompleteTutorial);
             string keysSave = string.Empty;
             for (int i = 0; i < lsTutorialKey.Count; ++i)
             {
@@ -80,7 +81,7 @@ namespace AtoGame.OtherModules.Tutorial.Demo
                     keysSave += ",";
                 }
             }
-            PlayerPrefs.SetString("TutorialKeys", keysSave);
+            PlayerPrefExtension.SetString("TutorialKeys", keysSave);
         }
     }
 }

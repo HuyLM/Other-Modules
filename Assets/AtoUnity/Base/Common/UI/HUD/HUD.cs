@@ -1,8 +1,11 @@
-﻿using Ftech.Lib.UnityInspector;
+﻿using AtoGame.Base.UnityInspector;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+#if USE_ODIN_INSPECTOR
 using Sirenix.OdinInspector;
+#endif
+
 namespace AtoGame.Base.UI
 {
     [DisallowMultipleComponent]
@@ -10,14 +13,22 @@ namespace AtoGame.Base.UI
     {
         [SerializeField] private int order;
         [Header("[Frames]")]
-        [SerializeField, AssetsOnly] private Frame[] prefabFrames;
-        [SerializeField, SceneObjectsOnly] private Frame[] onSceneFrames;
+#if USE_ODIN_INSPECTOR
+        [AssetsOnly]
+#endif
+        [SerializeField] private Frame[] prefabFrames;
+#if USE_ODIN_INSPECTOR
+        [SceneObjectsOnly]
+#endif
+        [SerializeField] private Frame[] onSceneFrames;
         [SerializeField] private Frame defaulFrame;
 
         [SerializeField] private Transform container;
 
-        [Sirenix.OdinInspector.ReadOnly, SerializeField] private List<Frame> loadedFrames = new List<Frame>();
-        [Sirenix.OdinInspector.ReadOnly, SerializeField] private readonly List<Frame> activeFrames = new List<Frame>();
+        [ReadOnly]
+        [SerializeField] private List<Frame> loadedFrames = new List<Frame>();
+        [ReadOnly]
+        [SerializeField] private readonly List<Frame> activeFrames = new List<Frame>();
 
         protected virtual void Awake()
         {
@@ -105,7 +116,7 @@ namespace AtoGame.Base.UI
             return false;
         }
 
-        #region Get States
+#region Get States
 
         public int Order { get => order; }
 
@@ -253,9 +264,9 @@ namespace AtoGame.Base.UI
             return false;
         }
 
-        #endregion
+#endregion
 
-        #region Show & Hide & Pause
+#region Show & Hide & Pause
 
         public F Show<F>(Action onCompleted = null, bool instant = false, bool hideCurrent = false, bool pauseCurrent = false) where F : Frame
         {
@@ -398,7 +409,7 @@ namespace AtoGame.Base.UI
             return Show<F>();
         }
 
-        #endregion
+#endregion
 
         protected virtual void InitializeFrame(Frame frame)
         {
@@ -449,7 +460,7 @@ namespace AtoGame.Base.UI
             frameOnTop.Back();
         }
 
-        #region Extensions
+#region Extensions
 
         public void Show(Frame frame)
         {
@@ -511,7 +522,7 @@ namespace AtoGame.Base.UI
             Resume(GetFrameOnTop(), null, false);
         }
 
-        #endregion
+#endregion
     }
 
     public abstract class HUD<T> : HUD where T : HUD<T>

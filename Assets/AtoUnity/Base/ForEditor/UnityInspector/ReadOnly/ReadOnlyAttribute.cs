@@ -1,7 +1,8 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Ftech.Lib.UnityInspector {
+namespace AtoGame.Base.UnityInspector
+{
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
     public class ReadOnlyAttribute : PropertyAttribute {
     }

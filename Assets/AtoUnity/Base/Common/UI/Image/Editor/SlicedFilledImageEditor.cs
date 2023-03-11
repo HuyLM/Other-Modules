@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
 
-namespace Ftech.BattleText
+namespace AtoGame.Base.UI
 {
 
     // Custom Editor to order the variables in the Inspector similar to Image component

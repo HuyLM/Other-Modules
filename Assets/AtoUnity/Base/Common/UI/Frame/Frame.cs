@@ -1,4 +1,6 @@
-﻿using Sirenix.OdinInspector;
+﻿#if USE_ODIN_INSPECTOR
+using Sirenix.OdinInspector;
+#endif
 using System;
 using UnityEngine;
 
@@ -8,13 +10,21 @@ namespace AtoGame.Base.UI
     public class Frame : MonoBehaviour
     {
         [Header("[Events]")]
+#if USE_ODIN_INSPECTOR
         [FoldoutGroup("Frame")]
+#endif
         [SerializeField] private FrameEvent onShowed;
+#if USE_ODIN_INSPECTOR
         [FoldoutGroup("Frame")]
+#endif
         [SerializeField] private FrameEvent onHidden;
+#if USE_ODIN_INSPECTOR
         [FoldoutGroup("Frame")]
+#endif
         [SerializeField] private FrameEvent onPaused;
+#if USE_ODIN_INSPECTOR
         [FoldoutGroup("Frame")]
+#endif
         [SerializeField] private FrameEvent onResumed;
 
         private bool initialized;

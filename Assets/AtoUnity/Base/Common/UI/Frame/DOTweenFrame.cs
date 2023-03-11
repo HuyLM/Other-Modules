@@ -1,20 +1,31 @@
 ﻿using System;
 using UnityEngine;
-using Sirenix.OdinInspector; 
-
+#if USE_ODIN_INSPECTOR
+using Sirenix.OdinInspector;
+#endif
 namespace AtoGame.Base.UI
 {
     public class DOTweenFrame : Frame
     {
+#if USE_ODIN_INSPECTOR
         [FoldoutGroup("Frame")]
+#endif
         [Header("[Animations]")]
+#if USE_ODIN_INSPECTOR
         [FoldoutGroup("Frame")]
+#endif
         [SerializeField] protected DOTweenAnimation showAnimation;
+#if USE_ODIN_INSPECTOR
         [FoldoutGroup("Frame")]
+#endif
         [SerializeField] protected DOTweenAnimation hideAnimation;
+#if USE_ODIN_INSPECTOR
         [FoldoutGroup("Frame")]
+#endif
         [SerializeField] protected DOTweenAnimation pauseAnimation;
+#if USE_ODIN_INSPECTOR
         [FoldoutGroup("Frame")]
+#endif
         [SerializeField] protected DOTweenAnimation resumeAnimation;
 
         protected override void OnInitialize(HUD hud)
