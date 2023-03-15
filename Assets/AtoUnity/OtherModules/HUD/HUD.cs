@@ -1,12 +1,10 @@
-﻿using AtoGame.Base.UnityInspector;
+using AtoGame.Base.UnityInspector;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-#if USE_ODIN_INSPECTOR
-using Sirenix.OdinInspector;
-#endif
 
-namespace AtoGame.Base.UI.Old
+namespace AtoGame.OtherModules.HUD
 {
     [DisallowMultipleComponent]
     public class HUD : MonoBehaviour
@@ -21,14 +19,15 @@ namespace AtoGame.Base.UI.Old
         [SceneObjectsOnly]
 #endif
         [SerializeField] private Frame[] onSceneFrames;
-        [SerializeField] private Frame defaulFrame;
 
+        [SerializeField] private Frame defaulFrame;
         [SerializeField] private Transform container;
 
         [ReadOnly]
         [SerializeField] private List<Frame> loadedFrames = new List<Frame>();
         [ReadOnly]
         [SerializeField] private readonly List<Frame> activeFrames = new List<Frame>();
+        private bool active;
 
         protected virtual void Awake()
         {
@@ -39,8 +38,30 @@ namespace AtoGame.Base.UI.Old
             LoadOnSceneFrames();
         }
 
+        private void LoadOnSceneFrames()
+        {
+            if (onSceneFrames == null || onSceneFrames.Length == 0)
+            {
+                return;
+            }
+            for (int i = 0; i < onSceneFrames.Length; ++i)
+            {
+                Frame frame = onSceneFrames[i];
+                if (frame == null)
+                {
+                    continue;
+                }
+                if (frame.Initialized == false)
+                {
+                    InitializeFrame(frame);
+                }
+                loadedFrames.Add(frame);
+            }
+        }
+
         protected virtual void Start()
         {
+            active = true;
             if (defaulFrame != null)
             {
                 if (loadedFrames.Contains(defaulFrame) == false)
@@ -63,51 +84,83 @@ namespace AtoGame.Base.UI.Old
             }
         }
 
-        private void LoadOnSceneFrames()
-        {
-            if (onSceneFrames == null || onSceneFrames.Length == 0)
-            {
-                return;
-            }
-            for (int i = 0; i < onSceneFrames.Length; ++i)
-            {
-                Frame frame = onSceneFrames[i];
-                if (frame == null)
-                {
-                    continue;
-                }
-                if (frame.Initialized == false)
-                {
-                    InitializeFrame(frame);
-                }
-                loadedFrames.Add(frame);
-            }
-
-        }
-
-        protected virtual void OnEnable()
-        {
-            HUDManager.Add(this);
-        }
-
-        protected virtual void OnDisable()
-        {
-            HUDManager.Remove(this);
-        }
-
         protected virtual void OnDestroy()
         {
             foreach (Frame frame in loadedFrames)
             {
                 if (frame == null)
                     continue;
-                frame.OnShowed.RemoveListener(OnFrameShowed);
-                frame.OnHidden.RemoveListener(OnFrameHidden);
             }
+        }
+
+        protected virtual void OnEnable()
+        {
+            HUDManager.Instance.Add(this);
+        }
+
+        protected virtual void OnDisable()
+        {
+            HUDManager.Instance.Remove(this);
+        }
+
+        protected virtual void InitializeFrame(Frame frame)
+        {
+            if (frame == null && frame.Initialized)
+                return;
+
+            frame.gameObject.SetActive(false);
+            frame.Initialize(this);
+        }
+
+        public virtual void OnFrameShowed(Frame frame)
+        {
+            if (frame == null)
+                return;
+            if (frame == GetFrameOnTop())
+                return;
+            if (!ContainsFrame(frame))
+                return;
+
+            frame.transform.SetAsLastSibling();
+            activeFrames.Add(frame);
+        }
+
+        public virtual void OnFrameHidden(Frame frame)
+        {
+            if (frame == null)
+                return;
+            if (!ContainsFrame(frame))
+                return;
+
+            bool isFrameOnTop = frame == GetFrameOnTop();
+            activeFrames.Remove(frame);
+
+            if (isFrameOnTop)
+            {
+                //GetFrameOnTop()?.Resume();
+            }
+        }
+
+        public virtual void Back()
+        {
+            if(active == false)
+            {
+                return;
+            }
+            Frame frameOnTop = GetFrameOnTop();
+            if (frameOnTop == null)
+            {
+                return;
+            }
+            frameOnTop.Back();
         }
 
         public virtual bool OnUpdate()
         {
+            if (active == false)
+            {
+                return false;
+            }
             if (Input.GetKeyDown(KeyCode.Escape) && GetActiveFrameCount() > 0)
             {
                 Back();
@@ -116,8 +169,12 @@ namespace AtoGame.Base.UI.Old
             return false;
         }
 
-#region Get States
+        public void SetActive(bool active)
+        {
+            this.active = active;
+        }
 
+        #region Get States
         public int Order { get => order; }
 
         public int GetActiveFrameCount()
@@ -263,10 +320,9 @@ namespace AtoGame.Base.UI.Old
             }
             return false;
         }
+        #endregion
 
-#endregion
-
-#region Show & Hide & Pause
+        #region Show & Hide & Pause & Resume
 
         public F Show<F>(Action onCompleted = null, bool instant = false, bool hideCurrent = false, bool pauseCurrent = false) where F : Frame
         {
@@ -275,6 +331,10 @@ namespace AtoGame.Base.UI.Old
 
         public virtual Frame Show(Frame frame, Action onCompleted = null, bool instant = false, bool hideCurrent = false, bool pauseCurrent = false)
         {
+            if (active == false)
+            {
+                return null;
+            }
             if (frame == null)
                 return null;
             if (IsFrameOnTop(frame))
@@ -321,6 +381,10 @@ namespace AtoGame.Base.UI.Old
 
         public virtual Frame Hide(Frame frame, Action onCompleted = null, bool instant = false)
         {
+            if (active == false)
+            {
+                return null;
+            }
             if (frame == null)
                 return null;
             if (!ContainsActiveFrame(frame))
@@ -338,6 +402,10 @@ namespace AtoGame.Base.UI.Old
 
         public virtual Frame Pause(Frame frame, Action onCompleted = null, bool instant = false)
         {
+            if (active == false)
+            {
+                return null;
+            }
             if (frame == null)
                 return null;
             if (!ContainsActiveFrame(frame))
@@ -351,6 +419,10 @@ namespace AtoGame.Base.UI.Old
 
         public virtual Frame Resume(Frame frame, Action onCompleted = null, bool instant = false)
         {
+            if (active == false)
+            {
+                return null;
+            }
             if (frame == null)
                 return null;
             if (!ContainsActiveFrame(frame))
@@ -364,6 +436,10 @@ namespace AtoGame.Base.UI.Old
 
         public int PauseAll()
         {
+            if (active == false)
+            {
+                return 0;
+            }
             int hideCount = activeFrames.Count;
             for (int i = activeFrames.Count - 1; i >= 0; i--)
             {
@@ -374,6 +450,10 @@ namespace AtoGame.Base.UI.Old
 
         public int ResumeAll()
         {
+            if (active == false)
+            {
+                return 0;
+            }
             int hideCount = activeFrames.Count;
             for (int i = activeFrames.Count - 1; i >= 0; i--)
             {
@@ -384,6 +464,10 @@ namespace AtoGame.Base.UI.Old
 
         public int HideAll()
         {
+            if (active == false)
+            {
+                return 0;
+            }
             int hideCount = activeFrames.Count;
             for (int i = activeFrames.Count - 1; i >= 0; i--)
             {
@@ -394,6 +478,10 @@ namespace AtoGame.Base.UI.Old
 
         public F HideTo<F>() where F : Frame
         {
+            if (active == false)
+            {
+                return null;
+            }
             for (int i = activeFrames.Count - 1; i >= 0; i--)
             {
                 if (activeFrames[i] is F)
@@ -409,58 +497,9 @@ namespace AtoGame.Base.UI.Old
             return Show<F>();
         }
 
-#endregion
+        #endregion
 
-        protected virtual void InitializeFrame(Frame frame)
-        {
-            if (frame == null && frame.Initialized)
-                return;
-
-            frame.gameObject.SetActive(false);
-            frame.Initialize(this);
-            frame.OnShowed.AddListener(OnFrameShowed);
-            frame.OnHidden.AddListener(OnFrameHidden);
-        }
-
-        protected virtual void OnFrameShowed(Frame frame)
-        {
-            if (frame == null)
-                return;
-            if (frame == GetFrameOnTop())
-                return;
-            if (!ContainsFrame(frame))
-                return;
-
-            frame.transform.SetAsLastSibling();
-            activeFrames.Add(frame);
-        }
-
-        protected virtual void OnFrameHidden(Frame frame)
-        {
-            if (frame == null)
-                return;
-            if (!ContainsFrame(frame))
-                return;
-
-            bool isFrameOnTop = frame == GetFrameOnTop();
-            activeFrames.Remove(frame);
-
-            if (isFrameOnTop)
-            {
-                GetFrameOnTop()?.Resume();
-            }
-        }
-
-        public virtual void Back()
-        {
-            Frame frameOnTop = GetFrameOnTop();
-            if (frameOnTop == null)
-                return;
-
-            frameOnTop.Back();
-        }
-
-#region Extensions
+        #region Extensions
 
         public void Show(Frame frame)
         {
@@ -522,7 +561,7 @@ namespace AtoGame.Base.UI.Old
             Resume(GetFrameOnTop(), null, false);
         }
 
-#endregion
+        #endregion
     }
 
     public abstract class HUD<T> : HUD where T : HUD<T>

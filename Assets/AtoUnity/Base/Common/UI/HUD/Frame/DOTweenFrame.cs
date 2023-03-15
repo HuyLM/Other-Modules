@@ -3,7 +3,7 @@ using UnityEngine;
 #if USE_ODIN_INSPECTOR
 using Sirenix.OdinInspector;
 #endif
-namespace AtoGame.Base.UI
+namespace AtoGame.Base.UI.Old
 {
     public class DOTweenFrame : Frame
     {

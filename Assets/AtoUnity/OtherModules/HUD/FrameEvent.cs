@@ -1,6 +1,7 @@
-﻿using UnityEngine.Events;
+using UnityEngine.Events;
 
-namespace AtoGame.Base.UI {
+namespace AtoGame.OtherModules.HUD
+{
     [System.Serializable]
     public class FrameEvent : UnityEvent<Frame> { }
 }

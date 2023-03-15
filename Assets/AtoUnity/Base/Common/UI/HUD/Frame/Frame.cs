@@ -4,7 +4,7 @@ using Sirenix.OdinInspector;
 using System;
 using UnityEngine;
 
-namespace AtoGame.Base.UI
+namespace AtoGame.Base.UI.Old
 {
     [DisallowMultipleComponent]
     public class Frame : MonoBehaviour
@@ -157,23 +157,6 @@ namespace AtoGame.Base.UI
         protected virtual void OnResume(Action onCompleted = null, bool instant = false)
         {
             onCompleted?.Invoke();
-        }
-
-        // For-Tracking
-        public virtual string GetCurrentNameFrame()
-        {
-            return "Frame-Class";
-        }
-
-        public Frame SetPreviousNameFrame(string name)
-        {
-            namePreviousFrame = name;
-            return this;
-        }
-
-        public virtual string GetPreviousNameFrame()
-        {
-            return string.IsNullOrEmpty(namePreviousFrame) ? "null" : namePreviousFrame;
         }
     }
 }

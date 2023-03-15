@@ -1,11 +1,13 @@
-﻿using System.Collections.Generic;
+using AtoGame.Base;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace AtoGame.Base.UI.Old
+namespace AtoGame.OtherModules.HUD
 {
     public class HUDManager : SingletonBind<HUDManager>
     {
-
         private class HUDComparer : IComparer<HUD>
         {
             public int Compare(HUD x, HUD y)
@@ -23,54 +25,43 @@ namespace AtoGame.Base.UI.Old
             eventSystem = EventSystem.current;
         }
 
-        public static int GetHudCount()
+        public void Add(HUD hud)
         {
-            return Instance.huds.Count;
-        }
-
-        public static IEnumerable<HUD> GetHuds()
-        {
-            return Instance.huds;
-        }
-
-        public static void Clear()
-        {
-            Instance.huds.Clear();
-        }
-
-        public static void Add(HUD hud)
-        {
-            if (Instance.huds.Contains(hud))
+            if (huds.Contains(hud))
             {
                 return;
             }
-
-            Instance.huds.Add(hud);
-            Instance.huds.Sort(comparer);
+            huds.Add(hud);
+            huds.Sort(comparer);
         }
 
-        public static bool Remove(HUD hud)
+        public bool Remove(HUD hud)
         {
             if (Initialized)
             {
-                return Instance.huds.Remove(hud);
+                return huds.Remove(hud);
             }
             return false;
         }
 
-        public static void IgnoreUserInput(bool ignore)
+        public void IgnoreUserInput(bool ignore)
         {
-            if (Instance)
+            if (!eventSystem)
             {
-                if (!Instance.eventSystem)
-                {
-                    Instance.eventSystem = EventSystem.current;
-                }
-                if (Instance.eventSystem)
-                {
-                    Instance.eventSystem.enabled = !ignore;
-                }
-                Instance.enabled = !ignore;
+                eventSystem = EventSystem.current;
+            }
+            if (eventSystem)
+            {
+                eventSystem.enabled = !ignore;
+            }
+            enabled = !ignore;
+        }
+
+        public void SetActiveAllHUD(bool active)
+        {
+            for(int i = 0; i < huds.Count; ++i)
+            {
+                huds[i].SetActive(active);
             }
         }
 
