@@ -28,11 +28,11 @@ namespace AtoGame.OtherModules.HUD
 #endif
         [SerializeField] private FrameEvent onResuming;
 
-        private FrameState state = FrameState.NotInitialized;
-        private HUD hud;
+        protected FrameState state = FrameState.NotInitialized;
+        protected HUD hud;
 
-        private Action onCompleted;
-        private bool instant;
+        protected Action onCompleted;
+        protected bool instant;
 
         public HUD Hud { get => hud; private set => hud = value; }
         public bool Initialized { get => state != FrameState.NotInitialized; }
@@ -71,7 +71,7 @@ namespace AtoGame.OtherModules.HUD
             state = FrameState.Hidding;
         }
 
-        public Frame Show(Action onCompleted = null, bool instant = false)
+        public Frame ShowByHUD(Action onCompleted = null, bool instant = false) // warning: Awake -> ShowByHUD -> ActiveFrame -> Start -> OnShowedFrame
         {
             if(IsHidding)
             {
@@ -79,7 +79,6 @@ namespace AtoGame.OtherModules.HUD
                 this.instant = instant;
                 SetState(FrameState.Showing);
                 onShowing?.Invoke(this);
-                Hud?.OnFrameShowed(this);
                 ActiveFrame();
             }
             return this;
@@ -96,7 +95,7 @@ namespace AtoGame.OtherModules.HUD
             this.onCompleted?.Invoke();
         }
 
-        public Frame Hide(Action onCompleted = null, bool instant = false)
+        public Frame HideByHUD(Action onCompleted = null, bool instant = false)
         {
             if(Initialized && !IsHidding)
             {
@@ -104,7 +103,6 @@ namespace AtoGame.OtherModules.HUD
                 this.instant = instant;
                 SetState(FrameState.Hidding);
                 onHidding?.Invoke(this);
-                Hud?.OnFrameHidden(this);
                 DeactiveFrame();
             }
             return this;
@@ -121,7 +119,7 @@ namespace AtoGame.OtherModules.HUD
             this.onCompleted?.Invoke();
         }
 
-        public Frame Pause(Action onCompleted = null, bool instant = false)
+        public Frame PauseByHUD(Action onCompleted = null, bool instant = false)
         {
             if(IsShowing)
             {
@@ -144,7 +142,7 @@ namespace AtoGame.OtherModules.HUD
             this.onCompleted?.Invoke();
         }
 
-        public Frame Resume(Action onCompleted = null, bool instant = false)
+        public Frame ResumeByHUD(Action onCompleted = null, bool instant = false)
         {
             if (IsPausing == true)
             {
@@ -169,8 +167,28 @@ namespace AtoGame.OtherModules.HUD
 
         public virtual Frame Back()
         {
-            Hide();
+            Hud.BackToPrevious(null);
             return this;
+        }
+
+        public void Hide()
+        {
+            hud.Hide(this);
+        }
+
+        public void Show()
+        {
+            hud.Show(this);
+        }
+
+        public void Pause()
+        {
+            hud.Pause(this);
+        }
+
+        public void Resume()
+        {
+            hud.Resume(this);
         }
 
         public enum FrameState

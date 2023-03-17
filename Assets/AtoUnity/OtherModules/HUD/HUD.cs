@@ -22,11 +22,14 @@ namespace AtoGame.OtherModules.HUD
 
         [SerializeField] private Frame defaulFrame;
         [SerializeField] private Transform container;
+        [SerializeField] private bool useBackToPrevious;
 
         [ReadOnly]
         [SerializeField] private List<Frame> loadedFrames = new List<Frame>();
         [ReadOnly]
         [SerializeField] private readonly List<Frame> activeFrames = new List<Frame>();
+        [ReadOnly]
+        [SerializeField] private Stack<Frame> previousFrames = new Stack<Frame>();
         private bool active;
 
         protected virtual void Awake()
@@ -112,32 +115,26 @@ namespace AtoGame.OtherModules.HUD
             frame.Initialize(this);
         }
 
-        public virtual void OnFrameShowed(Frame frame)
+        public void BackToPrevious(Action onCompleted)
         {
-            if (frame == null)
-                return;
-            if (frame == GetFrameOnTop())
-                return;
-            if (!ContainsFrame(frame))
-                return;
-
-            frame.transform.SetAsLastSibling();
-            activeFrames.Add(frame);
-        }
-
-        public virtual void OnFrameHidden(Frame frame)
-        {
-            if (frame == null)
-                return;
-            if (!ContainsFrame(frame))
-                return;
-
-            bool isFrameOnTop = frame == GetFrameOnTop();
-            activeFrames.Remove(frame);
-
-            if (isFrameOnTop)
+            if(useBackToPrevious)
             {
-                //GetFrameOnTop()?.Resume();
+                if(previousFrames.Count == 0)
+                {
+                    return;
+                }
+                // Hide Current;
+                Hide(null, false, false);
+                // Show Previous frame
+                Frame previousFrame = previousFrames.Pop();
+                if(previousFrame.IsHidding)
+                {
+                    Show(previousFrame, onCompleted, false, false, false);
+                }
+                else if(previousFrame.IsPausing)
+                {
+                    Resume(previousFrame, onCompleted, false);
+                }
             }
         }
 
@@ -366,41 +363,22 @@ namespace AtoGame.OtherModules.HUD
                 Pause();
             }
 
-            return frame.Show(onCompleted, instant);
+            frame.transform.SetAsLastSibling();
+            activeFrames.Add(frame);
+            return frame.ShowByHUD(onCompleted, instant);
         }
 
-        public F Hide<F>(Action onCompleted = null, bool instant = false) where F : Frame
+        public F Hide<F>(Action onCompleted = null, bool instant = false, bool addToPrevious = true) where F : Frame
         {
-            return Hide(GetFrame<F>(), onCompleted, instant) as F;
+            return Hide(GetFrame<F>(), onCompleted, instant, addToPrevious) as F;
         }
 
-        public Frame Hide(Action onCompleted = null, bool instant = false)
+        public Frame Hide(Action onCompleted = null, bool instant = false, bool addToPrevious = true)
         {
-            return Hide(GetFrameOnTop(), onCompleted, instant);
+            return Hide(GetFrameOnTop(), onCompleted, instant, addToPrevious);
         }
 
-        public virtual Frame Hide(Frame frame, Action onCompleted = null, bool instant = false)
-        {
-            if (active == false)
-            {
-                return null;
-            }
-            if (frame == null)
-                return null;
-            if (!ContainsActiveFrame(frame))
-            {
-                Debug.LogWarningFormat("[HUD] The frame {0} has not been opened before.", frame.name);
-                return null;
-            }
-
-            //if (IsFrameOnTop(frame)) {
-            //    Debug.LogWarningFormat("[HUD] The closing a frame {0} is not on the top.", frame.name);
-            //}
-
-            return frame.Hide(onCompleted, instant);
-        }
-
-        public virtual Frame Pause(Frame frame, Action onCompleted = null, bool instant = false)
+        public virtual Frame Hide(Frame frame, Action onCompleted = null, bool instant = false, bool addToPrevious = true)
         {
             if (active == false)
             {
@@ -414,7 +392,43 @@ namespace AtoGame.OtherModules.HUD
                 return null;
             }
 
-            return frame.Pause(onCompleted, instant);
+            if(useBackToPrevious && addToPrevious)
+            {
+                Frame previousFrame = previousFrames.Peek();
+                if (previousFrame != frame)
+                {
+                    previousFrames.Push(frame);
+                }
+            }
+          
+            activeFrames.Remove(frame);
+            return frame.HideByHUD(onCompleted, instant);
+        }
+
+        public virtual Frame Pause(Frame frame, Action onCompleted = null, bool instant = false, bool addToPrevious = true)
+        {
+            if (active == false)
+            {
+                return null;
+            }
+            if (frame == null)
+                return null;
+            if (!ContainsActiveFrame(frame))
+            {
+                Debug.LogWarningFormat("[HUD] The frame {0} has not been opened before.", frame.name);
+                return null;
+            }
+
+            if (useBackToPrevious && addToPrevious)
+            {
+                Frame previousFrame = previousFrames.Peek();
+                if (previousFrame != frame)
+                {
+                    previousFrames.Push(frame);
+                }
+            }
+
+            return frame.PauseByHUD(onCompleted, instant);
         }
 
         public virtual Frame Resume(Frame frame, Action onCompleted = null, bool instant = false)
@@ -431,7 +445,7 @@ namespace AtoGame.OtherModules.HUD
                 return null;
             }
 
-            return frame.Resume(onCompleted, instant);
+            return frame.ResumeByHUD(onCompleted, instant);
         }
 
         public int PauseAll()
@@ -443,21 +457,7 @@ namespace AtoGame.OtherModules.HUD
             int hideCount = activeFrames.Count;
             for (int i = activeFrames.Count - 1; i >= 0; i--)
             {
-                activeFrames[i].Pause(null, true);
-            }
-            return hideCount;
-        }
-
-        public int ResumeAll()
-        {
-            if (active == false)
-            {
-                return 0;
-            }
-            int hideCount = activeFrames.Count;
-            for (int i = activeFrames.Count - 1; i >= 0; i--)
-            {
-                activeFrames[i].Resume(null, true);
+                activeFrames[i].PauseByHUD(null, true);
             }
             return hideCount;
         }
@@ -471,30 +471,13 @@ namespace AtoGame.OtherModules.HUD
             int hideCount = activeFrames.Count;
             for (int i = activeFrames.Count - 1; i >= 0; i--)
             {
-                activeFrames[i].Hide(null, true);
+                activeFrames[i].HideByHUD(null, true);
+            }
+            if(useBackToPrevious)
+            {
+                previousFrames.Clear();
             }
             return hideCount;
-        }
-
-        public F HideTo<F>() where F : Frame
-        {
-            if (active == false)
-            {
-                return null;
-            }
-            for (int i = activeFrames.Count - 1; i >= 0; i--)
-            {
-                if (activeFrames[i] is F)
-                {
-                    activeFrames[i].Resume();
-                    break;
-                }
-                else
-                {
-                    activeFrames[i].Hide(null, true);
-                }
-            }
-            return Show<F>();
         }
 
         #endregion
@@ -528,12 +511,12 @@ namespace AtoGame.OtherModules.HUD
 
         public void Hide(Frame frame)
         {
-            Hide(frame, null, false);
+            Hide(frame, null, false, true);
         }
 
         public void HideInstant(Frame frame)
         {
-            Hide(frame, null, true);
+            Hide(frame, null, true, true);
         }
 
         public void Hide()

@@ -1,4 +1,6 @@
-﻿using UnityEditor;
+﻿using System;
+using System.Collections;
+using UnityEditor;
 using UnityEngine;
 
 namespace AtoGame.Base.UI
@@ -28,12 +30,22 @@ namespace AtoGame.Base.UI
                 animation.LoadTransitions();
             }
 
+            EditorGUILayout.BeginHorizontal();
             EditorGUI.BeginDisabledGroup(isPlaying);
             if (GUILayout.Button("Play"))
             {
-                Play();
+                Play(false);
+            }
+            if (animation.Delay > 0)
+            {
+                if (GUILayout.Button("Play Delay"))
+                {
+                    Play(true);
+                }
             }
             EditorGUI.EndDisabledGroup();
+          
+            EditorGUILayout.EndHorizontal();
             EditorGUI.BeginDisabledGroup(!isPlaying);
             if (GUILayout.Button("Stop"))
             {
@@ -45,16 +57,38 @@ namespace AtoGame.Base.UI
 
         }
 
-        private void Play()
+        private void Play(bool isDelay)
         {
             isPlaying = true;
+            if(isDelay)
+            {
+                if (Application.isPlaying == false)
+                {
+                    Unity.EditorCoroutines.Editor.EditorCoroutineUtility.StartCoroutine(CountEditorUpdates(animation.Delay, () => {
 
+                        foreach (var transition in animation.Transitions)
+                        {
+                            transition.PlayPreview();
+                            DG.DOTweenEditor.DOTweenEditorPreview.PrepareTweenForPreview(transition.Tween);
+                        }
+                        DG.DOTweenEditor.DOTweenEditorPreview.Start();
+                    }), this);
+                    return;
+                }
+            }
             foreach (var transition in animation.Transitions)
             {
                 transition.PlayPreview();
                 DG.DOTweenEditor.DOTweenEditorPreview.PrepareTweenForPreview(transition.Tween);
             }
             DG.DOTweenEditor.DOTweenEditorPreview.Start();
+        }
+
+        IEnumerator CountEditorUpdates(float delay, Action onCompleted)
+        {
+            var waitForOneSecond = new Unity.EditorCoroutines.Editor.EditorWaitForSeconds(delay);
+            yield return waitForOneSecond;
+            onCompleted?.Invoke();
         }
 
         private void Stop()

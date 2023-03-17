@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DG.Tweening;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,18 +8,13 @@ namespace AtoGame.Base.UI
     public class DOTweenAnimation : MonoBehaviour
     {
         public enum DOTweenLoadType { AutoInit, ManualInit, AutoPlay }
-        private class DOTweenTransitionComparer : IComparer<DOTweenTransition>
-        {
-            public int Compare(DOTweenTransition x, DOTweenTransition y)
-            {
-                return y.TotalDuration.CompareTo(x.TotalDuration);
-            }
-        }
 
         [Header("[Transitions]")]
+        [SerializeField] private float delay;
         [SerializeField] private DOTweenTransition[] transitions;
         [SerializeField] private DOTweenLoadType loadType = DOTweenLoadType.AutoInit;
-        //private static DOTweenTransitionComparer comparer = new DOTweenTransitionComparer();
+
+        public float Delay { get => delay; }
 
         public DOTweenTransition[] Transitions { get => transitions; }
 
@@ -56,7 +52,6 @@ namespace AtoGame.Base.UI
 
         public void Initialize()
         {
-            //System.Array.Sort(transitions, comparer);
         }
 
         public void ResetState()
@@ -83,8 +78,25 @@ namespace AtoGame.Base.UI
 
         public void Play(System.Action onCompleted, bool restart)
         {
-            Stop(false);
+            if(delay > 0)
+            {
+                if(restart)
+                {
+                    ResetState();
+                }
+                DOVirtual.DelayedCall(delay, () => {
+                    PlayImmediate(onCompleted, restart);
+                });
+            }
+            else
+            {
+                PlayImmediate(onCompleted, restart);
+            }
+        }
 
+        public void PlayImmediate(System.Action onCompleted, bool restart)
+        {
+            Stop(false);
             if (transitions.Length <= 0)
             {
                 onCompleted?.Invoke();
