@@ -22,16 +22,16 @@ namespace AtoGame.OtherModules.Inventory
 
                 int selectedValue = property.intValue;
 
-                GUIContent[] contents = new GUIContent[ItemDatabase.GetCount() + 1];
+                GUIContent[] contents = new GUIContent[ItemDatabaseEditor.GetCount() + 1];
                 contents[0] = new GUIContent("None", "None");
-                int[] optionsValue = new int[ItemDatabase.GetCount() + 1];
+                int[] optionsValue = new int[ItemDatabaseEditor.GetCount() + 1];
                 optionsValue[0] = ItemDatabase.NoneId;
 
                 int index = 1;
-                foreach (var itemType in ItemDatabase.GetAllItem())
+                foreach (var itemType in ItemDatabaseEditor.GetAllItem())
                 {
                     string type = itemType.NameType;
-                    string name = $"{itemType.Item.Name} (ID: {itemType.Item.Id})";
+                    string name = $"{itemType.Item.DisplayName} (ID: {itemType.Item.Id})";
                     contents[index] = new GUIContent(type + name);
                     optionsValue[index] = itemType.Item.Id;
                     index++;
