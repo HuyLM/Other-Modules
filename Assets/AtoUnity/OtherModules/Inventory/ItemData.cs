@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace AtoGame.OtherModules.Inventory
 {
+    [System.Serializable]
     public class ItemData
     {
         public static ItemData Empty = new ItemData(ItemDatabase.NoneId, 0);
@@ -96,12 +97,12 @@ namespace AtoGame.OtherModules.Inventory
             }
         }
 
-        public void Claim(string tag)
+        public void Claim(string[] tags)
         {
             ItemConfig item = ItemConfig;
             if (item != null)
             {
-                item.Claim(Amount, tag);
+                item.Claim(Amount, tags);
             }
         }
 

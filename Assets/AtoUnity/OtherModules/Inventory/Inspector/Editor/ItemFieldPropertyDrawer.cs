@@ -14,11 +14,12 @@ namespace AtoGame.OtherModules.Inventory
             if (isInteger)
             {
                 label = EditorGUI.BeginProperty(position, label, property);
-                EditorGUI.indentLevel = 0;
                 Rect contentPosition = EditorGUI.PrefixLabel(position, label);
 
 
                 EditorGUI.BeginChangeCheck();
+                int indent = EditorGUI.indentLevel;
+                EditorGUI.indentLevel = 0;
 
                 int selectedValue = property.intValue;
 
@@ -50,6 +51,7 @@ namespace AtoGame.OtherModules.Inventory
                 {
                     property.intValue = selectedValue;
                 }
+                EditorGUI.indentLevel = indent;
                 EditorGUI.EndProperty();
             }
             else

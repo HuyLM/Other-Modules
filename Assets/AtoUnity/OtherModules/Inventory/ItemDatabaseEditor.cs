@@ -23,6 +23,7 @@ namespace AtoGame.OtherModules.Inventory
 #if USE_ODIN_INSPECTOR
         [Button("Reload", ButtonSizes.Large)]
 #endif
+        [ContextMenu("Reload")]
         public void OnInitialize()
         {
             itemTypeDictionary = new Dictionary<int, ItemTypeName>();

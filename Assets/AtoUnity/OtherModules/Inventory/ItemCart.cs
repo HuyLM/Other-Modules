@@ -7,7 +7,7 @@ namespace AtoGame.OtherModules.Inventory
     public class ItemCart
     {
         //public const string DEFAULT_TAG = "default_tag";
-        public string tag;
-        public List<ItemData> items = new List<ItemData>();
+        public string Tag;
+        public List<ItemData> Items = new List<ItemData>();
     }
 }

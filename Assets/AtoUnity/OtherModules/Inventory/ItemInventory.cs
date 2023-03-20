@@ -6,6 +6,7 @@ namespace AtoGame.OtherModules.Inventory
 {
     public class ItemInventory
     {
+        public const long INFINITE_AMOUNT = long.MaxValue;
         private readonly Dictionary<int, ItemData> itemDictionary = new Dictionary<int, ItemData>();
         private List<ItemData> items = new List<ItemData>();
         private List<int> iii = new List<int>();
@@ -35,14 +36,6 @@ namespace AtoGame.OtherModules.Inventory
                         itemDictionary.Add(item.Id, new ItemData(item.Id, amount));
                     }
                 }
-            }
-        }
-
-        public void Add(params ItemData[] items)
-        {
-            for(int i =0; i< items.Length; ++i)
-            {
-                Add(items[i].Id, items[i].Amount);
             }
         }
 
@@ -93,7 +86,7 @@ namespace AtoGame.OtherModules.Inventory
         {
             if (IsInfinite(id))
             {
-                return new ItemData(id, int.MaxValue);
+                return new ItemData(id, INFINITE_AMOUNT);
             }
             if (itemDictionary.TryGetValue(id, out ItemData item))
             {
