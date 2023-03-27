@@ -12,6 +12,7 @@ namespace AtoGame.OtherModules.FSM
         public Transition(State<T> to)
         {
             To = to;
+            to.AddTransition(this);
         }
 
         protected abstract bool CheckCondition(StateMachine<T> stateMachine);

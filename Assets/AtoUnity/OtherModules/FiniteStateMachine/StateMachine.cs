@@ -13,9 +13,11 @@ namespace AtoGame.OtherModules.FSM
 
         public T Context { get => context; }
 
-        public virtual void Initialize()
+        public virtual void Initialize(T context)
         {
-
+            this.context = context;
+            // s1 create states
+            // s2 create trasitions
         }
 
         public void Updating()
@@ -29,7 +31,7 @@ namespace AtoGame.OtherModules.FSM
         }
 
         protected abstract void DoAlwaysActions();
-        protected void CheckTransitionFromAnyStates()
+        private void CheckTransitionFromAnyStates()
         {
             if (anyStateTransitions == null)
             {
