@@ -37,7 +37,7 @@ namespace AtoGame.Base.UI
 #if UNITY_EDITOR
             if (Application.isPlaying == false)
             {
-                
+                // if get error, must install EditorCoroutines in Package Manager
                 Unity.EditorCoroutines.Editor.EditorCoroutineUtility.StartCoroutine(CountEditorUpdates(Delay, () => {
                     target.gameObject.SetActive(active);
                 }), this);
@@ -50,6 +50,7 @@ namespace AtoGame.Base.UI
 
         IEnumerator CountEditorUpdates(float delay, Action onCompleted)
         {
+            // if get error, must install EditorCoroutines in Package Manager
             var waitForOneSecond = new Unity.EditorCoroutines.Editor.EditorWaitForSeconds(delay);
             yield return waitForOneSecond;
             onCompleted?.Invoke();
