@@ -7,9 +7,9 @@ namespace AtoGame.OtherModules.FSM
 {
     public abstract class Transition<T> where T : IContext
     {
-        public State<T> To { get; } 
+        public State<T> To { get; private set; } 
 
-        public Transition(State<T> to)
+        public void SetStateTo(State<T> to)
         {
             To = to;
             to.AddTransition(this);

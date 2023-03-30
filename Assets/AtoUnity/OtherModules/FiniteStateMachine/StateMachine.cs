@@ -4,7 +4,18 @@ using UnityEngine;
 
 namespace AtoGame.OtherModules.FSM
 {
-    public abstract class StateMachine<T> where T : IContext
+    public abstract class StateMachine
+    {
+        public abstract void Initialize(IContext context);
+
+        public abstract void Updating();
+        public virtual void Destroy()
+        {
+
+        }
+    }
+
+    public abstract class StateMachine<T> : StateMachine where T : IContext
     {
         protected T context;
         State<T> currentState;
@@ -13,14 +24,14 @@ namespace AtoGame.OtherModules.FSM
 
         public T Context { get => context; }
 
-        public virtual void Initialize(T context)
+        public override void Initialize(IContext context)
         {
-            this.context = context;
+            this.context = (T)context;
             // s1 create states
             // s2 create trasitions
         }
 
-        public void Updating()
+        public override void Updating()
         {
             // Do Always Actions
             DoAlwaysActions();

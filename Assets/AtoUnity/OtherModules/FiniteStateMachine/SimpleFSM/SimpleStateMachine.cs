@@ -5,7 +5,18 @@ using UnityEngine;
 
 namespace AtoGame.OtherModules.SimpleFSM
 {
-    public abstract class SimpleStateMachine<T> where T : ISimpleContext
+    public abstract class SimpleStateMachine
+    {
+        public abstract void Initialize(ISimpleContext context);
+
+        public abstract void Updating();
+        public virtual void Destroy()
+        {
+
+        }
+    }
+
+    public abstract class SimpleStateMachine<T> : SimpleStateMachine where T : ISimpleContext
     {
         protected T context;
         protected Dictionary<Type, SimpleState<T>> states;
@@ -14,13 +25,13 @@ namespace AtoGame.OtherModules.SimpleFSM
 
         public T Context { get => context; }
 
-        public virtual void Initialize(T context)
+        public override void Initialize(ISimpleContext context)
         {
-            this.context = context;
+            this.context = (T)context;
             // s1 create states
         }
 
-        public void Updating()
+        public override void Updating()
         {
             // Do Always Actions
             DoAlwaysActions();
