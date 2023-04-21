@@ -40,7 +40,7 @@ namespace AtoGame.Base.UI
             }
         }
 
-        public void FillBar(Image img, float fillAmount)
+        private void FillBar(Image img, float fillAmount)
         {
             if (!isLoaded)
             {

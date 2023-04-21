@@ -46,6 +46,10 @@ namespace AtoGame.OtherModules.FSM
 
         public void AddTransition(Transition<T> transition)
         {
+            if (transitions == null)
+            {
+                transitions = new List<Transition<T>>();
+            }
             transitions.Add(transition);
         }
     }
