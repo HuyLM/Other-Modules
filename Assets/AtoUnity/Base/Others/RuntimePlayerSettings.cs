@@ -64,6 +64,6 @@ namespace AtoGame.Base
                 return regex.Replace(text, newValue.ToString());
             }
         }
-    }
 #endif
+    }
 }

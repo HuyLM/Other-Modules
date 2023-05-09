@@ -135,6 +135,8 @@ namespace AtoGame.Base.Helper
             to.anchorMax = from.anchorMax;
             to.anchoredPosition = from.anchoredPosition;
             to.sizeDelta = from.sizeDelta;
+			to.localEulerAngles = from.localEulerAngles;
+            to.pivot = from.pivot;
         }
 
         public static DateTime ConvertToDateTime(long time)
