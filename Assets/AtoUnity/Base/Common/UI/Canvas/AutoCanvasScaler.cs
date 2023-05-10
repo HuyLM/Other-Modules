@@ -47,7 +47,11 @@ namespace AtoGame.Base.UI
             StopAllCoroutines();
         }
 
-        public void CalculatorScale()
+        [ContextMenu("CalculatorScale")]
+#if ODIN_INSPECTOR
+        [Sirenix.OdinInspector.Button("CalculatorScale")]
+#endif
+        private void CalculatorScale()
         {
             Camera camera = Camera.main;
 
