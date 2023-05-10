@@ -263,7 +263,7 @@ namespace AtoGame.OtherModules.Tutorial
         }
 
 
-        public void EndCurrentStep()
+        public void EndCurrentStep(int key)
         {
             if (!isInitialized)
             {
@@ -278,6 +278,11 @@ namespace AtoGame.OtherModules.Tutorial
             if (curTutorialData == null)
             {
                 Log($"curTutorialData null");
+                return;
+            }
+            if(curTutorialData.Key != key)
+            {
+                Log($"{key} is't showing. Because {curTutorialData.Key} is showing");
                 return;
             }
             curTutorialData.EndCurrentStep();
