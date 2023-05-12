@@ -110,12 +110,12 @@ namespace AtoGame.OtherModules.HUD
 
         protected virtual void DeactiveFrame()
         {
-            gameObject.SetActive(false);
             this.DelayFrame(2, OnHiddenFrame);
         }
 
         protected virtual void OnHiddenFrame()
         {
+            gameObject.SetActive(false);
             this.onCompleted?.Invoke();
         }
 

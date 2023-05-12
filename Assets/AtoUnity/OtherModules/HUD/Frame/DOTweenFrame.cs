@@ -46,7 +46,7 @@ namespace AtoGame.OtherModules.HUD
         {
             hideAnimation?.Stop();
             pauseAnimation?.Stop();
-            if(instant || showAnimation != null)
+            if(instant || showAnimation == null)
             {
                 base.ActiveFrame();
             }
@@ -59,7 +59,7 @@ namespace AtoGame.OtherModules.HUD
 
         protected override void DeactiveFrame()
         {
-            if (instant || hideAnimation != null)
+            if (instant || hideAnimation == null)
             {
                 base.DeactiveFrame();
             }
@@ -72,7 +72,7 @@ namespace AtoGame.OtherModules.HUD
 
         protected override void ResumeFrame()
         {
-            if (instant || resumeAnimation != null)
+            if (instant || resumeAnimation == null)
             {
                 base.ResumeFrame();
             }
@@ -81,7 +81,17 @@ namespace AtoGame.OtherModules.HUD
                 resumeAnimation.Play(OnResumedFrame, true);
             }
         }
-
+        protected override void PauseFrame()
+        {
+            if (instant || pauseAnimation == null)
+            {
+                base.PauseFrame();
+            }
+            else
+            {
+                pauseAnimation.Play(OnPausedFrame, true);
+            }
+        }
 
     }
 }

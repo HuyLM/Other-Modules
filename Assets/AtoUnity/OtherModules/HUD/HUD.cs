@@ -2,6 +2,7 @@ using AtoGame.Base.UnityInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace AtoGame.OtherModules.HUD
@@ -69,7 +70,15 @@ namespace AtoGame.OtherModules.HUD
             {
                 if (loadedFrames.Contains(defaulFrame) == false)
                 {
-                    Frame newFrame = Instantiate(defaulFrame, container);
+                    Frame newFrame = null;
+                    if (onSceneFrames.Contains(defaulFrame))
+                    {
+                        newFrame = defaulFrame;
+                    }
+                    else
+                    {
+                        newFrame = Instantiate(defaulFrame, container);
+                    }
                     if (newFrame != null)
                     {
                         loadedFrames.Add(newFrame);
@@ -103,7 +112,10 @@ namespace AtoGame.OtherModules.HUD
 
         protected virtual void OnDisable()
         {
-            HUDManager.Instance.Remove(this);
+            if (HUDManager.Initialized)
+            {
+                HUDManager.Instance.Remove(this);
+            }
         }
 
         protected virtual void InitializeFrame(Frame frame)
