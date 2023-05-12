@@ -150,5 +150,15 @@ namespace AtoGame.Base.Helper
             TimeSpan timeSpan = dateTime - dtDateTime;
             return (long)timeSpan.TotalSeconds;
         }
+
+        public static bool IsPointWithinCollider(this Collider collider, Vector3 point)
+        {
+            return (collider.ClosestPoint(point) - point).sqrMagnitude < Mathf.Epsilon * Mathf.Epsilon;
+        }
+
+        public static bool IsPointWithinCollider(Collider2D collider, Vector2 point)
+        {
+            return (collider.ClosestPoint(point) - point).sqrMagnitude < Mathf.Epsilon * Mathf.Epsilon;
+        }
     }
 }
