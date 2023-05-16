@@ -2,29 +2,32 @@ using AtoGame.Base.UI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+#if ODIN_INSPECTOR
+using Sirenix.OdinInspector;
+#endif
 
 namespace AtoGame.OtherModules.HUD
 {
     public class DOTweenFrame : Frame
     {
-#if USE_ODIN_INSPECTOR
-       [FoldoutGroup("Frame")]
+#if ODIN_INSPECTOR
+        [FoldoutGroup("Frame")]
 #endif
         [Header("[Animations]")]
-#if USE_ODIN_INSPECTOR
-       [FoldoutGroup("Frame")]
+#if ODIN_INSPECTOR
+        [FoldoutGroup("Frame")]
 #endif
         [SerializeField] protected DOTweenAnimation showAnimation;
-#if USE_ODIN_INSPECTOR
-       [FoldoutGroup("Frame")]
+#if ODIN_INSPECTOR
+        [FoldoutGroup("Frame")]
 #endif
         [SerializeField] protected DOTweenAnimation hideAnimation;
-#if USE_ODIN_INSPECTOR
-       [FoldoutGroup("Frame")]
+#if ODIN_INSPECTOR
+        [FoldoutGroup("Frame")]
 #endif
         [SerializeField] protected DOTweenAnimation pauseAnimation;
-#if USE_ODIN_INSPECTOR
-       [FoldoutGroup("Frame")]
+#if ODIN_INSPECTOR
+        [FoldoutGroup("Frame")]
 #endif
         [SerializeField] protected DOTweenAnimation resumeAnimation;
 
@@ -46,7 +49,7 @@ namespace AtoGame.OtherModules.HUD
         {
             hideAnimation?.Stop();
             pauseAnimation?.Stop();
-            if(instant || showAnimation != null)
+            if(instant || showAnimation == null)
             {
                 base.ActiveFrame();
             }
@@ -59,7 +62,7 @@ namespace AtoGame.OtherModules.HUD
 
         protected override void DeactiveFrame()
         {
-            if (instant || hideAnimation != null)
+            if (instant || hideAnimation == null)
             {
                 base.DeactiveFrame();
             }
@@ -72,7 +75,7 @@ namespace AtoGame.OtherModules.HUD
 
         protected override void ResumeFrame()
         {
-            if (instant || resumeAnimation != null)
+            if (instant || resumeAnimation == null)
             {
                 base.ResumeFrame();
             }
@@ -82,6 +85,16 @@ namespace AtoGame.OtherModules.HUD
             }
         }
 
-
+        protected override void PauseFrame()
+        {
+            if (instant || pauseAnimation == null)
+            {
+                base.PauseFrame();
+            }
+            else
+            {
+                pauseAnimation.Play(OnPausedFrame, true);
+            }
+        }
     }
 }

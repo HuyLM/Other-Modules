@@ -29,5 +29,18 @@ namespace AtoGame.Base.UI
         {
             onSelect?.Invoke(this);
         }
+
+        public SelectableDisplayer<TModel> SetStateSelectButton(bool interaction, bool show)
+        {
+            if (btnSelect)
+            {
+                btnSelect.gameObject.SetActive(true);
+                if (show)
+                {
+                    btnSelect.interactable = interaction;
+                }
+            }
+            return this;
+        }
     }
 }

@@ -1,4 +1,4 @@
-#if USE_ODIN_INSPECTOR
+#if ODIN_INSPECTOR
 using Sirenix.OdinInspector;
 #endif
 using AtoGame.Base.Helper;
@@ -11,19 +11,19 @@ namespace AtoGame.OtherModules.HUD
     public abstract class Frame : MonoBehaviour
     {
         [Header("[Events]")]
-#if USE_ODIN_INSPECTOR
+#if ODIN_INSPECTOR
         [FoldoutGroup("Frame")]
 #endif
         [SerializeField] private FrameEvent onShowing;
-#if USE_ODIN_INSPECTOR
+#if ODIN_INSPECTOR
         [FoldoutGroup("Frame")]
 #endif
         [SerializeField] private FrameEvent onHidding;
-#if USE_ODIN_INSPECTOR
+#if ODIN_INSPECTOR
         [FoldoutGroup("Frame")]
 #endif
         [SerializeField] private FrameEvent onPausing;
-#if USE_ODIN_INSPECTOR
+#if ODIN_INSPECTOR
         [FoldoutGroup("Frame")]
 #endif
         [SerializeField] private FrameEvent onResuming;
@@ -110,12 +110,12 @@ namespace AtoGame.OtherModules.HUD
 
         protected virtual void DeactiveFrame()
         {
-            gameObject.SetActive(false);
             this.DelayFrame(2, OnHiddenFrame);
         }
 
         protected virtual void OnHiddenFrame()
         {
+            gameObject.SetActive(false);
             this.onCompleted?.Invoke();
         }
 

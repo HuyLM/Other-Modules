@@ -2,6 +2,7 @@ using AtoGame.Base.UnityInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace AtoGame.OtherModules.HUD
@@ -11,12 +12,12 @@ namespace AtoGame.OtherModules.HUD
     {
         [SerializeField] private int order;
         [Header("[Frames]")]
-#if USE_ODIN_INSPECTOR
-        [AssetsOnly]
+#if ODIN_INSPECTOR
+        [Sirenix.OdinInspector.AssetsOnly]
 #endif
         [SerializeField] private Frame[] prefabFrames;
-#if USE_ODIN_INSPECTOR
-        [SceneObjectsOnly]
+#if ODIN_INSPECTOR
+        [Sirenix.OdinInspector.SceneObjectsOnly]
 #endif
         [SerializeField] private Frame[] onSceneFrames;
 
@@ -69,7 +70,15 @@ namespace AtoGame.OtherModules.HUD
             {
                 if (loadedFrames.Contains(defaulFrame) == false)
                 {
-                    Frame newFrame = Instantiate(defaulFrame, container);
+                    Frame newFrame = null;
+                    if (onSceneFrames.Contains(defaulFrame))
+                    {
+                        newFrame = defaulFrame;
+                    }
+                    else
+                    {
+                        newFrame = Instantiate(defaulFrame, container);
+                    }
                     if (newFrame != null)
                     {
                         loadedFrames.Add(newFrame);
@@ -103,7 +112,10 @@ namespace AtoGame.OtherModules.HUD
 
         protected virtual void OnDisable()
         {
-            HUDManager.Instance.Remove(this);
+            if (HUDManager.Initialized)
+            {
+                HUDManager.Instance.Remove(this);
+            }
         }
 
         protected virtual void InitializeFrame(Frame frame)
@@ -392,15 +404,19 @@ namespace AtoGame.OtherModules.HUD
                 return null;
             }
 
-            if(useBackToPrevious && addToPrevious)
+            if (useBackToPrevious && addToPrevious)
             {
-                Frame previousFrame = previousFrames.Peek();
-                if (previousFrame != frame)
+                if (previousFrames.Count > 0)
+
                 {
-                    previousFrames.Push(frame);
+                    Frame previousFrame = previousFrames.Peek();
+                    if (previousFrame != frame)
+                    {
+                        previousFrames.Push(frame);
+                    }
                 }
             }
-          
+
             activeFrames.Remove(frame);
             return frame.HideByHUD(onCompleted, instant);
         }

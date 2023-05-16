@@ -15,8 +15,8 @@ namespace AtoGame.OtherModules.Inventory
         [SerializeField] public bool lockID;
         [SerializeField] private string displayName;
 #endif
-#if USE_ODIN_INSPECTOR
-        [DisableIf("lockID")]
+#if ODIN_INSPECTOR
+        [Sirenix.OdinInspector.DisableIf("lockID")]
 #endif
         [SerializeField, Range(1, 999999)] private int id = 1;
         [SerializeField] private string nameKey;

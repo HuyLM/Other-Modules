@@ -20,8 +20,8 @@ namespace AtoGame.OtherModules.Inventory
 
         private Dictionary<int, ItemTypeName> itemTypeDictionary;
 
-#if USE_ODIN_INSPECTOR
-        [Button("Reload", ButtonSizes.Large)]
+#if ODIN_INSPECTOR
+        [Sirenix.OdinInspector.Button("Reload", Sirenix.OdinInspector.ButtonSizes.Large)]
 #endif
         [ContextMenu("Reload")]
         public void OnInitialize()
@@ -81,8 +81,8 @@ namespace AtoGame.OtherModules.Inventory
             }
         }
 
-#if USE_ODIN_INSPECTOR
-        [Button("Lock All Item", ButtonSizes.Large)]
+#if ODIN_INSPECTOR
+        [Sirenix.OdinInspector.Button("Lock All Item", Sirenix.OdinInspector.ButtonSizes.Large)]
 #endif
         private void LockAllItem()
         {
