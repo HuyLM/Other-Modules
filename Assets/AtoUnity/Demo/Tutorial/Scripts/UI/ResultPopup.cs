@@ -42,7 +42,9 @@ namespace AtoGame.OtherModules.Tutorial.Demo
 
         private void NextStepTutorial()
         {
-            TutorialController.Instance.ShowCurrentStep(); //GameTutorial_Keo 5 & GameTutorial_Bao 2 & GameTutorial_Bao_Full 3
+            TutorialController.Instance.ShowCurrentStep(TutorialKey.GameTutorial_Keo); //GameTutorial_Keo 5
+            TutorialController.Instance.ShowCurrentStep(TutorialKey.GameTutorial_Bao); // GameTutorial_Bao 2
+            TutorialController.Instance.ShowCurrentStep(TutorialKey.GameTutorial_Bao_Full); // GameTutorial_Bao_Full 3
         }
 
         private void OnOkButtonClicked()

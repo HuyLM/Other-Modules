@@ -63,13 +63,14 @@ namespace AtoGame.OtherModules.Tutorial.Demo
 
             TutorialController.Instance.AssignTarget(TutorialKey.GameTutorial_Bao_Full, 1, btnBao.gameObject);
 
-            TutorialController.Instance.ShowCurrentStep(); // GameTutorial_Keo 1 & GameTutorial_Bao_Full 1
+            TutorialController.Instance.ShowCurrentStep(TutorialKey.GameTutorial_Keo); // GameTutorial_Keo 1 
+            TutorialController.Instance.ShowCurrentStep(TutorialKey.GameTutorial_Bao_Full); // GameTutorial_Bao_Full 1
             TutorialController.Instance.ShowTutorial(TutorialKey.GameTutorial_Bao);
         }
 
         private void NextStepTutorial()
         {
-            TutorialController.Instance.ShowCurrentStep(); // GameTutorial_Keo 2 & GameTutorial_Keo 3
+            TutorialController.Instance.ShowCurrentStep(TutorialKey.GameTutorial_Keo); // GameTutorial_Keo 2 & GameTutorial_Keo 3
         }
 
         private void OnBackButtonClicked()
@@ -165,7 +166,9 @@ namespace AtoGame.OtherModules.Tutorial.Demo
             SetStateButton(btnBua, true, true);
             SetStateButton(btnBao, true, true);
 
-            TutorialController.Instance.ShowCurrentStep(); // GameTutorial_Keo 4 & GameTutorial_Bao 1 & GameTutorial_Bao_Full 2
+            TutorialController.Instance.ShowCurrentStep(TutorialKey.GameTutorial_Keo); // GameTutorial_Keo 4
+            TutorialController.Instance.ShowCurrentStep(TutorialKey.GameTutorial_Bao); // GameTutorial_Bao 1
+            TutorialController.Instance.ShowCurrentStep(TutorialKey.GameTutorial_Bao_Full); // GameTutorial_Bao_Full 2
         }
 
         private void SetStateButton(Button button, bool interaction, bool show)

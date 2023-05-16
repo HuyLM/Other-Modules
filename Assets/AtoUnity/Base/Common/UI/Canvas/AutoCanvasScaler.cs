@@ -51,7 +51,7 @@ namespace AtoGame.Base.UI
 #if ODIN_INSPECTOR
         [Sirenix.OdinInspector.Button("CalculatorScale")]
 #endif
-        public void CalculatorScale()
+        private void CalculatorScale()
         {
             Camera camera = Camera.main;
 

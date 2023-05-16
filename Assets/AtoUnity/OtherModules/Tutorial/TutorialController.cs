@@ -237,7 +237,7 @@ namespace AtoGame.OtherModules.Tutorial
             onCompleted?.Invoke();
         }
 
-        public void ShowCurrentStep()
+        public void ShowCurrentStep(int key)
         {
             if (!isInitialized)
             {
@@ -259,11 +259,16 @@ namespace AtoGame.OtherModules.Tutorial
                 Log($"curTutorialData null");
                 return;
             }
+            if (curTutorialData.Key != key)
+            {
+                Log($"{key} is't showing. Because {curTutorialData.Key} is showing");
+                return;
+            }
             curTutorialData.ForceShowCurrentStep();
         }
 
 
-        public void EndCurrentStep()
+        public void EndCurrentStep(int key)
         {
             if (!isInitialized)
             {
@@ -278,6 +283,11 @@ namespace AtoGame.OtherModules.Tutorial
             if (curTutorialData == null)
             {
                 Log($"curTutorialData null");
+                return;
+            }
+            if(curTutorialData.Key != key)
+            {
+                Log($"{key} is't showing. Because {curTutorialData.Key} is showing");
                 return;
             }
             curTutorialData.EndCurrentStep();

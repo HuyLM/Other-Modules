@@ -96,5 +96,6 @@ namespace AtoGame.OtherModules.HUD
                 pauseAnimation.Play(OnPausedFrame, true);
             }
         }
+
     }
 }
