@@ -1,0 +1,187 @@
+﻿#if APPSFLYER_ENABLE
+using AppsFlyerSDK;
+#endif
+using System.Collections;
+using System.Collections.Generic;
+using System.Text;
+using UnityEngine;
+#if UNITY_IAP_ENABLE
+using UnityEngine.Purchasing;
+#endif
+
+namespace AtoGame.Tracking.Appsflyer
+{
+    public class AtoAppsflyerTracking : SingletonFreeAlive<AtoAppsflyerTracking>
+#if APPSFLYER_ENABLE
+        , IAppsFlyerConversionData
+#endif
+    {
+        public bool isDebug;
+        public bool getConversionData;
+        [Header("Dev key")]
+        public string devKey = "dev_key";
+        [Header("App Id")]
+        public string appID = "";
+        public string UWPAppID;
+        public string macOSAppID;
+
+        private bool available = false;
+
+        public bool Available { get => available; }
+
+        protected override void OnAwake()
+        {
+            base.OnAwake();
+            available = false;
+        }
+        public override void Preload()
+        {
+            base.Preload();
+            Init();
+        }
+
+        public void SetCUID(string id)
+        {
+#if APPSFLYER_ENABLE
+            AppsFlyer.setCustomerUserId(id);
+#endif
+        }
+
+        private void Init()
+        {
+#if APPSFLYER_ENABLE
+            //******************************//
+            AppsFlyer.setIsDebug(isDebug);
+#if UNITY_WSA_10_0 && !UNITY_EDITOR
+            AppsFlyer.initSDK(devKey, UWPAppID, getConversionData ? this : null);
+#elif UNITY_STANDALONE_OSX && !UNITY_EDITOR
+            AppsFlyer.initSDK(devKey, macOSAppID, getConversionData ? this : null);
+#else
+            AppsFlyer.initSDK(devKey, appID, getConversionData ? this : null);
+#endif
+            //******************************/
+            AppsFlyer.startSDK();
+            TrackingLogger.Log($"<color=green>[AtoAppsflyerTracking] AppsFlyer Initialized: SDK Version={AppsFlyer.getSdkVersion()}</color>");
+#if APPSFLYER_ADREVENUE_ENABLE
+            AppsFlyerAdRevenue.start();
+            AppsFlyerAdRevenue.setIsDebug(isDebug);
+            TrackingLogger.Log($"<color=green>[AtoAppsflyerTracking] AppsFlyerAdRevenue Initialized: SDK Version={AppsFlyerAdRevenue.kAppsFlyerAdRevenueVersion}</color>");
+#endif
+#else
+            TrackingLogger.Log("[AtoAppsflyerTracking] ScriptingDefine is not set: APPSFLYER_ENABLE (PlayerSetting/Scripting Define");
+#endif
+            available = true;
+        }
+
+#region Appsflyer Event Log
+        public void LogEvent(string eventName, ParameterBuilder parameterBuilder)
+        {
+            DebugLog(eventName, parameterBuilder);
+#if UNITY_EDITOR
+            return;
+#endif
+            this.Log(eventName, parameterBuilder != null ? parameterBuilder.BuildString() : null);
+        }
+
+        private void Log(string eventName, Dictionary<string, string> param)
+        {
+#if APPSFLYER_ENABLE
+            AppsFlyer.sendEvent(eventName, param);
+#endif
+        }
+
+        private void DebugLog(string eventName, ParameterBuilder parameterBuilder)
+        {
+            StringBuilder paramLogs = new StringBuilder();
+            if (parameterBuilder != null && parameterBuilder.Params.Count > 0)
+            {
+                paramLogs.Append(" /");
+                foreach (KeyValuePair<string, object> entry in parameterBuilder.Params)
+                {
+                    paramLogs.Append(" " + entry.Key + "=" + entry.Value.ToString());
+                }
+            }
+            TrackingLogger.Log("[AtoAppsflyerTracking] EventName = " + eventName + paramLogs.ToString());
+        }
+#endregion
+
+#region Appsflyer Adrevenue Log
+#if APPSFLYER_ADREVENUE_ENABLE
+        private void LogAdRevenue(string monetizationNetwork,
+            AppsFlyerAdRevenueMediationNetworkType mediationNetwork,
+            double eventRevenue,
+            string revenueCurrency,
+            Dictionary<string, string> additionalParameters)
+        {
+            AppsFlyerAdRevenue.logAdRevenue(monetizationNetwork, mediationNetwork, eventRevenue, revenueCurrency, additionalParameters);
+        }
+#endif
+#endregion
+
+#region Appsflyer Callbacks
+
+        public void onConversionDataSuccess(string conversionData)
+        {
+#if APPSFLYER_ENABLE
+            AppsFlyer.AFLog("didReceiveConversionData", conversionData);
+            Dictionary<string, object> conversionDataDictionary = AppsFlyer.CallbackStringToDictionary(conversionData);
+            // add deferred deeplink logic here
+#endif
+        }
+
+        public void onConversionDataFail(string error)
+        {
+#if APPSFLYER_ENABLE
+            AppsFlyer.AFLog("didReceiveConversionDataWithError", error);
+            TrackingLogger.Log("[AtoAppsflyerTracking]: OnConversionData Failed: " + error);
+#endif
+        }
+
+        public void onAppOpenAttribution(string attributionData)
+        {
+#if APPSFLYER_ENABLE
+            AppsFlyer.AFLog("onAppOpenAttribution", attributionData);
+            Dictionary<string, object> attributionDataDictionary = AppsFlyer.CallbackStringToDictionary(attributionData);
+            // add direct deeplink logic here
+            TrackingLogger.Log("[AtoAppsflyerTracking]: onAppOpenAttribution-" + attributionData.ToString());
+#endif
+        }
+
+        public void onAppOpenAttributionFailure(string error)
+        {
+#if APPSFLYER_ENABLE
+            AppsFlyer.AFLog("onAppOpenAttributionFailure", error);
+#endif
+        }
+        #endregion
+
+        #region For Validate IAP
+#if UNITY_IAP_ENABLE
+        /// <summary>
+        /// Gọi hàm này sau khi thực hiện purchase thành công. (dành riêng cho game có IAP chiếm trên 20%)
+        /// if (validPurchase) {
+        ///     Unlock the appropriate content here.
+        ///     AtoAppsflyerTracking.AppsFlyerPurchaseEvent(e.purchasedProduct);
+        /// }
+        /// return PurchaseProcessingResult.Complete;
+        /// </summary>
+        /// <param name="product"></param>
+        public static void AppsFlyerPurchaseEvent (Product product)
+        {
+            Dictionary<string, string> eventValue = new Dictionary<string, string> ();
+            eventValue.Add ("af_revenue", GetAppsflyerRevenue (product.metadata.localizedPrice));
+            eventValue.Add ("af_content_id", product.definition.id);
+            eventValue.Add ("af_currency", product.metadata.isoCurrencyCode);
+            AppsFlyer.sendEvent ("af_purchase", eventValue);
+        }
+
+        public static string GetAppsflyerRevenue (decimal amount) 
+        {
+            decimal val = decimal.Multiply (amount, 0.63m);
+            return val.ToString ();
+        }
+
+#endif
+        #endregion
+    }
+}
