@@ -93,5 +93,10 @@ namespace AtoGame.OtherModules.Inventory
         {
             return ItemInventoryController.Instance.ItemInventory.GetItem(Id).Amount;
         }
+
+        public virtual bool CanClaim(long amount)
+        {
+            return true;
+        }
     }
 }

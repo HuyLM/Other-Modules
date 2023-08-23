@@ -1,0 +1,22 @@
+{
+    "name": "AtoGame.Base",
+    "rootNamespace": "",
+    "references": [
+        "GUID:776d03a35f1b52c4a9aed9f56d7b4229",
+        "GUID:478a2357cc57436488a56e564b08d223",
+        "GUID:790673e9c38074a4a9e7f46e6a164a4f"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "DemiLib.dll",
+        "DOTween.dll",
+        "DOTweenPro.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -114,5 +114,15 @@ namespace AtoGame.OtherModules.Inventory
                 item.Remove(Amount);
             }
         }
+
+        public bool CanClaim()
+        {
+            ItemConfig item = ItemConfig;
+            if (item != null)
+            {
+                item.CanClaim(Amount);
+            }
+            return false;
+        }
     }
 }

@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 namespace AtoGame.Mediation
 {
     #if ATO_MAX_MEDIATION_ENABLE
