@@ -407,13 +407,16 @@ namespace AtoGame.OtherModules.HUD
             if (useBackToPrevious && addToPrevious)
             {
                 if (previousFrames.Count > 0)
-
                 {
                     Frame previousFrame = previousFrames.Peek();
                     if (previousFrame != frame)
                     {
                         previousFrames.Push(frame);
                     }
+                }
+                else
+                {
+                    previousFrames.Push(frame);
                 }
             }
 
@@ -437,8 +440,15 @@ namespace AtoGame.OtherModules.HUD
 
             if (useBackToPrevious && addToPrevious)
             {
-                Frame previousFrame = previousFrames.Peek();
-                if (previousFrame != frame)
+                if (previousFrames.Count > 0)
+                {
+                    Frame previousFrame = previousFrames.Peek();
+                    if (previousFrame != frame)
+                    {
+                        previousFrames.Push(frame);
+                    }
+                }
+                else
                 {
                     previousFrames.Push(frame);
                 }
