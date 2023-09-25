@@ -15,7 +15,7 @@ namespace AtoGame.OtherModules.LocalSaveLoad
         public int SaveVersion
         {
             get => savedSaveVersion;
-            set => PlayerPrefExtension.SetInt(PIPELINE_LOCAL_SAVE_VERSION_KEY, value);
+            set => savedSaveVersion = value;
 
         }
 

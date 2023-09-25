@@ -24,6 +24,11 @@ namespace AtoGame.OtherModules.LocalSaveLoad
             {
                 return RuntimePlayerSettings.AndroidBundleVersionCode;
             }
+#if UNITY_ANDROID
+            return RuntimePlayerSettings.AndroidBundleVersionCode;
+#elif UNITY_IOS
+            return RuntimePlayerSettings.iOSBuildVersion;
+#endif
             return 0;
         }
 
