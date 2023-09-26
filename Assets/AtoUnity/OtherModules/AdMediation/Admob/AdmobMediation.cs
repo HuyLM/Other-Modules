@@ -240,13 +240,15 @@ namespace AtoGame.Mediation
 
             void InitAdmob()
             {
-                GoogleMobileAds.Api.RequestConfiguration requestConfiguration = new GoogleMobileAds.Api.RequestConfiguration
-                {
-                    TestDeviceIds = deviceIds,
-                };
-                GoogleMobileAds.Api.MobileAds.SetRequestConfiguration(requestConfiguration);
-                // Initialize the Google Mobile Ads SDK.
-                GoogleMobileAds.Api.MobileAds.Initialize(HandleInitCompleteAction);
+                AdsEventExecutor.ExecuteInUpdate(() => {
+                    GoogleMobileAds.Api.RequestConfiguration requestConfiguration = new GoogleMobileAds.Api.RequestConfiguration
+                    {
+                        TestDeviceIds = deviceIds,
+                    };
+                    GoogleMobileAds.Api.MobileAds.SetRequestConfiguration(requestConfiguration);
+                    // Initialize the Google Mobile Ads SDK.
+                    GoogleMobileAds.Api.MobileAds.Initialize(HandleInitCompleteAction);
+                });
             }
         }
 
@@ -297,7 +299,7 @@ namespace AtoGame.Mediation
             }
         }
 
-#region Video Reward
+    #region Video Reward
 
         public bool IsRewardVideoAvailable()
         {
@@ -321,9 +323,9 @@ namespace AtoGame.Mediation
             rewardedAd?.Request();
         }
 
-#endregion
+    #endregion
 
-#region Interstitial
+    #region Interstitial
         public bool IsInterstitialAvailable()
         {
             return interstitialAd != null && interstitialAd.IsAvailable;
@@ -345,9 +347,9 @@ namespace AtoGame.Mediation
         {
             interstitialAd?.Request();
         }
-#endregion
+    #endregion
 
-#region Banner
+    #region Banner
 
         public void ShowBanner(Action<string, AdInfo> onCompleted = null, Action<string, AdInfo> onFailed = null)
         {
@@ -384,7 +386,7 @@ namespace AtoGame.Mediation
         {
             Debug.Log("Admob Mediation not support!!!");
         }
-#endregion
+    #endregion
     }
 #endif
 }
