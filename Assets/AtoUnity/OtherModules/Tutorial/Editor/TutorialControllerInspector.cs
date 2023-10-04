@@ -171,7 +171,14 @@ namespace AtoGame.OtherModules.Tutorial
             //Tell Unity to refresh. 
             AssetDatabase.Refresh();
         }
-
+        /// <summary>
+        /// kiem tra key va keyName trong fileName co bi trung o trong keyDic hay khong
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="keyName"></param>
+        /// <param name="fileName"></param>
+        /// <param name="keyDic"></param>
+        /// <returns></returns>
         private bool CheckAddKeyDic(int key, string keyName, string fileName, Dictionary<int, string> keyDic)
         {
             foreach(var value in keyDic)

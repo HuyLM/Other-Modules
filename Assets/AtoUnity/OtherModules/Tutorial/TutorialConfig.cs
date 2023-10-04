@@ -1,3 +1,4 @@
+using AtoGame.Base.UnityInspector.Editor;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ namespace AtoGame.OtherModules.Tutorial
     [CreateAssetMenu(fileName = "TutorialConfig", menuName = "Data/OtherModules/Tutorial/TutorialConfig")]
     public class TutorialConfig : ScriptableObject, ITutorialConfig
     {
-        [SerializeField] private TutorialData[] tutorialDatas;
+        [SerializeField, ExtendScriptable] private TutorialData[] tutorialDatas;
         [SerializeField] private int[] endTutorialKeys;
         [SerializeField] private TutorialData[] extraTutorialDatas;
         [SerializeField] private bool enableLog = true;

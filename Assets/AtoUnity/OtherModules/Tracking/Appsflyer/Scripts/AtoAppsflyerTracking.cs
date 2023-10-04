@@ -59,7 +59,7 @@ namespace AtoGame.Tracking.Appsflyer
 #else
             AppsFlyer.initSDK(devKey, appID, getConversionData ? this : null);
 #endif
-            //******************************/
+            //******************************//
             AppsFlyer.startSDK();
             TrackingLogger.Log($"<color=green>[AtoAppsflyerTracking] AppsFlyer Initialized: SDK Version={AppsFlyer.getSdkVersion()}</color>");
 #if APPSFLYER_ADREVENUE_ENABLE

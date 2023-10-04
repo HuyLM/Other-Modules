@@ -391,6 +391,19 @@ namespace AtoGame.OtherModules.Tutorial
 
         public void SaveKeys(int[] keys)
         {
+            int[] endTutorialKeys = Config.GetEndTutorialKeys();
+            for (int i = 0; i < keys.Length; i++)
+            {
+                for (int j = 0; j < endTutorialKeys.Length; j++)
+                {
+                    if(keys[i] == endTutorialKeys[j])
+                    {
+                        Saver.SetTutorialCompleted();
+                        return;
+                    }
+                }
+            }
+            //else
             Saver.Save(keys, (result) => {
                 SaveKeys(keys);
             });

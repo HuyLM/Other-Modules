@@ -1,3 +1,5 @@
+using AtoGame.Base.UnityInspector.Editor;
+using NaughtyAttributes;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -15,7 +17,7 @@ namespace AtoGame.OtherModules.Tutorial
         public int[] NotShowWhenDoneKeys;
         [Header("Steps")]
         public int SaveAtStep;
-        public TutorialStep[] steps;
+        [ExtendScriptable] public TutorialStep[] steps;
         public bool AutoNextStep = true;
         [Header("Others")]
         public bool IsActive = true;
