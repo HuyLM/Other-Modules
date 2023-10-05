@@ -16,7 +16,7 @@ MonoBehaviour:
   started: 0
   guid: e37bfc8a2b7af334cafeb1a6108bc586
   position: {x: -22, y: 4}
-  blackboard: {fileID: 0}
+  tree: {fileID: 0}
   description: 
   drawGizmos: 0
   child: {fileID: -5660333016957678146}
@@ -38,7 +38,7 @@ MonoBehaviour:
   started: 0
   guid: 74a286b60eaf8ea45b9bd84db9ce177b
   position: {x: -22, y: 118}
-  blackboard: {fileID: 0}
+  tree: {fileID: 0}
   description: 
   drawGizmos: 0
   children:
@@ -61,7 +61,7 @@ MonoBehaviour:
   started: 0
   guid: d654e6bf449ef0a4e9d4228651cef97e
   position: {x: 148, y: 289}
-  blackboard: {fileID: 0}
+  tree: {fileID: 0}
   description: 
   drawGizmos: 0
   duration: 1
@@ -81,7 +81,7 @@ MonoBehaviour:
   started: 0
   guid: 6bc6981b00778a744bc6d4097134e636
   position: {x: -22, y: 289}
-  blackboard: {fileID: 0}
+  tree: {fileID: 0}
   description: 
   drawGizmos: 0
   speed: 5
@@ -109,7 +109,10 @@ MonoBehaviour:
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
-    SerializationNodes: []
+    SerializationNodes:
+    - Name: context
+      Entry: 6
+      Data: 
   rootNode: {fileID: 4300890025194573056}
   treeState: 0
   nodes:
@@ -119,7 +122,7 @@ MonoBehaviour:
   - {fileID: -4755641854017797634}
   - {fileID: 6402316061889451186}
   - {fileID: -2247863421084346560}
-  blackboard: {fileID: 0}
+  blackboard: {fileID: 11400000, guid: 501c65e6096636d4b97a2ded2ad35aa7, type: 2}
 --- !u!114 &4300890025194573056
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -136,7 +139,7 @@ MonoBehaviour:
   started: 0
   guid: ca00e6aa7ca72c144ae99d826e0d13e4
   position: {x: -22, y: -102}
-  blackboard: {fileID: 0}
+  tree: {fileID: 0}
   description: 
   drawGizmos: 0
   child: {fileID: -8754077107127582826}
@@ -156,7 +159,7 @@ MonoBehaviour:
   started: 0
   guid: e8b7b3236babb5b45a8c128a30261cab
   position: {x: -194, y: 289}
-  blackboard: {fileID: 0}
+  tree: {fileID: 0}
   description: 
   drawGizmos: 0
   min: {x: -20, y: -20}
