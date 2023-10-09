@@ -34,5 +34,10 @@ namespace AtoGame.Base.Utilities
         {
             countdown += time;
         }
+
+        public void Stop()
+        {
+            countdown = -1;
+        }
     }
 }

@@ -8,7 +8,7 @@ using UnityEditor;
 
 namespace AtoGame.TheKiwiCoder.BT
 {
-    [CreateAssetMenu()]
+    [CreateAssetMenu(menuName ="Datas/OtherModules/BehaviourTree")]
   
     public class BehaviourTree : AtoGame.OdinSerializer.SerializedScriptableObject {
         public Node rootNode;
