@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -159,6 +159,30 @@ namespace AtoGame.Base.Helper
         public static bool IsPointWithinCollider(Collider2D collider, Vector2 point)
         {
             return (collider.ClosestPoint(point) - point).sqrMagnitude < Mathf.Epsilon * Mathf.Epsilon;
+        }
+
+        public static bool CompareTag(this Collider2D collision, string[] tags)
+        {
+            if(collision == null)
+            {
+                return false;
+            }
+            if(tags == null || tags.Length == 0)
+            {
+                return false;
+            }
+            for(int i = 0; i < tags.Length; ++i)
+            {
+                if(string.IsNullOrEmpty(tags[i]))
+                {
+                    return false;
+                }
+                if(collision.CompareTag(tags[i]))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }
