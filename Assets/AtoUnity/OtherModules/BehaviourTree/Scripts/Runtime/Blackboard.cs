@@ -13,7 +13,6 @@ namespace AtoGame.TheKiwiCoder.BT
     // Add other properties here that make sense for your specific use case.
     public abstract class Blackboard : ScriptableObject
     {
-        public string a;
-        public int b;
+       
     }
 }
