@@ -137,18 +137,19 @@ namespace AtoGame.OtherModules.HUD
                 {
                     return;
                 }
-                // Hide Current;
-                Hide(null, false, false);
-                // Show Previous frame
-                Frame previousFrame = previousFrames.Pop();
-                if(previousFrame.IsHidding)
-                {
-                    Show(previousFrame, onCompleted, false, false, false);
-                }
-                else if(previousFrame.IsPausing)
-                {
-                    Resume(previousFrame, onCompleted, false);
-                }
+				// Hide Current;
+                Hide(()=> {
+                    // Show Previous frame
+                    Frame previousFrame = previousFrames.Pop();
+                    if (previousFrame.IsHidding)
+                    {
+                        Show(previousFrame, onCompleted, false, false, false);
+                    }
+                    else if (previousFrame.IsPausing)
+                    {
+                        Resume(previousFrame, onCompleted, false);
+                    }
+                }, false, false);
             }
         }
 
