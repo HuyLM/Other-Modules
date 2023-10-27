@@ -71,7 +71,7 @@ namespace AtoGame.OtherModules.HUD
             state = FrameState.Hidding;
         }
 
-        public Frame ShowByHUD(Action onCompleted = null, bool instant = false) // warning: Awake -> ShowByHUD -> ActiveFrame -> Start -> OnShowedFrame
+        public Frame ShowByHUD(Action onCompleted = null, bool instant = false) // note: ShowByHUD -> Awake -> OnEnable -> ActiveFrame -> Start -> OnShowedFrame
         {
             if(IsHidding)
             {
@@ -95,7 +95,7 @@ namespace AtoGame.OtherModules.HUD
             this.onCompleted?.Invoke();
         }
 
-        public Frame HideByHUD(Action onCompleted = null, bool instant = false)
+        public Frame HideByHUD(Action onCompleted = null, bool instant = false) // note: HideByHUD -> DeactiveFrame -> OnDisable -> OnHiddenFrame
         {
             if(Initialized && !IsHidding)
             {
