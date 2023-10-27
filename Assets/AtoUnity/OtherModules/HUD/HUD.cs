@@ -77,7 +77,9 @@ namespace AtoGame.OtherModules.HUD
                     }
                     else
                     {
+						defaulFrame.gameObject.SetActive(false);
                         newFrame = Instantiate(defaulFrame, container);
+						defaulFrame.gameObject.SetActive(true);
                     }
                     if (newFrame != null)
                     {
@@ -252,7 +254,9 @@ namespace AtoGame.OtherModules.HUD
                 {
                     if (!frame.GetType().IsSubclassOf(typeof(F)))
                     {
+						frame.gameObject.SetActive(false);
                         Frame loadFrame = Instantiate(frame, container);
+						frame.gameObject.SetActive(true);
                         if (loadFrame != null)
                         {
                             loadedFrames.Add(loadFrame);
