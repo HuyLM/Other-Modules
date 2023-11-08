@@ -10,17 +10,15 @@ namespace AtoGame.OtherModules.LocalSaveLoad
     [CreateAssetMenu(fileName = "LocalSaveLoadConfiguration", menuName = "Data/OtherModules/LocalSaveLoad/LocalSaveLoadConfiguration")]
     public class LocalSaveLoadConfiguration : ScriptableObject
     {
-        [ReadOnly]
-        [SerializeField] private int saveVersion;
         [SerializeField] private PipelineLocalStepConfig[] localStepConfigs;
 
         public int SaveVersion()
         {
-            if(Application.platform == RuntimePlatform.IPhonePlayer)
+            if (Application.platform == RuntimePlatform.IPhonePlayer)
             {
                 return int.Parse(RuntimePlayerSettings.iOSBuildVersion);
             }
-            if(Application.platform == RuntimePlatform.Android)
+            if (Application.platform == RuntimePlatform.Android)
             {
                 return RuntimePlayerSettings.AndroidBundleVersionCode;
             }

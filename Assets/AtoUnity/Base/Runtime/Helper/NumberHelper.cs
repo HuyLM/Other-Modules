@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 
-namespace MatchNumber
+namespace AtoGame.Base.Helper
 {
     /// <summary> Extensions for various number types. </summary>
     public static class NumberHelper

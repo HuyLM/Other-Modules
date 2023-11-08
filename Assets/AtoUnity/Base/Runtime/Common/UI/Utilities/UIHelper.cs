@@ -173,5 +173,17 @@ namespace AtoGame.Base.Utilities
         {
             rt.offsetMin = new Vector2(rt.offsetMin.x, bottom);
         }
+
+        public static void SetStateButton(this Button button, bool interacable, bool show)
+        {
+            if (button != null)
+            {
+                button.gameObject.SetActive(show);
+                if (show == true)
+                {
+                    button.interactable = interacable;
+                }
+            }
+        }
     }
 }
