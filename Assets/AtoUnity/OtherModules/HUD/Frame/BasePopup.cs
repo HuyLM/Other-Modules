@@ -39,6 +39,12 @@ namespace AtoGame.OtherModules.HUD
             OnPreClose(null);
         }
 
+        protected override void OnHiddenFrame()
+        {
+            base.OnHiddenFrame();
+            SetTapState(true);
+        }
+
         protected virtual void OnCloseButtonClicked()
         {
             Close();

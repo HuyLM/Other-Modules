@@ -1,8 +1,3 @@
-using AtoGame.Base.UnityInspector;
-using AtoGame.OdinSerializer;
-using Sirenix.OdinInspector;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace AtoGame.TheKiwiCoder.BT
