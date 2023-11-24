@@ -49,9 +49,7 @@ namespace AtoGame.Base.UI
         }
 
         [ContextMenu("CalculatorScale")]
-#if ODIN_INSPECTOR
         [Button("CalculatorScale")]
-#endif
         private void CalculatorScale()
         {
             Camera camera = Camera.main;

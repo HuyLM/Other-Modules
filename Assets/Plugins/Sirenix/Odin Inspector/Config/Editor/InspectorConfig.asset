@@ -16,4 +16,141 @@ MonoBehaviour:
   defaultEditorBehaviour: 11
   processMouseMoveInInspector: 1
   drawingConfig:
-    configs: []
+    configs:
+    - DrawnTypeName: AtoGame.Base.EvenDisableListener, AtoGame.Base
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.Base.EventDestroyListener, AtoGame.Base
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.Base.EventListenerBase, AtoGame.Base
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.Base.LoggerComponent, AtoGame.Base
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.Base.Poolable, AtoGame.Base
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.Base.PoolManager, AtoGame.Base
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.Base.PoolRegister, AtoGame.Base
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.Base.SingletonScriptableObjectReference, AtoGame.Base
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.Base.Helper.AutoDestroy, AtoGame.Base
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.Base.Helper.CoroutineHelper, AtoGame.Base
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.Base.Helper.HideTrail, AtoGame.Base
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.Base.UI.AutoCanvasScaler, AtoGame.Base
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.Base.UI.AutoExpandGridLayoutGroup, AtoGame.Base
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.Base.UI.BaseProgressBar, AtoGame.Base
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.Base.UI.TabButton, AtoGame.Base
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.Base.UI.TabControl, AtoGame.Base
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.Base.UI.Timer, AtoGame.Base
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.Base.UI.TrellisHorizontal, AtoGame.Base
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.Base.UI.TrellisLayout, AtoGame.Base
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.Base.UI.UI_ScrollRectOcclusion, AtoGame.Base
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.Crystal.SafeArea, AtoGame.Base
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.Base.UnityInspector.Demo.SerializableDictionaryExample,
+        Assembly-CSharp
+      EditorTypeName: Sirenix.OdinInspector.Editor.OdinEditor, Sirenix.OdinInspector.Editor
+    - DrawnTypeName: AtoGame.Mediation.AdsEventExecutor, Assembly-CSharp
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.OtherModules.HUD.BasePanel, Assembly-CSharp
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.OtherModules.HUD.BasePopup, Assembly-CSharp
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.OtherModules.HUD.DOTweenFrame, Assembly-CSharp
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.OtherModules.HUD.HUD, Assembly-CSharp
+      EditorTypeName: Sirenix.OdinInspector.Editor.OdinEditor, Sirenix.OdinInspector.Editor
+    - DrawnTypeName: AtoGame.OtherModules.HUD.HUDManager, Assembly-CSharp
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.OtherModules.Inventory.ItemCollector, Assembly-CSharp
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.OtherModules.Inventory.ItemConfig, Assembly-CSharp
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.OtherModules.Inventory.ItemDatabase, Assembly-CSharp
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.OtherModules.Inventory.ItemDatabaseEditor, Assembly-CSharp
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.OtherModules.Inventory.UI.ItemDataDisplayer, Assembly-CSharp
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.OtherModules.LocalSaveLoad.LocalSaveLoadConfiguration,
+        Assembly-CSharp
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.OtherModules.LocalSaveLoad.PipelineLocalStepConfig,
+        Assembly-CSharp
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.OtherModules.Tutorial.FocusButtonStep, Assembly-CSharp
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.OtherModules.Tutorial.TapScreenStep, Assembly-CSharp
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.OtherModules.Tutorial.TutorialData, Assembly-CSharp
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.OtherModules.Tutorial.Demo.GamePanel, Assembly-CSharp
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.OtherModules.Tutorial.Demo.MainLobbyPanel, Assembly-CSharp
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.OtherModules.Tutorial.Demo.ResultPopup, Assembly-CSharp
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.OtherModules.Tutorial.Demo.ShopPanel, Assembly-CSharp
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.OtherModules.Tutorial.Demo.TutorialUI, Assembly-CSharp
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.TheKiwiCoder.BT.BehaviourTree, Assembly-CSharp
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.TheKiwiCoder.BT.BehaviourTreeSettings, Assembly-CSharp-Editor
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.TheKiwiCoder.BT.Breakpoint, Assembly-CSharp
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.TheKiwiCoder.BT.Failure, Assembly-CSharp
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.TheKiwiCoder.BT.InterruptSelector, Assembly-CSharp
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.TheKiwiCoder.BT.Inverter, Assembly-CSharp
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.TheKiwiCoder.BT.Log, Assembly-CSharp
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.TheKiwiCoder.BT.Parallel, Assembly-CSharp
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.TheKiwiCoder.BT.RandomFailure, Assembly-CSharp
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.TheKiwiCoder.BT.RandomSelector, Assembly-CSharp
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.TheKiwiCoder.BT.Repeat, Assembly-CSharp
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.TheKiwiCoder.BT.RootNode, Assembly-CSharp
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.TheKiwiCoder.BT.Selector, Assembly-CSharp
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.TheKiwiCoder.BT.Sequencer, Assembly-CSharp
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.TheKiwiCoder.BT.Succeed, Assembly-CSharp
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.TheKiwiCoder.BT.Timeout, Assembly-CSharp
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.TheKiwiCoder.BT.Wait, Assembly-CSharp
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.TheKiwiCoder.BT.Demo.BasicRoamingBlackboard, Assembly-CSharp
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.TheKiwiCoder.BT.Demo.BehaviourTreeRunner, Assembly-CSharp
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.TheKiwiCoder.BT.Demo.MoveToPosition, Assembly-CSharp
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.TheKiwiCoder.BT.Demo.RandomPosition, Assembly-CSharp
+      EditorTypeName: 
+    - DrawnTypeName: AtoGame.Tracking.Appsflyer.AtoAppsflyerTracking, Assembly-CSharp
+      EditorTypeName: 
+    - DrawnTypeName: OtherModules.CommandSystem.CommandManager, Assembly-CSharp
+      EditorTypeName: 
+    - DrawnTypeName: OtherModules.CommandSystem.CommandUI, Assembly-CSharp
+      EditorTypeName: 

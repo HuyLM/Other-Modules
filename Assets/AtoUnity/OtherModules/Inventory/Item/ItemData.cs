@@ -1,3 +1,4 @@
+using NaughtyAttributes;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,8 +9,8 @@ namespace AtoGame.OtherModules.Inventory
     public class ItemData
     {
         public static ItemData Empty = new ItemData(ItemDatabase.NoneId, 0);
-        [SerializeField, ItemField] protected int i;
-        [SerializeField] protected long a;
+        [SerializeField, ItemField, Label("ID")] protected int i;
+        [SerializeField, Label("Amount")] protected long a;
 
         private ItemConfig item;
         [SerializeField]

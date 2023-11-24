@@ -1,34 +1,22 @@
 using AtoGame.Base.UI;
+using NaughtyAttributes;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-#if ODIN_INSPECTOR
-using Sirenix.OdinInspector;
-#endif
 
 namespace AtoGame.OtherModules.HUD
 {
     public class DOTweenFrame : Frame
     {
-#if ODIN_INSPECTOR
-        [FoldoutGroup("Frame")]
-#endif
-        [Header("[Animations]")]
-#if ODIN_INSPECTOR
-        [FoldoutGroup("Frame")]
-#endif
+
+
+        [Foldout("Frame Animations")]
         [SerializeField] protected DOTweenAnimation showAnimation;
-#if ODIN_INSPECTOR
-        [FoldoutGroup("Frame")]
-#endif
+        [Foldout("Frame Animations")]
         [SerializeField] protected DOTweenAnimation hideAnimation;
-#if ODIN_INSPECTOR
-        [FoldoutGroup("Frame")]
-#endif
+        [Foldout("Frame Animations")]
         [SerializeField] protected DOTweenAnimation pauseAnimation;
-#if ODIN_INSPECTOR
-        [FoldoutGroup("Frame")]
-#endif
+        [Foldout("Frame Animations")]
         [SerializeField] protected DOTweenAnimation resumeAnimation;
 
         protected override void OnInitialize(HUD hud)

@@ -28,6 +28,7 @@ namespace AtoGame.Mediation
         [SerializeField] private string iosBannerAdTestId;
         [Header("Privacy")]
         [SerializeField] private bool isAgeRestrictedUser = false;
+        [SerializeField] private string maxAdContent = "MA";
         [Space(20)]
         [Header("Default Banner")]
         [SerializeField] private BannerSize defaultBannerSize;
@@ -123,11 +124,11 @@ namespace AtoGame.Mediation
                 return;
             }
 
-            if(string.IsNullOrEmpty(RewardedAdUnitId))
+            if(string.IsNullOrEmpty(RewardedAdUnitId) == false)
             {
                 rewardedAd = new AdmobVideoRewardAd(RewardedAdUnitId);
             }
-            if (string.IsNullOrEmpty(InterstitialAdUnitId))
+            if (string.IsNullOrEmpty(InterstitialAdUnitId) == false)
             {
                 interstitialAd = new AdmobInterstitialAd(InterstitialAdUnitId);
             }
@@ -161,7 +162,7 @@ namespace AtoGame.Mediation
 
             // Set tag for under age of consent. Here false means users are not under age.
             var consentRequestParameters = new GoogleMobileAds.Ump.Api.ConsentRequestParameters();
-            //consentRequestParameters.ConsentDebugSettings = consentDebugSettings;
+            consentRequestParameters.ConsentDebugSettings = consentDebugSettings;
             consentRequestParameters.TagForUnderAgeOfConsent = tagForUnderAgeOfConsent;
 
             GoogleMobileAds.Ump.Api.ConsentInformation.Update(consentRequestParameters,
@@ -244,6 +245,8 @@ namespace AtoGame.Mediation
                     GoogleMobileAds.Api.RequestConfiguration requestConfiguration = new GoogleMobileAds.Api.RequestConfiguration
                     {
                         TestDeviceIds = deviceIds,
+                        TagForChildDirectedTreatment = isAgeRestrictedUser ? GoogleMobileAds.Api.TagForChildDirectedTreatment.True : GoogleMobileAds.Api.TagForChildDirectedTreatment.False,
+                        MaxAdContentRating = GoogleMobileAds.Api.MaxAdContentRating.ToMaxAdContentRating(maxAdContent)
                     };
                     GoogleMobileAds.Api.MobileAds.SetRequestConfiguration(requestConfiguration);
                     // Initialize the Google Mobile Ads SDK.

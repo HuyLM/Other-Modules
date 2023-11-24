@@ -1,4 +1,5 @@
 using AtoGame.Base;
+using NaughtyAttributes;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,9 +21,7 @@ namespace AtoGame.OtherModules.Inventory
 
         private Dictionary<int, ItemTypeName> itemTypeDictionary;
 
-#if ODIN_INSPECTOR
-        [Sirenix.OdinInspector.Button("Reload", Sirenix.OdinInspector.ButtonSizes.Large)]
-#endif
+        [Button("Reload")]
         [ContextMenu("Reload")]
         public void OnInitialize()
         {
@@ -81,9 +80,7 @@ namespace AtoGame.OtherModules.Inventory
             }
         }
 
-#if ODIN_INSPECTOR
-        [Sirenix.OdinInspector.Button("Lock All Item", Sirenix.OdinInspector.ButtonSizes.Large)]
-#endif
+        [Button("Lock All Item")]
         private void LockAllItem()
         {
             foreach (var c in itemDatabase.Collectors)

@@ -1833,6 +1833,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4023732331052632642}
   - component: {fileID: 658850434704400415}
+  - component: {fileID: 6605314055487608430}
   m_Layer: 5
   m_Name: UI
   m_TagString: Untagged
@@ -1881,3 +1882,20 @@ MonoBehaviour:
   btnClose: {fileID: 8628603031227856229}
   txtConsole: {fileID: 4693581483984842252}
   srConsole: {fileID: 5283183278976394317}
+--- !u!114 &6605314055487608430
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8648783055675039492}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f86a2c97165b0f458d44d35f4414faa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ConformTop: 0
+  ConformBottom: 0
+  ConformLeft: 0
+  ConformRight: 0
+  Logging: 0

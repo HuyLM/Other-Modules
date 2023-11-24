@@ -1,7 +1,5 @@
-#if ODIN_INSPECTOR
-using Sirenix.OdinInspector;
-#endif
 using AtoGame.Base.Helper;
+using NaughtyAttributes;
 using System;
 using UnityEngine;
 
@@ -10,22 +8,13 @@ namespace AtoGame.OtherModules.HUD
     [DisallowMultipleComponent]
     public abstract class Frame : MonoBehaviour
     {
-        [Header("[Events]")]
-#if ODIN_INSPECTOR
-        [FoldoutGroup("Frame")]
-#endif
+        [Foldout("Frame Events")]
         [SerializeField] private FrameEvent onShowing;
-#if ODIN_INSPECTOR
-        [FoldoutGroup("Frame")]
-#endif
+        [Foldout("Frame Events")]
         [SerializeField] private FrameEvent onHidding;
-#if ODIN_INSPECTOR
-        [FoldoutGroup("Frame")]
-#endif
+        [Foldout("Frame Events")]
         [SerializeField] private FrameEvent onPausing;
-#if ODIN_INSPECTOR
-        [FoldoutGroup("Frame")]
-#endif
+        [Foldout("Frame Events")]
         [SerializeField] private FrameEvent onResuming;
 
         protected FrameState state = FrameState.NotInitialized;
@@ -33,6 +22,8 @@ namespace AtoGame.OtherModules.HUD
 
         protected Action onCompleted;
         protected bool instant;
+        protected Action _onHidden;
+        protected Action _onPaused;
 
         public HUD Hud { get => hud; private set => hud = value; }
         public bool Initialized { get => state != FrameState.NotInitialized; }
@@ -80,6 +71,8 @@ namespace AtoGame.OtherModules.HUD
                 SetState(FrameState.Showing);
                 onShowing?.Invoke(this);
                 ActiveFrame();
+                SetOnHidden(null);
+                SetOnPaused(null);
             }
             return this;
         }
@@ -189,6 +182,18 @@ namespace AtoGame.OtherModules.HUD
         public void Resume()
         {
             hud.Resume(this);
+        }
+
+        public Frame SetOnHidden(Action onHidden)
+        {
+            _onHidden = onHidden;
+            return this;
+        }
+
+        public Frame SetOnPaused(Action onPaused)
+        {
+            _onPaused = onPaused;
+            return this;
         }
 
         public enum FrameState

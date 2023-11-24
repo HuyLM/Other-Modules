@@ -1,4 +1,5 @@
 using AtoGame.Base.UnityInspector.Editor;
+using NaughtyAttributes;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,11 +14,9 @@ namespace AtoGame.OtherModules.Inventory
         [SerializeField, SpriteField] private Sprite sprite;
 #if UNITY_EDITOR
         [SerializeField] public bool lockID;
-        [SerializeField] private string displayName;
+        [SerializeField, Label("Name For Editor")] private string displayName;
 #endif
-#if ODIN_INSPECTOR
-        [Sirenix.OdinInspector.DisableIf("lockID")]
-#endif
+        [DisableIf("lockID")]
         [SerializeField, Range(1, 999999)] private int id = 1;
         [SerializeField] private string nameKey;
         [SerializeField, TextArea(3, 5)] private string descriptionKey;
