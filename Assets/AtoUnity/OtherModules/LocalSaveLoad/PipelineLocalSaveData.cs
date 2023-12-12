@@ -58,5 +58,10 @@ namespace AtoGame.OtherModules.LocalSaveLoad
         {
             PlayerPrefExtension.SetInt(PIPELINE_LOCAL_SAVE_VERSION_KEY, savedSaveVersion);
         }
+
+        public void EaseData()
+        {
+            savedSaveVersion = configSaveVersion = ConfigSaveVersion();
+        }
     }
 }

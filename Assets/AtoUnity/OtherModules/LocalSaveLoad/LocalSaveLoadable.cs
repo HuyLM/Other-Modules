@@ -22,5 +22,9 @@ namespace AtoGame.OtherModules.LocalSaveLoad
         /// Call when need save data
         /// </summary>
         void SaveData();
+        /// <summary>
+        /// Call when need ease data
+        /// </summary>
+        void EaseData();
     }
 }

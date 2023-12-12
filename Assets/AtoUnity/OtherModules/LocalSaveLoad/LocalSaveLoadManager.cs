@@ -134,5 +134,21 @@ namespace AtoGame.OtherModules.LocalSaveLoad
             }
             pipelineLocalSaveData.SaveData();
         }
+
+        private void EaseData()
+        {
+            foreach (var m in registeredModules)
+            {
+                m.Value.EaseData();
+            }
+            pipelineLocalSaveData.EaseData();
+        }
+
+        public void EaseAllData()
+        {
+            EaseData();
+            InitData();
+            SaveData();
+        }
     }
 }
