@@ -36,12 +36,11 @@ namespace AtoGame.OtherModules.Inventory
             itemDatabase.OnInitialize();
             if(inventorySaver != null)
             {
-                inventorySaver.Init(()=> {
+                inventorySaver.AddOnInit(()=> {
                     inventorySaver.Load((result, itemInventory)=>{
                         if(result == true)
                         {
                             this.itemInventory = itemInventory;
-                            itemInventory.OnInitialize();
                         }
                         doingTaskNumber--;
                         if (doingTaskNumber == 0)

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,36 +9,11 @@ namespace AtoGame.OtherModules.Inventory
     {
         public const long INFINITE_AMOUNT = long.MaxValue;
         private readonly Dictionary<int, ItemData> itemDictionary = new Dictionary<int, ItemData>();
-        private List<ItemData> items = new List<ItemData>();
         private List<int> iii = new List<int>();
 
         private bool isDirty;
 
-        public List<ItemData> Items { get => items; }
         public List<int> InfiniteItemIds { get => iii; }
-
-        public void OnInitialize()
-        {
-            if (items == null)
-            {
-                return;
-            }
-            foreach (ItemData item in items)
-            {
-                if (ItemInventoryController.Instance.ItemDatabase.Constains(item.Id))
-                {
-                    long amount = item.Amount;
-                    if (itemDictionary.ContainsKey(item.Id))
-                    {
-                        itemDictionary[item.Id].Stack(amount);
-                    }
-                    else
-                    {
-                        itemDictionary.Add(item.Id, new ItemData(item.Id, amount));
-                    }
-                }
-            }
-        }
 
         public virtual void Add(int id, long amount)
         {
@@ -129,14 +105,65 @@ namespace AtoGame.OtherModules.Inventory
             }
         }
 
-        public void Load(List<ItemData> items, List<int> infiniteItemIds)
+        public void Load(ItemData[] items, int[] infiniteItemIds)
         {
-            this.items = items;
-            this.iii = infiniteItemIds;
+            // Items
+            if (items != null && items.Length > 0)
+            {
+                foreach (ItemData item in items)
+                {
+                    long amount = item.Amount;
+                    if (itemDictionary.ContainsKey(item.Id))
+                    {
+                        itemDictionary[item.Id].Stack(amount);
+                    }
+                    else
+                    {
+                        itemDictionary.Add(item.Id, new ItemData(item.Id, amount));
+                    }
+                }
+            }
+            else
+            {
+
+            }
+
+            // Infinite Items
+            if (infiniteItemIds != null && infiniteItemIds.Length > 0)
+            {
+                this.iii = new List<int>();
+                for (int i = 0; i < infiniteItemIds.Length; ++i)
+                {
+                    iii.Add(infiniteItemIds[i]);
+                }
+            }
+            else
+            {
+                this.iii = null;
+            }
             isDirty = false;
         }
 
-
+        public void Save(Action<bool, ItemData[], List<int>> onSave)
+        {
+            if (isDirty == false)
+            {
+                onSave?.Invoke(false, null, null);
+                return;
+            }
+            ItemData[] items = null;
+            if (itemDictionary.Count > 0)
+            {
+                items = new ItemData[itemDictionary.Count];
+                int index = 0;
+                foreach (var i in itemDictionary.Values)
+                {
+                    items[index] = i;
+                    index++;
+                }
+            }
+            onSave?.Invoke(true, items, InfiniteItemIds);
+        }
     }
 
     public enum NotifyType
