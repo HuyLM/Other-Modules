@@ -12,6 +12,7 @@ namespace AtoGame.Base.UI
         private SerializedProperty fromCurrentProperty;
         private SerializedProperty fromProperty;
         private SerializedProperty toProperty;
+        private SerializedProperty modeProperty;
 
         protected override void OnEnable()
         {
@@ -21,12 +22,14 @@ namespace AtoGame.Base.UI
             fromCurrentProperty = serializedObject.FindProperty("fromCurrent");
             fromProperty = serializedObject.FindProperty("from");
             toProperty = serializedObject.FindProperty("to");
+            modeProperty = serializedObject.FindProperty("mode");
         }
         public override void OnInspectorGUI()
         {
             base.OnInspectorGUI();
 
             EditorGUILayout.PropertyField(targetProperty);
+            EditorGUILayout.PropertyField(modeProperty);
 
             EditorGUILayout.PropertyField(fromCurrentProperty);
             if (!dOTweenLocalRotate.FromCurrent)
