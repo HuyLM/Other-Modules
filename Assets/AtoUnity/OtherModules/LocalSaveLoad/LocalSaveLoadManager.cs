@@ -14,28 +14,41 @@ namespace AtoGame.OtherModules.LocalSaveLoad
         private LocalSaveLoadConfiguration configuration;
         private bool isInitialized;
 
-        public void RegisterModule(Type interfaceType, Type moduleType)
+        public void RegisterModule(Type moduleType)
+        {
+            if (isInitialized == false)
+            {
+                return;
+            }
+            if (typeof(LocalSaveLoadable).IsAssignableFrom(moduleType) == false)
+            {
+                return;
+            }
+            if (registeredModules.ContainsKey(moduleType))
+            {
+                return;
+            }
+            registeredModules.Add(moduleType, Activator.CreateInstance(moduleType) as LocalSaveLoadable);
+        }
+
+        public void RegisterModule(Type moduleType, LocalSaveLoadable _object)
         {
             if(isInitialized == false) 
             {
                 return;
             }
-            if(interfaceType.IsAssignableFrom(moduleType) == false)
+            if (typeof(LocalSaveLoadable).IsAssignableFrom(moduleType) == false)
             {
                 return;
             }
-            if(typeof(LocalSaveLoadable).IsAssignableFrom(moduleType) == false)
+            if (registeredModules.ContainsKey(moduleType))
             {
                 return;
             }
-            if(registeredModules.ContainsKey(interfaceType))
-            {
-                return;
-            }
-            registeredModules.Add(interfaceType, Activator.CreateInstance(moduleType) as LocalSaveLoadable);
+            registeredModules.Add(moduleType, _object);
         }
 
-        public T GetModule<T>()
+        public T Get<T>()
         {
             if (isInitialized == false)
             {

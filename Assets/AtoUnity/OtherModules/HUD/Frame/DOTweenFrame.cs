@@ -56,7 +56,6 @@ namespace AtoGame.OtherModules.HUD
             }
             else
             {
-                gameObject.SetActive(false);
                 hideAnimation.Play(OnHiddenFrame, true);
             }
         }
