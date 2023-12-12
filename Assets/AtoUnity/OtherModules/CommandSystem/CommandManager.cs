@@ -75,7 +75,7 @@ namespace OtherModules.CommandSystem
             }));
         }
 
-        public void AddCommand(Command command)
+        public void AddCommand(BaseCommand command)
         {
             commandSystem.AddCommand(command);
         }

@@ -121,8 +121,9 @@ namespace AtoGame.Base.UI
             }
         }
 
-        public void ForceFillBar(float pct)
+        public virtual void ForceFillBar(float pct)
         {
+            pct = Mathf.Clamp(pct, 0, 1);
             if (isUseLerp)
             {
                 FillBar(imgCurrentValueLerp, pct);
