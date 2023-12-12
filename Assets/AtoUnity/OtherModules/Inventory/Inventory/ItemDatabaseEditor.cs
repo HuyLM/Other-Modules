@@ -39,7 +39,8 @@ namespace AtoGame.OtherModules.Inventory
             {
                 AddCollectorToDictionary(c, path);
             }
-            foreach (var i in collector.Items)
+            var items = collector.GetItems();
+            foreach (var i in items)
             {
                 AddItemToDictionary(i, path);
             }

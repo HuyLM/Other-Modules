@@ -5,15 +5,15 @@ using UnityEngine;
 namespace AtoGame.OtherModules.Inventory
 {
     [CreateAssetMenu(fileName = "ItemCollector", menuName = "Data/OtherModules/Inventory/ItemCollector")]
-    public class ItemCollector : ScriptableObject
+    public class ItemCollector : BaseItemCollector
     {
-        [SerializeField] private string nameCollector = "other";
         [SerializeField] private List<ItemConfig> items;
-        [SerializeField] private List<ItemCollector> collectors;
 
-        public List<ItemConfig> Items { get => items; }
-        public List<ItemCollector> Collectors { get => collectors; }
-        public string NameCollector { get => nameCollector; }
+        public override List<ItemConfig> GetItems()
+        {
+            return items;
+        }
+     
 
 #if UNITY_EDITOR
         public void LockAllItem()
@@ -23,7 +23,7 @@ namespace AtoGame.OtherModules.Inventory
                 i.lockID = true;
                 UnityEditor.EditorUtility.SetDirty(i);
             }
-            foreach (var c in collectors)
+            foreach (var c in Collectors)
             {
                 c.LockAllItem();
             }

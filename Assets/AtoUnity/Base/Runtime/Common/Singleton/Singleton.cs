@@ -275,7 +275,7 @@ namespace AtoGame.Base
         }
 
     }
-    public abstract class SingletonScriptableObject<T> : SingletonScriptableObject where T : SingletonScriptableObject
+    public abstract class SingletonScriptableObject<T> : SingletonScriptableObject where T : SingletonScriptableObject<T>
     {
         static T _instance = null;
         public static T Instance
@@ -285,10 +285,26 @@ namespace AtoGame.Base
                 if (_instance == null)
                 {
                     _instance = Resources.FindObjectsOfTypeAll<T>().FirstOrDefault();
-                    if(_instance != null)
+#if UNITY_EDITOR
+                    if (_instance == null)
+                    {
+                        T[] asstes = Resources.LoadAll<T>("");
+                        if (asstes == null || asstes.Length < 1)
+                        {
+                            Debug.LogError("Could not find any singleton scriptable object instance in the resources");
+                        }
+                        else if (asstes.Length > 1)
+                        {
+                            Debug.LogError("Multiple instance of the singleton scriptable object found in the resources");
+                        }
+                        _instance = asstes[0];
+                    }
+#endif
+                    if (_instance != null)
                     {
                         _instance.OnAwake();
                     }
+
                 }
                 return _instance;
             }
