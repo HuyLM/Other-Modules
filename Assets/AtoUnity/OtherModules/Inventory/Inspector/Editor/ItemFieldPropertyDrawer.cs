@@ -22,19 +22,68 @@ namespace AtoGame.OtherModules.Inventory
 
                 int selectedValue = property.intValue;
 
-                GUIContent[] contents = new GUIContent[ItemDatabaseEditor.GetCount() + 1];
+                ItemFieldAttribute itemFieldattribute = (ItemFieldAttribute)attribute;
+                string[] nameCollectors = itemFieldattribute.NameCollectors;
+                int numberItem = 0;
+
+                if(nameCollectors == null)
+                {
+                    numberItem = ItemDatabaseEditor.GetCount();
+                }
+                else
+                {
+                    for (int i = 0; i < nameCollectors.Length; ++i)
+                    {
+                        foreach (var itemType in ItemDatabaseEditor.GetAllItem(nameCollectors[i]))
+                        {
+                            numberItem++;
+                        }
+                    }
+                }
+
+               
+
+                GUIContent[] contents = new GUIContent[numberItem + 1];
                 contents[0] = new GUIContent("None", "None");
-                int[] optionsValue = new int[ItemDatabaseEditor.GetCount() + 1];
+                int[] optionsValue = new int[numberItem + 1];
                 optionsValue[0] = ItemDatabase.NoneId;
 
                 int index = 1;
-                foreach (var itemType in ItemDatabaseEditor.GetAllItem())
+                if (nameCollectors == null)
                 {
-                    string type = itemType.NameType;
-                    string name = $"{itemType.Item.DisplayName} (ID: {itemType.Item.Id})";
-                    contents[index] = new GUIContent(type + name);
-                    optionsValue[index] = itemType.Item.Id;
-                    index++;
+                    foreach (var itemType in ItemDatabaseEditor.GetAllItem())
+                    {
+                        string type = itemType.NameType;
+                        string name = $"{itemType.Item.DisplayName} (ID: {itemType.Item.Id})";
+                        contents[index] = new GUIContent(type + name);
+                        optionsValue[index] = itemType.Item.Id;
+                        index++;
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < nameCollectors.Length; ++i)
+                    {
+                        foreach (var itemType in ItemDatabaseEditor.GetAllItem(nameCollectors[i]))
+                        {
+                            string type = string.Empty;
+                            if (itemFieldattribute.RemoveCollectorName)
+                            {
+                                type = itemType.NameType;
+                                int startIndex = type.IndexOf(nameCollectors[i] + "/");
+                                type = type.Remove(startIndex, nameCollectors[i].Length + 1);
+                            }
+                            else
+                            {
+                                type = itemType.NameType;
+                            }
+                            string name = $"{itemType.Item.DisplayName} (ID: {itemType.Item.Id})";
+                            contents[index] = new GUIContent(type + name);
+                            optionsValue[index] = itemType.Item.Id;
+                            index++;
+                        }
+                    }
+
                 }
                 Rect popupRect = contentPosition;
                 popupRect.Set(popupRect.x, popupRect.y, popupRect.width * 0.8f, popupRect.height);
