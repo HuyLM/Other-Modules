@@ -14,9 +14,9 @@ namespace AtoGame.OtherModules.Inventory
             if (isInteger)
             {
                 label = EditorGUI.BeginProperty(position, label, property);
-                EditorGUI.indentLevel = 0;
+                int indent = EditorGUI.indentLevel;
                 Rect contentPosition = EditorGUI.PrefixLabel(position, label);
-
+                EditorGUI.indentLevel = 0;
 
                 EditorGUI.BeginChangeCheck();
 
@@ -71,6 +71,7 @@ namespace AtoGame.OtherModules.Inventory
                     property.intValue = selectedValue;
                 }
                 EditorGUI.EndProperty();
+                EditorGUI.indentLevel = indent;
             }
             else
             {
