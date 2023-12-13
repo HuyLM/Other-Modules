@@ -151,6 +151,7 @@ namespace AtoGame.OtherModules.Inventory
                 onSave?.Invoke(false, null, null);
                 return;
             }
+            isDirty = false;
             ItemData[] items = null;
             if (itemDictionary.Count > 0)
             {

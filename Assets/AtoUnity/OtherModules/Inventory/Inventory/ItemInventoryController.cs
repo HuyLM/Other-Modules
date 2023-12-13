@@ -1,4 +1,5 @@
 using AtoGame.Base;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,23 +31,18 @@ namespace AtoGame.OtherModules.Inventory
             isInitialized = false;
             this.itemDatabase = itemDatabase;
             this.inventorySaver = inventorySaver;
-
-            int doingTaskNumber = 1;
+            this.itemInventory = new ItemInventory();
 
             itemDatabase.OnInitialize();
             if(inventorySaver != null)
             {
                 inventorySaver.AddOnInit(()=> {
-                    inventorySaver.Load((result, itemInventory)=>{
+                    inventorySaver.Load((result, items, infiniteIds)=>{
                         if(result == true)
                         {
-                            this.itemInventory = itemInventory;
+                            itemInventory.Load(items, infiniteIds);
                         }
-                        doingTaskNumber--;
-                        if (doingTaskNumber == 0)
-                        {
-                            isInitialized = true;
-                        }
+                        isInitialized = true;
                     });
                 });
             }
@@ -81,6 +77,27 @@ namespace AtoGame.OtherModules.Inventory
                 return;
             }
             ItemInventory.Remove(id, amount);
+        }
+
+        public void Save(Action<bool> onSaveResult = null)
+        {
+            if(isInitialized == false || itemInventory == null)
+            {
+                onSaveResult?.Invoke(false);
+                return;
+            }
+            itemInventory.Save((doSave, items, infiniteIds)=> { 
+                if(doSave)
+                {
+                    Saver.PushSave(items, infiniteIds, (saveSuccess)=> {
+                        onSaveResult?.Invoke(saveSuccess);
+                    });
+                }
+                else
+                {
+                    onSaveResult?.Invoke(true);
+                }
+            });
         }
 
         #region Cart

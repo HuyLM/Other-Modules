@@ -48,7 +48,7 @@ namespace AtoGame.OtherModules.LocalSaveLoad
             registeredModules.Add(moduleType, _object);
         }
 
-        public T Get<T>()
+        public T Get<T>() where T : LocalSaveLoadable
         {
             if (isInitialized == false)
             {

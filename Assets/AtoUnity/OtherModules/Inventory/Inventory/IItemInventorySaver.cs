@@ -8,7 +8,7 @@ namespace AtoGame.OtherModules.Inventory
     public interface IItemInventorySaver
     {
         void AddOnInit(Action onCompleted);
-        void Load(Action<bool, ItemInventory> onLoaded);
-        void PushSave(Action<bool> onResult);
+        void Load(Action<bool, ItemData[], int[]> onLoaded);
+        void PushSave(ItemData[] items, List<int> infiniteIds, Action<bool> onResult);
     }
 }
