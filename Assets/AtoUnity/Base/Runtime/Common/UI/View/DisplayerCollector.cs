@@ -56,7 +56,7 @@ namespace AtoGame.Base.UI
             {
                 if (DisplayerCount == i)
                 {
-                    displayers.Add(CreateDisplayer());
+                    AddDisplayer(CreateDisplayer());
                 }
 
                 TDisplayer displayer = GetDisplayer(i);
@@ -75,6 +75,10 @@ namespace AtoGame.Base.UI
                     displayer.gameObject.SetActive(false);
                 }
             }
+        }
+        public virtual void AddDisplayer(TDisplayer displayer)
+        {
+            displayers.Add(displayer);
         }
 
         public virtual void SetupDisplayer(TDisplayer displayer, TModel item)

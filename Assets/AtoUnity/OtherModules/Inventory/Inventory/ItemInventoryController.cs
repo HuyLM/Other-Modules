@@ -48,14 +48,14 @@ namespace AtoGame.OtherModules.Inventory
             }
         }
 
-        public void Add(string[] tags, int id, long amount)
+        public void Add(int id, long amount,params string[] tags)
         {
             if (isInitialized == false)
             {
                 Log($"Can't Add Func, because it is not initialized");
                 return;
             }
-            AddCart(tags, id, amount);
+            AddCart(id, amount, tags);
             ItemInventory.Add(id, amount);
         }
 
@@ -153,7 +153,7 @@ namespace AtoGame.OtherModules.Inventory
                     {
                         for (int i = 0; i < itemCart.Items.Count; ++i)
                         {
-                            ItemData itemInList = GetItemWithIdInList(result, itemCart.Items[i].Id);
+                            ItemData itemInList = GetItemWithIdInList(itemCart.Items[i].Id, result);
                             if (itemInList.IsEmpty)
                             {
                                 result.Add(new ItemData(itemCart.Items[i].Id, itemCart.Items[i].Amount));
@@ -178,7 +178,7 @@ namespace AtoGame.OtherModules.Inventory
             return null;
         }
 
-        private ItemData GetItemWithIdInList(List<ItemData> list, int id)
+        private ItemData GetItemWithIdInList(int id, List<ItemData> list)
         {
             for (int i = 0; i < list.Count; ++i)
             {
@@ -190,7 +190,7 @@ namespace AtoGame.OtherModules.Inventory
             return ItemData.Empty;
         }
 
-        public void ClearCart(string[] tags)
+        public void ClearCart(params string[] tags)
         {
             if (isInitialized == false)
             {
@@ -211,7 +211,7 @@ namespace AtoGame.OtherModules.Inventory
             }
         }
 
-        public void EndUseCart(string[] tags)
+        public void EndUseCart(params string[] tags)
         {
             if (isInitialized == false)
             {
@@ -251,7 +251,7 @@ namespace AtoGame.OtherModules.Inventory
             }
         }
 
-        public void AddCart(string[] tags, int id, long amount)
+        public void AddCart(int id, long amount, params string[] tags)
         {
             if (isInitialized == false)
             {
@@ -275,7 +275,7 @@ namespace AtoGame.OtherModules.Inventory
             }
         }
 
-        public void RemoveCart(string[] tags, ItemData item)
+        public void RemoveCart(ItemData item, params string[] tags)
         {
             if (isInitialized == false)
             {

@@ -48,19 +48,19 @@ namespace AtoGame.OtherModules.LocalSaveLoad
             registeredModules.Add(moduleType, _object);
         }
 
-        public T Get<T>() where T : LocalSaveLoadable
+        public static T Get<T>() where T : LocalSaveLoadable
         {
-            if (isInitialized == false)
+            if (Instance.isInitialized == false)
             {
                 return default(T);
             }
             Type tType = typeof(T);
-            if (registeredModules.ContainsKey(tType) == false)
+            if (Instance.registeredModules.ContainsKey(tType) == false)
             {
                 return default(T);
             }
             LocalSaveLoadable val = null;
-            registeredModules.TryGetValue(tType, out val);
+            Instance.registeredModules.TryGetValue(tType, out val);
             return (T)val;
         }
 

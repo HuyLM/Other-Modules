@@ -78,9 +78,9 @@ namespace AtoGame.OtherModules.Inventory
         #endregion
 
 
-        public virtual void Claim(long amount, string[] tags)
+        public virtual void Claim(long amount, params string[] tags)
         {
-            ItemInventoryController.Instance.Add(tags, Id, amount);
+            ItemInventoryController.Instance.Add(Id, amount, tags);
         }
 
         public virtual void Remove(long amount)
