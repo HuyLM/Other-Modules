@@ -14,20 +14,19 @@ namespace AtoGame.OtherModules.LocalSaveLoad
 
         public int SaveVersion()
         {
-            if (Application.platform == RuntimePlatform.IPhonePlayer)
+            string curVersionString = Application.version;
+            string[] splitNumbers = curVersionString.Split('.');
+            int[] numbers = new int[splitNumbers.Length];
+            for(int i = 0; i < splitNumbers.Length; ++i)
             {
-                return int.Parse(RuntimePlayerSettings.iOSBuildVersion);
+                numbers[i] = int.Parse(splitNumbers[i]);
             }
-            if (Application.platform == RuntimePlatform.Android)
+            int saveVersion = 0;
+            for(int i = 0; i < numbers.Length; ++i)
             {
-                return RuntimePlayerSettings.AndroidBundleVersionCode;
+                saveVersion += numbers[i] * ((int)Mathf.Pow(1000, numbers.Length - i - 1));
             }
-#if UNITY_ANDROID
-            return RuntimePlayerSettings.AndroidBundleVersionCode;
-#elif UNITY_IOS
-            return RuntimePlayerSettings.iOSBuildVersion;
-#endif
-            return 0;
+            return saveVersion;
         }
 
         private void OnValidate()

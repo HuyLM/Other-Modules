@@ -19,7 +19,7 @@ namespace AtoGame.Base
         public const int AndroidBundleVersionCode = 3;
 
 #if UNITY_EDITOR
-
+        /*
         // Map here your settings with the actual settings from UnityEditor
         private static readonly Dictionary<string, Func<object>> RuntimeToEditorMapping = new Dictionary<string, Func<object>>()
         {
@@ -64,6 +64,7 @@ namespace AtoGame.Base
                 return regex.Replace(text, newValue.ToString());
             }
         }
+        */
 #endif
     }
 }
