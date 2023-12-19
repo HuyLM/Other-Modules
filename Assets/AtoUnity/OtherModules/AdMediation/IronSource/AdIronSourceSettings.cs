@@ -34,7 +34,6 @@ namespace AtoGame.Mediation
         [SerializeField] private int bannerWidth;
         [SerializeField] private int bannerHeight;
         [Header("Privacy")]
-        [SerializeField] private bool hasUserConsent = true;
         [SerializeField] private bool isAgeRestrictedUser = false;
         [SerializeField] private bool doNotSell = false;
         [SerializeField] private bool isLimitedDataUse = false;
@@ -117,7 +116,6 @@ namespace AtoGame.Mediation
             }
         }
         public IronSourceBannerPosition DefaultBannerPosition => defaultBannerPosition;
-        public bool HasUserConsent => hasUserConsent;
         public bool IsAgeRestrictedUser => isAgeRestrictedUser;
         public bool DoNotSell => doNotSell;
         public bool IsLimitedDataUse => isLimitedDataUse;

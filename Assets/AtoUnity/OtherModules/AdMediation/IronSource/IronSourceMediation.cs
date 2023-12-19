@@ -14,6 +14,7 @@ namespace AtoGame.Mediation
         private ISBannerAd bannerAd;
 
         private bool isInitialized;
+        private bool hasUserConsent;
 
         public void Init()
         {
@@ -46,7 +47,7 @@ namespace AtoGame.Mediation
                 IronSource.Agent.validateIntegration();
             }
 
-            IronSource.Agent.setConsent(AdIronSourceSettings.Instance.HasUserConsent);
+            IronSource.Agent.setConsent(hasUserConsent);
             IronSource.Agent.setMetaData("is_child_directed", AdIronSourceSettings.Instance.IsAgeRestrictedUser.ToString());
             IronSource.Agent.setMetaData("do_not_sell", AdIronSourceSettings.Instance.DoNotSell.ToString());
             if(AdIronSourceSettings.Instance.UseFacebookAd)
@@ -132,6 +133,11 @@ namespace AtoGame.Mediation
         void OnApplicationPause(bool isPaused)
         {
             IronSource.Agent.onApplicationPause(isPaused);
+        }
+
+        public void SetUserConsent(bool consent)
+        {
+            hasUserConsent = consent;
         }
 
     #region Video Reward
