@@ -16,16 +16,16 @@ namespace AtoGame.Mediation
         [SerializeField] private string androidInterstitialAdId;
         [SerializeField] private string androidVideoAdId;
         [SerializeField] private string androidBannerAdId;
-        [SerializeField] private string androidInterstitialAdTestId;
-        [SerializeField] private string androidVideoAdTestId;
-        [SerializeField] private string androidBannerAdTestId;
+        [SerializeField] private string androidInterstitialAdTestId = "ca-app-pub-3940256099942544/1033173712";
+        [SerializeField] private string androidVideoAdTestId = "ca-app-pub-3940256099942544/5224354917";
+        [SerializeField] private string androidBannerAdTestId = "ca-app-pub-3940256099942544/6300978111";
         [Header("IOS")]
         [SerializeField] private string iosInterstitialAdId;
         [SerializeField] private string iosVideoAdId;
         [SerializeField] private string iosBannerAdId;
-        [SerializeField] private string iosInterstitialAdTestId;
-        [SerializeField] private string iosVideoAdTestId;
-        [SerializeField] private string iosBannerAdTestId;
+        [SerializeField] private string iosInterstitialAdTestId = "ca-app-pub-3940256099942544/4411468910";
+        [SerializeField] private string iosVideoAdTestId = "ca-app-pub-3940256099942544/1712485313";
+        [SerializeField] private string iosBannerAdTestId = "ca-app-pub-3940256099942544/2934735716";
         [Header("Privacy")]
         [SerializeField] private bool isAgeRestrictedUser = false;
         [SerializeField] private string maxAdContent = "MA";
