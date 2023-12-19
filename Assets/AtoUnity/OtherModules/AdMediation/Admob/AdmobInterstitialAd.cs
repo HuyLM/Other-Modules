@@ -78,6 +78,33 @@ namespace AtoGame.Mediation
             }
         }
 
+        public override void Request()
+        {
+            if (requesting)
+            {
+                return;
+            }
+            if (Application.internetReachability == NetworkReachability.NotReachable)
+            {
+                Debug.Log("Request failed: No internet available.");
+                return;
+            }
+
+            requesting = true;
+            float delayRequest = GetRetryTime(retryCounting);
+            Debug.Log($"AdmobInterstitialAd Request: delay={delayRequest}s, retry={retryCounting}");
+
+            delayRequestTask = new DelayTask(delayRequest, () =>
+            {
+                AdsEventExecutor.Remove(delayRequestTask);
+                CallRequest();
+
+            });
+            delayRequestTask.Start();
+            AdsEventExecutor.AddTask(delayRequestTask);
+        }
+
+
 
         public void DestroyAd()
         {
@@ -140,7 +167,7 @@ namespace AtoGame.Mediation
         private void OnAdFullScreenContentFailed(GoogleMobileAds.Api.AdError errorInfo)
         {
             OnAdShowFailed(errorInfo.ToString(), new AdInfo());
-            AdMediation.onInterstitialFailedEvent(errorInfo.ToString(), new AdInfo());
+            AdMediation.onInterstitialFailedEvent?.Invoke(errorInfo.ToString(), new AdInfo());
 
             Debug.Log($"[AdMediation-AdmobInterstitialAd]: {adUnitId} got OnAdFullScreenContentFailed With ErrorInfo " + errorInfo.ToString());
         }

@@ -124,7 +124,7 @@ namespace AtoGame.Mediation
                 return;
             }
 
-            if(string.IsNullOrEmpty(RewardedAdUnitId) == false)
+            if (string.IsNullOrEmpty(RewardedAdUnitId) == false)
             {
                 rewardedAd = new AdmobVideoRewardAd(RewardedAdUnitId);
             }
@@ -152,7 +152,7 @@ namespace AtoGame.Mediation
 
 
 
-            var debugGeography = GoogleMobileAds.Ump.Api.DebugGeography.Disabled;
+            var debugGeography = GoogleMobileAds.Ump.Api.DebugGeography.EEA;
             var tagForUnderAgeOfConsent = isAgeRestrictedUser;
             // Confugre the ConsentDebugSettings.
             // The ConsentDebugSettings is serializable so you may expose this to your monobehavior.
@@ -173,70 +173,33 @@ namespace AtoGame.Mediation
                     {
                         // The consent information updated successfully.
                         Debug.Log(string.Format(
-                                "Consent information updated to {0}. You may load the consent " +
-                                "form.", GoogleMobileAds.Ump.Api.ConsentInformation.ConsentStatus));
+                            "Consent information updated to {0}. You may load the consent " +
+                            "form.", GoogleMobileAds.Ump.Api.ConsentInformation.ConsentStatus));
 
-                        if(GoogleMobileAds.Ump.Api.ConsentInformation.IsConsentFormAvailable())
-                        {
-                            GoogleMobileAds.Ump.Api.ConsentForm.Load(
-                            // OnConsentFormLoad
-                            (GoogleMobileAds.Ump.Api.ConsentForm form, GoogleMobileAds.Ump.Api.FormError error) =>
+                        GoogleMobileAds.Ump.Api.ConsentForm.LoadAndShowConsentFormIfRequired((GoogleMobileAds.Ump.Api.FormError formError) => {
+                            if (formError != null)
                             {
-                                if (form != null)
-                                {
-                                    // The consent form was loaded.
-                                    // We cache the consent form for showing later.
-                                    
-                                    Debug.Log("Consent form is loaded and is ready to show.");
-                                    if(GoogleMobileAds.Ump.Api.ConsentInformation.ConsentStatus == GoogleMobileAds.Ump.Api.ConsentStatus.Required)
-                                    {
-                                        form.Show(
-                                       // OnConsentFormShow
-                                       (GoogleMobileAds.Ump.Api.FormError error) =>
-                                       {
-                                           if (error == null)
-                                           {
-                                               InitAdmob();
-                                           }
-                                           else
-                                           {
-                                                // The consent form failed to show.
-                                                Debug.LogError("Failed to show consent form with error: " +
-                                                               error.Message);
-                                           }
-                                       });
-                                    }
-                                    else
-                                    {
-                                        InitAdmob();
-                                    }
-                                }
-                                else
-                                {
-                                    // The consent form failed to load.
-                                    string error1 = "Failed to load consent form with error11111: ";
-                                    string error2 = error == null ? "unknown error" : error.Message;
-                                    Debug.LogError(error1);
-                                    Debug.LogError(error2);
-                                    Debug.LogError(error1 + error2);
+                                // Consent gathering failed.
+                                UnityEngine.Debug.LogError(formError);
+                            }
 
-                                }
-                            });
-                        }
-                        else
-                        {
-                            InitAdmob();
-                        }
-                       
+                            if (ConsentInformation.CanRequestAds())
+                            {
+                                Debug.Log("ConsentInformation.CanRequestAds = true");
+                                InitAdmob();
+                            }
+                        });
                     }
                     else
                     {
                         // The consent information failed to update.
                         Debug.LogError("Failed to update consent information with error: " +
                                 error.Message);
+                        InitAdmob();
                     }
+                }
+            );
 
-                });
 
 
             void InitAdmob()

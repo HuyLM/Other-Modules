@@ -19,7 +19,7 @@ namespace AtoGame.Mediation
             {
                 if(_bannerView != null)
                 {
-                    return true; ;
+                    return true;
                 }
                 return false;
             }
@@ -114,9 +114,14 @@ namespace AtoGame.Mediation
 
         private void OnAdPaid(GoogleMobileAds.Api.AdValue obj)
         {
+            if(obj == null)
+            {
+                Debug.Log($"[AdMediation-AdmobBannerAd]: {adUnitId} got OnAdPaid With AdInfo null");
+                return;
+            }
             Debug.Log($"[AdMediation-AdmobBannerAd]: {adUnitId} got OnAdPaid With AdInfo " + obj.ToString());
             OnAdOpening(obj.ConvertToImpression());
-            AdMediation.onAdRevenuePaidEvent.Invoke(obj.ConvertToImpression());
+            AdMediation.onAdRevenuePaidEvent?.Invoke(obj.ConvertToImpression());
         }
 
 

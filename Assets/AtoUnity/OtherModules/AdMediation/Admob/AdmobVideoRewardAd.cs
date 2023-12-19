@@ -169,7 +169,7 @@ namespace AtoGame.Mediation
         private void OnAdFullScreenContentFailed(GoogleMobileAds.Api.AdError errorInfo)
         {
             OnAdShowFailed(errorInfo.ToString(), new AdInfo());
-            AdMediation.onVideoRewardFailedEvent(errorInfo.ToString(), new AdInfo());
+            AdMediation.onVideoRewardFailedEvent?.Invoke(errorInfo.ToString(), new AdInfo());
 
             Debug.Log($"[AdMediation-AdmobVideoRewardAd]: {adUnitId} got OnAdFullScreenContentFailed With ErrorInfo " + errorInfo.ToString());
         }
