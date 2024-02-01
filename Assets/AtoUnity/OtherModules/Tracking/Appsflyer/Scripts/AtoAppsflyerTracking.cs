@@ -1,6 +1,7 @@
 ﻿#if APPSFLYER_ENABLE
 using AppsFlyerSDK;
 #endif
+using AtoGame.Base;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
