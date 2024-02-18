@@ -36,8 +36,8 @@ namespace AtoGame.OtherModules.Inventory
             itemDatabase.OnInitialize();
             if(inventorySaver != null)
             {
-                inventorySaver.AddOnInit(()=> {
-                    inventorySaver.Load((result, items, infiniteIds)=>{
+                inventorySaver.AddOnInit(() => {
+                    inventorySaver.Load((result, items, infiniteIds) => {
                         if(result == true)
                         {
                             itemInventory.Load(items, infiniteIds);
@@ -48,20 +48,24 @@ namespace AtoGame.OtherModules.Inventory
             }
         }
 
-        public void Add(int id, long amount,params string[] tags)
+        public void Add(int id, long amount, string source, params string[] tags)
         {
-            if (isInitialized == false)
+            if(isInitialized == false)
             {
                 Log($"Can't Add Func, because it is not initialized");
                 return;
             }
+            if(id == ItemDatabase.NoneId)
+            {
+                return;
+            }
             AddCart(id, amount, tags);
-            ItemInventory.Add(id, amount);
+            ItemInventory.Add(id, amount, source);
         }
 
         public void Remove(params ItemData[] items)
         {
-            if (isInitialized == false)
+            if(isInitialized == false)
             {
                 Log($"Can't Remove(params) Func, because it is not initialized");
                 return;
@@ -71,7 +75,7 @@ namespace AtoGame.OtherModules.Inventory
 
         public void Remove(int id, long amount)
         {
-            if (isInitialized == false)
+            if(isInitialized == false)
             {
                 Log($"Can't Remove Func, because it is not initialized");
                 return;
@@ -86,10 +90,10 @@ namespace AtoGame.OtherModules.Inventory
                 onSaveResult?.Invoke(false);
                 return;
             }
-            itemInventory.Save((doSave, items, infiniteIds)=> { 
+            itemInventory.Save((doSave, items, infiniteIds) => {
                 if(doSave)
                 {
-                    Saver.PushSave(items, infiniteIds, (saveSuccess)=> {
+                    Saver.PushSave(items, infiniteIds, (saveSuccess) => {
                         onSaveResult?.Invoke(saveSuccess);
                     });
                 }
@@ -104,7 +108,7 @@ namespace AtoGame.OtherModules.Inventory
 
         public void StartUseCart(string tag)
         {
-            if (isInitialized == false)
+            if(isInitialized == false)
             {
                 Log($"Can't StartUseCart Func, because it is not initialized");
                 return;
@@ -137,24 +141,24 @@ namespace AtoGame.OtherModules.Inventory
 
         public List<ItemData> GetCart(string tag, bool isStackCart = true)
         {
-            if (isInitialized == false)
+            if(isInitialized == false)
             {
                 Log($"Can't GetCart Func, because it is not initialized");
                 return null;
             }
-            if (carts.ContainsKey(tag))
+            if(carts.ContainsKey(tag))
             {
                 ItemCart itemCart;
                 carts.TryGetValue(tag, out itemCart);
-                if (itemCart != null)
+                if(itemCart != null)
                 {
                     List<ItemData> result = new List<ItemData>();
-                    if (isStackCart)
+                    if(isStackCart)
                     {
-                        for (int i = 0; i < itemCart.Items.Count; ++i)
+                        for(int i = 0; i < itemCart.Items.Count; ++i)
                         {
                             ItemData itemInList = GetItemWithIdInList(itemCart.Items[i].Id, result);
-                            if (itemInList.IsEmpty)
+                            if(itemInList.IsEmpty)
                             {
                                 result.Add(new ItemData(itemCart.Items[i].Id, itemCart.Items[i].Amount));
                             }
@@ -180,9 +184,9 @@ namespace AtoGame.OtherModules.Inventory
 
         private ItemData GetItemWithIdInList(int id, List<ItemData> list)
         {
-            for (int i = 0; i < list.Count; ++i)
+            for(int i = 0; i < list.Count; ++i)
             {
-                if (list[i].Id == id)
+                if(list[i].Id == id)
                 {
                     return list[i];
                 }
@@ -192,18 +196,18 @@ namespace AtoGame.OtherModules.Inventory
 
         public void ClearCart(params string[] tags)
         {
-            if (isInitialized == false)
+            if(isInitialized == false)
             {
                 Log($"Can't ClearCart Func, because it is not initialized");
                 return;
             }
             for(int i = 0; i < tags.Length; ++i)
             {
-                if (carts.ContainsKey(tags[i]))
+                if(carts.ContainsKey(tags[i]))
                 {
                     ItemCart itemCart;
                     carts.TryGetValue(tags[i], out itemCart);
-                    if (itemCart != null)
+                    if(itemCart != null)
                     {
                         itemCart.Items.Clear();
                     }
@@ -213,14 +217,14 @@ namespace AtoGame.OtherModules.Inventory
 
         public void EndUseCart(params string[] tags)
         {
-            if (isInitialized == false)
+            if(isInitialized == false)
             {
                 Log($"Can't EndUseCart Func, because it is not initialized");
                 return;
             }
-            for (int i = 0; i < tags.Length; ++i)
+            for(int i = 0; i < tags.Length; ++i)
             {
-                if (carts.ContainsKey(tags[i]))
+                if(carts.ContainsKey(tags[i]))
                 {
                     carts.Remove(tags[i]);
                 }
@@ -229,12 +233,12 @@ namespace AtoGame.OtherModules.Inventory
 
         public void AddCart(string[] tags, params ItemData[] items)
         {
-            if (isInitialized == false)
+            if(isInitialized == false)
             {
                 Log($"Can't AddCart(params) Func, because it is not initialized");
                 return;
             }
-            if (items != null && tags != null)
+            if(items != null && tags != null)
             {
                 foreach(var tag in tags)
                 {
@@ -242,7 +246,7 @@ namespace AtoGame.OtherModules.Inventory
                     {
                         ItemCart itemCart;
                         carts.TryGetValue(tag, out itemCart);
-                        if (itemCart != null)
+                        if(itemCart != null)
                         {
                             itemCart.Items.AddRange(items);
                         }
@@ -253,20 +257,20 @@ namespace AtoGame.OtherModules.Inventory
 
         public void AddCart(int id, long amount, params string[] tags)
         {
-            if (isInitialized == false)
+            if(isInitialized == false)
             {
                 Log($"Can't AddCart Func, because it is not initialized");
                 return;
             }
-            if (tags != null)
+            if(tags != null)
             {
-                foreach (var tag in tags)
+                foreach(var tag in tags)
                 {
-                    if (carts.ContainsKey(tag))
+                    if(carts.ContainsKey(tag))
                     {
                         ItemCart itemCart;
                         carts.TryGetValue(tag, out itemCart);
-                        if (itemCart != null)
+                        if(itemCart != null)
                         {
                             itemCart.Items.Add(new ItemData(id, amount));
                         }
@@ -277,20 +281,20 @@ namespace AtoGame.OtherModules.Inventory
 
         public void RemoveCart(ItemData item, params string[] tags)
         {
-            if (isInitialized == false)
+            if(isInitialized == false)
             {
                 Log($"Can't RemoveCart Func, because it is not initialized");
                 return;
             }
-            if (tags != null)
+            if(tags != null)
             {
-                foreach (var tag in tags)
+                foreach(var tag in tags)
                 {
-                    if (carts.ContainsKey(tag))
+                    if(carts.ContainsKey(tag))
                     {
                         ItemCart itemCart;
                         carts.TryGetValue(tag, out itemCart);
-                        if (itemCart != null)
+                        if(itemCart != null)
                         {
                             itemCart.Items.Remove(item);
                         }

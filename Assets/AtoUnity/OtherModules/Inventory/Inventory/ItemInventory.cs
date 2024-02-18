@@ -15,7 +15,7 @@ namespace AtoGame.OtherModules.Inventory
 
         public List<int> InfiniteItemIds { get => iii; }
 
-        public virtual void Add(int id, long amount)
+        public virtual void Add(int id, long amount, string source)
         {
             if (ItemInventoryController.Instance.ItemDatabase.Constains(id))
             {
@@ -29,7 +29,14 @@ namespace AtoGame.OtherModules.Inventory
                     itemDictionary.Add(id, new ItemData(id, amount));
                     isDirty = true;
                 }
+                AtoGame.Base.EventDispatcher.Instance.Dispatch(new EventKey.OnAddItemInventory() {
+                    id = id,
+                    name = itemDictionary[id].NameKey.ToLower(),
+                    value = amount, 
+                    source = source,
+                });
             }
+
         }
 
         public virtual void Remove(params ItemData[] items)
@@ -125,7 +132,10 @@ namespace AtoGame.OtherModules.Inventory
             }
             else
             {
-
+                if(itemDictionary != null)
+                {
+                    itemDictionary.Clear();
+                }
             }
 
             // Infinite Items

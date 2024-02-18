@@ -1,14 +1,16 @@
+using StickerBook;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 #if UNITY_IAP_ENABLE
 using UnityEngine.Purchasing;
+using UnityEngine.Purchasing.Extension;
 using UnityEngine.Purchasing.Security;
 
 namespace AtoGame.IAP
 {
-    public class IapPurchaseController : IapSingleton<IapPurchaseController>, IStoreListener
+    public class IapPurchaseController : IapSingleton<IapPurchaseController>, IDetailedStoreListener
     {
         [SerializeField] private bool enableLogs;
         [SerializeField] private bool useAppleStoreKitTestCertificate = false;
@@ -157,6 +159,10 @@ namespace AtoGame.IAP
             {
                 if(isPurchasing == true)
                 {
+#if APPSFLYER_ENABLE
+                    Tracking.Appsflyer.AtoAppsflyerTracking.AppsFlyerPurchaseEvent(product);
+#endif
+                    //SBTracking.LogIAP(product.definition.id, product.metadata.isoCurrencyCode, product.metadata.localizedPrice, product.transactionID, string.Empty, "Shop");
                     isPurchasing = false;
                     if (onBuyCompleted != null) onBuyCompleted.Invoke(product.definition.id);
                 }
@@ -181,6 +187,19 @@ namespace AtoGame.IAP
                 return PurchaseProcessingResult.Pending;
             }
             return PurchaseProcessingResult.Complete;
+        }
+
+        public void OnPurchaseFailed(Product product, PurchaseFailureDescription failureDescription)
+        {
+            Log("OnPurchaseFailed: " + failureDescription.ToString());
+            if(isPurchasing == true)
+            {
+                if(onBuyFailed != null)
+                {
+                    onBuyFailed.Invoke((int)failureDescription.reason);
+                }
+                isPurchasing = false;
+            }
         }
 
         public void OnPurchaseFailed(Product product, PurchaseFailureReason failureReason)
@@ -381,7 +400,9 @@ namespace AtoGame.IAP
         }
 
 
-#endregion
+
+
+        #endregion
     }
 }
 

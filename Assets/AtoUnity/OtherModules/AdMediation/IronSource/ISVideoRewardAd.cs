@@ -102,7 +102,9 @@ namespace AtoGame.Mediation
         }
         void ReardedVideoOnAdClickedEvent(IronSourcePlacement ironSourcePlacement, IronSourceAdInfo adInfo)
         {
+            string placement = ironSourcePlacement.getPlacementName();
             Debug.Log("[AdMediation-ISVideoRewardAd]: I got ReardedVideoOnAdClickedEvent With Placement" + ironSourcePlacement.ToString() + "And AdInfo " + adInfo.ToString());
+            AdMediation.onVideoRewardClicked?.Invoke(placement, adInfo.Convert());
         }
         void ReardedVideoOnAdUnavailable()
         {

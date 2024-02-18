@@ -104,19 +104,19 @@ namespace AtoGame.Mediation
             }
             else if (size == BannerSize.BANNER)
             {
-                ironSourceBannerSize = new IronSourceBannerSize(IronSourceBannerSize.BANNER.Description);
+                ironSourceBannerSize = IronSourceBannerSize.BANNER;
             }
             else if (size == BannerSize.LARGE)
             {
-                ironSourceBannerSize = new IronSourceBannerSize(IronSourceBannerSize.LARGE.Description);
+                ironSourceBannerSize = IronSourceBannerSize.LARGE;
             }
             else if (size == BannerSize.RECTANGLE)
             {
-                ironSourceBannerSize = new IronSourceBannerSize(IronSourceBannerSize.RECTANGLE.Description);
+                ironSourceBannerSize = IronSourceBannerSize.RECTANGLE;
             }
             else if (size == BannerSize.SMART)
             {
-                ironSourceBannerSize = new IronSourceBannerSize(IronSourceBannerSize.SMART.Description);
+                ironSourceBannerSize = IronSourceBannerSize.SMART;
             }
             ironSourceBannerSize.SetAdaptive(isAdaptive);
             return ironSourceBannerSize;

@@ -124,6 +124,7 @@ namespace AtoGame.Mediation
         {
             requesting = false;
             retryCounting++;
+            AdMediation.onInterstitialLoadFailed?.Invoke(ironSourceError.ToString());
             OnAdLoadFailed(ironSourceError.ToString());
             Debug.Log("[AdMediation-ISInterstitialAd]: I got InterstitialOnAdLoadFailed With Error " + ironSourceError.ToString());
             Request();
@@ -140,6 +141,7 @@ namespace AtoGame.Mediation
         void InterstitialOnAdClickedEvent(IronSourceAdInfo adInfo)
         {
             Debug.Log("[AdMediation-ISInterstitialAd]: I got InterstitialOnAdClickedEvent With AdInfo " + adInfo.ToString());
+            AdMediation.onInterstitiaClicked?.Invoke(adInfo.Convert());
         }
 
         void InterstitialOnAdShowSucceededEvent(IronSourceAdInfo adInfo)

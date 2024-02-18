@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AtoGame.Tracking.Firebase
+namespace AtoGame.Tracking.FB
 {
     public class AtoFirebaseTracking : Singleton<AtoFirebaseTracking>
     {
@@ -70,7 +70,6 @@ namespace AtoGame.Tracking.Firebase
                     FirebaseAnalytics.LogEvent(eventName);
                 else
                     FirebaseAnalytics.LogEvent(eventName, para);
-                DebugLog(eventName, null);
             });
         }
 #endif
@@ -78,6 +77,7 @@ namespace AtoGame.Tracking.Firebase
         {
 #if FIREBASE_ENABLE
             this.LogEvent(eventName, parameterBuilder != null ? parameterBuilder.BuildFirebase() : null);
+            DebugLog(eventName, parameterBuilder);
 #else
             TrackingLogger.Log("FIREBASE_ENABLE flag has't defined");
 #endif

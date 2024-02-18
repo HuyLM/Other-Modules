@@ -9,5 +9,13 @@ namespace AtoGame.OtherModules.Inventory
         public struct OnItemInventoryChanged : Base.IEventParams
         {
         }
+
+        public struct OnAddItemInventory: Base.IEventParams
+        {
+            public int id;
+            public string name;
+            public long value;
+            public string source;
+        }
     }
 }

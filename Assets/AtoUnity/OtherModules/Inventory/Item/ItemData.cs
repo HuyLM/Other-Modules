@@ -98,12 +98,12 @@ namespace AtoGame.OtherModules.Inventory
             }
         }
 
-        public void Claim(string[] tags)
+        public void Claim(string source, params string[] tags)
         {
             ItemConfig item = ItemConfig;
             if (item != null)
             {
-                item.Claim(Amount, tags);
+                item.Claim(Amount, source, tags);
             }
         }
 
@@ -121,7 +121,7 @@ namespace AtoGame.OtherModules.Inventory
             ItemConfig item = ItemConfig;
             if (item != null)
             {
-                item.CanClaim(Amount);
+                return item.CanClaim(Amount);
             }
             return false;
         }

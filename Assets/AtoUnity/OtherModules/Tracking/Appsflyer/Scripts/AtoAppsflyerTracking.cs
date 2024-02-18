@@ -2,6 +2,7 @@
 using AppsFlyerSDK;
 #endif
 using AtoGame.Base;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
@@ -51,6 +52,12 @@ namespace AtoGame.Tracking.Appsflyer
         private void Init()
         {
 #if APPSFLYER_ENABLE
+#if UNITY_IOS && !UNITY_EDITOR
+            AppsFlyer.waitForATTUserAuthorizationWithTimeoutInterval(60);
+#endif
+            AppsFlyer.OnRequestResponse += AppsFlyerOnRequestResponse;
+            AppsFlyer.OnInAppResponse += OnInAppResponse;
+
             //******************************//
             AppsFlyer.setIsDebug(isDebug);
 #if UNITY_WSA_10_0 && !UNITY_EDITOR
@@ -104,11 +111,11 @@ namespace AtoGame.Tracking.Appsflyer
             }
             TrackingLogger.Log("[AtoAppsflyerTracking] EventName = " + eventName + paramLogs.ToString());
         }
-#endregion
+        #endregion
 
-#region Appsflyer Adrevenue Log
+        #region Appsflyer Adrevenue Log
 #if APPSFLYER_ADREVENUE_ENABLE
-        private void LogAdRevenue(string monetizationNetwork,
+        public void LogAdRevenue(string monetizationNetwork,
             AppsFlyerAdRevenueMediationNetworkType mediationNetwork,
             double eventRevenue,
             string revenueCurrency,
@@ -117,15 +124,33 @@ namespace AtoGame.Tracking.Appsflyer
             AppsFlyerAdRevenue.logAdRevenue(monetizationNetwork, mediationNetwork, eventRevenue, revenueCurrency, additionalParameters);
         }
 #endif
-#endregion
+        #endregion
 
-#region Appsflyer Callbacks
+        #region Appsflyer Callbacks
+
+        void AppsFlyerOnRequestResponse(object sender, EventArgs e)
+        {
+            #if APPSFLYER_ENABLE
+            var args = e as AppsFlyerRequestEventArgs;
+            AppsFlyer.AFLog("AppsFlyerOnRequestResponse", " status code " + args.statusCode);
+#endif
+        }
+
+        void OnInAppResponse(object sender, EventArgs e)
+        {
+            #if APPSFLYER_ENABLE
+            var af_args = e as AppsFlyerRequestEventArgs;
+            AppsFlyer.AFLog("AppsFlyerOnRequestResponse", " status code " + af_args.statusCode);
+#endif
+        }
+
 
         public void onConversionDataSuccess(string conversionData)
         {
 #if APPSFLYER_ENABLE
-            AppsFlyer.AFLog("didReceiveConversionData", conversionData);
+            AppsFlyer.AFLog("onConversionDataSuccess", conversionData);
             Dictionary<string, object> conversionDataDictionary = AppsFlyer.CallbackStringToDictionary(conversionData);
+            TrackingLogger.Log("[AtoAppsflyerTracking]: OnConversionData Success");
             // add deferred deeplink logic here
 #endif
         }
@@ -133,7 +158,7 @@ namespace AtoGame.Tracking.Appsflyer
         public void onConversionDataFail(string error)
         {
 #if APPSFLYER_ENABLE
-            AppsFlyer.AFLog("didReceiveConversionDataWithError", error);
+            AppsFlyer.AFLog("onConversionDataFail", error);
             TrackingLogger.Log("[AtoAppsflyerTracking]: OnConversionData Failed: " + error);
 #endif
         }
@@ -141,7 +166,7 @@ namespace AtoGame.Tracking.Appsflyer
         public void onAppOpenAttribution(string attributionData)
         {
 #if APPSFLYER_ENABLE
-            AppsFlyer.AFLog("onAppOpenAttribution", attributionData);
+            AppsFlyer.AFLog("onAppOpenAttribution: This method was replaced by UDL. This is a fake call.", attributionData);
             Dictionary<string, object> attributionDataDictionary = AppsFlyer.CallbackStringToDictionary(attributionData);
             // add direct deeplink logic here
             TrackingLogger.Log("[AtoAppsflyerTracking]: onAppOpenAttribution-" + attributionData.ToString());
@@ -151,18 +176,19 @@ namespace AtoGame.Tracking.Appsflyer
         public void onAppOpenAttributionFailure(string error)
         {
 #if APPSFLYER_ENABLE
-            AppsFlyer.AFLog("onAppOpenAttributionFailure", error);
+            AppsFlyer.AFLog("onAppOpenAttributionFailure: This method was replaced by UDL. This is a fake call.", error);
+            TrackingLogger.Log("[AtoAppsflyerTracking]: onAppOpenAttributionFailure Failed: " + error);
 #endif
         }
         #endregion
 
         #region For Validate IAP
-#if UNITY_IAP_ENABLE
+#if UNITY_IAP_ENABLE && APPSFLYER_ENABLE
         /// <summary>
         /// Gọi hàm này sau khi thực hiện purchase thành công. (dành riêng cho game có IAP chiếm trên 20%)
         /// if (validPurchase) {
         ///     Unlock the appropriate content here.
-        ///     AtoAppsflyerTracking.AppsFlyerPurchaseEvent(e.purchasedProduct);
+        ///     Tracking.Appsflyer.AtoAppsflyerTracking.AppsFlyerPurchaseEvent(e.purchasedProduct);
         /// }
         /// return PurchaseProcessingResult.Complete;
         /// </summary>
@@ -183,6 +209,6 @@ namespace AtoGame.Tracking.Appsflyer
         }
 
 #endif
-        #endregion
+#endregion
     }
 }

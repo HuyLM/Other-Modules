@@ -69,11 +69,14 @@ namespace AtoGame.Mediation
         public static Action<AdInfo> onVideoRewardDisplayedEvent;
         public static Action<string, AdInfo> onVideoRewardCompletedEvent;
         public static Action<string, AdInfo> onVideoRewardFailedEvent;
+        public static Action<string, AdInfo> onVideoRewardClicked;
         // interstitial
         public static Action<AdInfo> onInterstitialLoadedEvent;
+        public static Action<string> onInterstitialLoadFailed;
         public static Action<AdInfo> onInterstitialDisplayedEvent;
         public static Action<string, AdInfo> onInterstitialCompletedEvent;
         public static Action<string, AdInfo> onInterstitialFailedEvent;
+        public static Action<AdInfo> onInterstitiaClicked;
         // banner
         public static Action<string, AdInfo> onBannerCompletedEvent;
         public static Action<string> onBannerFailedEvent;
