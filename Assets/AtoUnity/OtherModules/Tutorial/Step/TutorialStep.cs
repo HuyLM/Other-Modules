@@ -44,8 +44,6 @@ namespace AtoGame.OtherModules.Tutorial
 
         public void ShowStep(Action onStepCompleted)
         {
-            Debug.LogError(DescriptionKey);
-
             this.onStepCompleted = onStepCompleted;
             onStartCallback?.Invoke();
             if (DelayShow > 0)

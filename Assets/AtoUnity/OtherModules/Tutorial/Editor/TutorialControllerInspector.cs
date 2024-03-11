@@ -72,13 +72,11 @@ namespace AtoGame.OtherModules.Tutorial
                 }
             }
         
-
-            bool endKeysNotDefine = false;
+            bool endKeysNotFound = false;
 
             if(tutorialConfig.GetEndTutorialKeys() == null || tutorialConfig.GetEndTutorialKeys().Length == 0)
             {
                 Debug.LogError($"[Tutorial-Editor] CheckEndTutorialKeys failed because empty endTutorialKeys field");
-                endKeysNotDefine = true;
             }
             foreach(var endKey in tutorialConfig.GetEndTutorialKeys())
             {
@@ -86,7 +84,7 @@ namespace AtoGame.OtherModules.Tutorial
                 if(tutorialData == null)
                 {
                     Debug.LogError($"[Tutorial-Editor] CheckEndTutorialKeys failed because endKey = ({endKey}) not found");
-                    endKeysNotDefine = true;
+                    endKeysNotFound = true;
                 }
             }
 
@@ -94,7 +92,7 @@ namespace AtoGame.OtherModules.Tutorial
             {
                 return;
             }
-            if (endKeysNotDefine == true)
+            if (endKeysNotFound == true)
             {
                 return;
             }

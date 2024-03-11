@@ -59,7 +59,7 @@ namespace AtoGame.OtherModules.Tutorial
             }
             tutorialUI.HighlightObject(btnTarget.gameObject);
             btnTarget.onClick.AddListener(OnTargetButtonClicked); // FIFO
-            IHighlightComponent highlightComponent = btnTarget.GetComponent<IHighlightComponent>();
+            IHighlightComponent highlightComponent = btnTarget.GetComponentInChildren<IHighlightComponent>(true);
             if (highlightComponent != null)
             {
                 highlightComponent.Show();
@@ -75,7 +75,7 @@ namespace AtoGame.OtherModules.Tutorial
             }
             tutorialUI.LowlightObject(btnTarget.gameObject);
             btnTarget.onClick.RemoveListener(OnTargetButtonClicked);
-            IHighlightComponent highlightComponent = btnTarget.GetComponent<IHighlightComponent>();
+            IHighlightComponent highlightComponent = btnTarget.GetComponentInChildren<IHighlightComponent>(true);
             if (highlightComponent != null)
             {
                 highlightComponent.Hide();

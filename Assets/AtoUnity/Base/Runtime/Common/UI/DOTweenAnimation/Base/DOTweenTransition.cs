@@ -33,6 +33,11 @@ namespace AtoGame.Base.UI
 
         public bool IsCompleted { get => isCompleted; }
 
+        public void OnDestroy()
+        {
+            Stop();
+        }
+
         public void Stop(bool onComplete = false)
         {
             Tween?.Kill(onComplete);

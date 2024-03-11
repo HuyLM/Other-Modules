@@ -6,7 +6,7 @@ namespace AtoGame.Base.UI
     public class TabControl : MonoBehaviour
     {
         [SerializeField] protected TabButton[] tabButtons;
-        protected Action<int, int> onTabChanged;
+        protected Action<int, int, bool> onTabChanged;
         protected int curTabIndex;
 
         public int CurTabIndex { get => curTabIndex; }
@@ -24,6 +24,7 @@ namespace AtoGame.Base.UI
             for (int i = 0; i < tabButtons.Length; ++i)
             {
                 tabButtons[i].SetActiveTab(true);
+                tabButtons[i].Init();
             }
         }
 
@@ -34,15 +35,15 @@ namespace AtoGame.Base.UI
 
         protected void SelectTab(int index)
         {
-            ChangeTab(index);
+            ChangeTab(index, false);
         }
 
         public void ForceSelectTab(int index)
         {
-            ChangeTab(index);
+            ChangeTab(index, true);
         }
 
-        protected virtual void ChangeTab(int index)
+        protected virtual void ChangeTab(int index, bool forceChange)
         {
             for (int i = 0; i < tabButtons.Length; ++i)
             {
@@ -55,11 +56,11 @@ namespace AtoGame.Base.UI
                     tabButtons[i].SetActiveTab(true);
                 }
             }
-            onTabChanged?.Invoke(curTabIndex, index);
+            onTabChanged?.Invoke(curTabIndex, index, forceChange);
             curTabIndex = index;
         }
 
-        public void AddOnTabChanged(Action<int, int> onTabChanged)
+        public void AddOnTabChanged(Action<int, int, bool> onTabChanged)
         {
             this.onTabChanged += onTabChanged;
         }

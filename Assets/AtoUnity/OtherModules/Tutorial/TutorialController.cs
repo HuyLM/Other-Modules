@@ -215,6 +215,27 @@ namespace AtoGame.OtherModules.Tutorial
             return false;
         }
 
+        public bool IsShowingExtraTutorial(int key)
+        {
+            if(!isInitialized)
+            {
+                Log($"Tutorial is not initialize");
+                return false;
+            }
+            if(!Config.EnableTutorial())
+            {
+                Log($"Tutorial is disabled");
+                return false;
+            }
+            TutorialData data = FindTutorialData(key);
+
+            if(isShowingTutorial && data == curTutorialData)
+            {
+                return true;
+            }
+            return false;
+        }
+
         protected void ShowingTutorial(TutorialData tutorialData)
         {
             isShowingTutorial = true;
@@ -405,7 +426,6 @@ namespace AtoGame.OtherModules.Tutorial
             }
             //else
             Saver.Save(keys, (result) => {
-                SaveKeys(keys);
             });
         }
 

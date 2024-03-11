@@ -14,7 +14,12 @@ namespace AtoGame.Mediation
         private ISBannerAd bannerAd;
 
         private bool isInitialized;
-        private bool hasUserConsent;
+
+        protected override void OnAwake()
+        {
+            base.OnAwake();
+            AdMediation.SetHandler(this);
+        }
 
         public void Init()
         {
@@ -46,8 +51,10 @@ namespace AtoGame.Mediation
                 Debug.Log("[AdMediation-IronSourceMediation]: IronSource.Agent.validateIntegration");
                 IronSource.Agent.validateIntegration();
             }
-
-            IronSource.Agent.setConsent(hasUserConsent);
+			if(AdIronSourceSettings.Instance.HasUserConsent)
+			{
+				IronSource.Agent.setConsent(true);
+			}
             IronSource.Agent.setMetaData("is_child_directed", AdIronSourceSettings.Instance.IsAgeRestrictedUser.ToString());
             IronSource.Agent.setMetaData("do_not_sell", AdIronSourceSettings.Instance.DoNotSell.ToString());
             if(AdIronSourceSettings.Instance.UseFacebookAd)
@@ -114,7 +121,24 @@ namespace AtoGame.Mediation
             isInitialized = true;
           
             Debug.Log("[AdMediation-IronSourceMediation]: I got SdkInitializationCompletedEvent");
-            LoadInterstitial();
+            IronSourceAdUnit adUnitType = AdIronSourceSettings.Instance.AdUnitType;
+            if(adUnitType.HasFlag(IronSourceAdUnit.REWARDED_VIDEO))
+            {
+                LoadRewardVideo();
+            }
+            if(adUnitType.HasFlag(IronSourceAdUnit.INTERSTITIAL))
+            {
+                LoadInterstitial();
+            }
+            if(adUnitType.HasFlag(IronSourceAdUnit.OFFERWALL))
+            {
+            }
+            if(adUnitType.HasFlag(IronSourceAdUnit.BANNER))
+            {
+            }
+           
+       
+          
         }
 
         public void ShowTestSuite()
@@ -133,11 +157,6 @@ namespace AtoGame.Mediation
         void OnApplicationPause(bool isPaused)
         {
             IronSource.Agent.onApplicationPause(isPaused);
-        }
-
-        public void SetUserConsent(bool consent)
-        {
-            hasUserConsent = consent;
         }
 
     #region Video Reward

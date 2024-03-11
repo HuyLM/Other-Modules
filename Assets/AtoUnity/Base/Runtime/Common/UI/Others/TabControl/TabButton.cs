@@ -12,7 +12,7 @@ namespace AtoGame.Base.UI
 
         public int TabIndex { get => tabIndex; set => tabIndex = value; }
 
-        private void Start()
+        public void Init()
         {
             btnTab.onClick.AddListener(OnTabButtonClicked);
         }
