@@ -28,7 +28,7 @@ namespace AtoGame.Base
             }
             else
             {
-                this.onCompleted.Invoke();
+                OnComplete(onCompleted);
             }
         }
     }

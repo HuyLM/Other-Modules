@@ -12,7 +12,7 @@ namespace AtoGame.Base
         public override void Execute(Action onCompleted = null)
         {
             unityEvent?.Invoke();
-            onCompleted?.Invoke();
+            OnComplete(onCompleted);
         }
     }
 }

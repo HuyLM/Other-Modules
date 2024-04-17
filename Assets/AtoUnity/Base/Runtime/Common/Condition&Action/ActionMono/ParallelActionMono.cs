@@ -27,7 +27,7 @@ namespace AtoGame.Base
             completedActionCount++;
             if(completedActionCount == actions.Length)
             {
-                this.onCompleted?.Invoke();
+                OnComplete(onCompleted);
             }
         }
     }
