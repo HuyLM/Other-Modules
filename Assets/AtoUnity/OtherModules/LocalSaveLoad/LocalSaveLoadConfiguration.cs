@@ -37,9 +37,9 @@ namespace AtoGame.OtherModules.LocalSaveLoad
         public List<PipelineLocalStepConfig> GetNextLocalSaveSteps(int preVersion)
         {
             List<PipelineLocalStepConfig> nextSaveSteps = new List<PipelineLocalStepConfig>();
-            for (int i = 0; i < localStepConfigs.Length; ++i)
+            for(int i = 0; i < localStepConfigs.Length; ++i)
             {
-                if (localStepConfigs[i].Version >= preVersion)
+                if(localStepConfigs[i].Version > preVersion)
                 {
                     nextSaveSteps.Add(localStepConfigs[i]);
                 }
