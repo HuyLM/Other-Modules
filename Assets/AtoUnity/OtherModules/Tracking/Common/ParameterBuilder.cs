@@ -74,6 +74,18 @@ namespace AtoGame.Tracking
         }
 #endif
 
+#if ADJUST_ENABLE
+        public com.adjust.sdk.AdjustEvent BuildAdjust(string eventName)
+        {
+            com.adjust.sdk.AdjustEvent adjustEvent = new com.adjust.sdk.AdjustEvent(eventName);
+            foreach(var item in Params)
+            {
+                adjustEvent.addCallbackParameter(item.Key, item.Value.ToString());
+            }
+            return adjustEvent;
+        }
+#endif
+
 
     }
 }

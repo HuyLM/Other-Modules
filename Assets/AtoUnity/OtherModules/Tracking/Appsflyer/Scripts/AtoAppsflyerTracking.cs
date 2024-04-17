@@ -35,6 +35,10 @@ namespace AtoGame.Tracking.Appsflyer
         {
             base.OnAwake();
             available = false;
+#if UNITY_IAP_ENABLE && APPSFLYER_ENABLE
+            EventDispatcher.Instance.AddListener<AtoGame.IAP.EventKey.OnBoughtIap>(OnPurchasedIap);
+#endif
+
         }
         public override void Preload()
         {
@@ -111,26 +115,40 @@ namespace AtoGame.Tracking.Appsflyer
             }
             TrackingLogger.Log("[AtoAppsflyerTracking] EventName = " + eventName + paramLogs.ToString());
         }
-        #endregion
+#endregion
 
-        #region Appsflyer Adrevenue Log
+#region Appsflyer Adrevenue Log
 #if APPSFLYER_ADREVENUE_ENABLE
         public void LogAdRevenue(string monetizationNetwork,
-            AppsFlyerAdRevenueMediationNetworkType mediationNetwork,
+            string mediationNetwork,
             double eventRevenue,
             string revenueCurrency,
             Dictionary<string, string> additionalParameters)
         {
-            AppsFlyerAdRevenue.logAdRevenue(monetizationNetwork, mediationNetwork, eventRevenue, revenueCurrency, additionalParameters);
+            AppsFlyerSDK.AppsFlyerAdRevenueMediationNetworkType type = AppsFlyerSDK.AppsFlyerAdRevenueMediationNetworkType.AppsFlyerAdRevenueMediationNetworkTypeIronSource;
+            if(mediationNetwork == "admob")
+            {
+                type = AppsFlyerSDK.AppsFlyerAdRevenueMediationNetworkType.AppsFlyerAdRevenueMediationNetworkTypeGoogleAdMob;
+            }
+            else if(mediationNetwork == "ironSource")
+            {
+                type = AppsFlyerSDK.AppsFlyerAdRevenueMediationNetworkType.AppsFlyerAdRevenueMediationNetworkTypeIronSource;
+            }
+            else if(mediationNetwork == "applovin")
+            {
+                type = AppsFlyerSDK.AppsFlyerAdRevenueMediationNetworkType.AppsFlyerAdRevenueMediationNetworkTypeApplovinMax;
+            }
+
+            AppsFlyerAdRevenue.logAdRevenue(monetizationNetwork, type, eventRevenue, revenueCurrency, additionalParameters);
         }
 #endif
-        #endregion
+#endregion
 
-        #region Appsflyer Callbacks
+#region Appsflyer Callbacks
 
         void AppsFlyerOnRequestResponse(object sender, EventArgs e)
         {
-            #if APPSFLYER_ENABLE
+#if APPSFLYER_ENABLE
             var args = e as AppsFlyerRequestEventArgs;
             AppsFlyer.AFLog("AppsFlyerOnRequestResponse", " status code " + args.statusCode);
 #endif
@@ -138,7 +156,7 @@ namespace AtoGame.Tracking.Appsflyer
 
         void OnInAppResponse(object sender, EventArgs e)
         {
-            #if APPSFLYER_ENABLE
+#if APPSFLYER_ENABLE
             var af_args = e as AppsFlyerRequestEventArgs;
             AppsFlyer.AFLog("AppsFlyerOnRequestResponse", " status code " + af_args.statusCode);
 #endif
@@ -180,10 +198,16 @@ namespace AtoGame.Tracking.Appsflyer
             TrackingLogger.Log("[AtoAppsflyerTracking]: onAppOpenAttributionFailure Failed: " + error);
 #endif
         }
-        #endregion
+#endregion
 
-        #region For Validate IAP
+#region For Validate IAP
 #if UNITY_IAP_ENABLE && APPSFLYER_ENABLE
+
+        private void OnPurchasedIap(IAP.EventKey.OnBoughtIap param)
+        {
+            AppsFlyerPurchaseEvent(param.Product);
+        }
+
         /// <summary>
         /// Gọi hàm này sau khi thực hiện purchase thành công. (dành riêng cho game có IAP chiếm trên 20%)
         /// if (validPurchase) {

@@ -2,6 +2,7 @@ using AtoGame.Base;
 #if FIREBASE_ENABLE
 using Firebase;
 using Firebase.Analytics;
+using Firebase.Crashlytics;
 #endif
 using System.Collections;
 using System.Collections.Generic;
@@ -23,7 +24,11 @@ namespace AtoGame.Tracking.FB
             if (Initialized)
                 return;
 
-            available = false;
+            //available = false;
+
+            available = true;
+            return;
+
 #if FIREBASE_ENABLE
             FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith((Task<DependencyStatus> task) =>
             {
@@ -47,6 +52,16 @@ namespace AtoGame.Tracking.FB
         private void OnFirebaseAvailable()
         {
             if (available) return;
+            // Create and hold a reference to your FirebaseApp,
+            // where app is a Firebase.FirebaseApp property of your application class.
+            // Crashlytics will use the DefaultInstance, as well;
+            // this ensures that Crashlytics is initialized.
+            Firebase.FirebaseApp app = Firebase.FirebaseApp.DefaultInstance;
+
+            // When this property is set to true, Crashlytics will report all
+            // uncaught exceptions as fatal events. This is the recommended behavior.
+            Crashlytics.ReportUncaughtExceptionsAsFatal = true;
+
             TrackingLogger.Log("[FIREBASE] OnFirebaseAvailable");
             FirebaseAnalytics.SetAnalyticsCollectionEnabled(true);
             TrackingLogger.Log("[FIREBASE] OnFirebaseAvailable - After set analyticscollectionenable true");
