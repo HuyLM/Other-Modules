@@ -103,7 +103,8 @@ namespace AtoGame.OtherModules.HUD
 
         protected virtual void DeactiveFrame()
         {
-            this.DelayFrame(2, OnHiddenFrame);
+            OnHiddenFrame();
+            //this.DelayFrame(2, OnHiddenFrame);
         }
 
         protected virtual void OnHiddenFrame()
@@ -164,9 +165,9 @@ namespace AtoGame.OtherModules.HUD
             return this;
         }
 
-        public void Hide()
+        public void Hide(bool instant = false)
         {
-            hud.Hide(this);
+            hud.Hide(this, instant: instant);
         }
 
         public void Show()
