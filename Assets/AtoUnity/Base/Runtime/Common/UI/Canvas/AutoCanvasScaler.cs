@@ -2,15 +2,18 @@
 using UnityEngine;
 using UnityEngine.UI;
 using NaughtyAttributes;
+using AtoGame.Base.Helper;
 
 namespace AtoGame.Base.UI
 {
     [RequireComponent(typeof(CanvasScaler))]
     public class AutoCanvasScaler : MonoBehaviour
     {
+        [SerializeField] private Camera cameraRef;
         [SerializeField] private CanvasScaler canvasScaler;
         [SerializeField, Range(0f, 10f)] private float updateRate = 1f;
         [SerializeField] private AnimationCurve curve = AnimationCurve.Linear(1.33f, 0f, 2f, 1f);
+        [SerializeField] private float delay;
 
         private WaitForSeconds waitUpdate;
         private float currentAspect;
@@ -52,7 +55,11 @@ namespace AtoGame.Base.UI
         [Button("CalculatorScale")]
         private void CalculatorScale()
         {
-            Camera camera = Camera.main;
+            Camera camera = cameraRef;
+            if(camera == null)
+            {
+                camera = Camera.main;
+            }
 
             if (camera == null) return;
             if (canvasScaler == null) return;
@@ -64,6 +71,10 @@ namespace AtoGame.Base.UI
 
         private IEnumerator AutoUpdate()
         {
+            if(delay > 0)
+            {
+                yield return Yielder.Wait(delay);
+            }
             while (true)
             {
                 CalculatorScale();

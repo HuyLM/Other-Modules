@@ -11,6 +11,7 @@ namespace AtoGame.Mediation
         {
             return new AdInfo()
             {
+                adPlatform = "ironSource",
                 auctionId = adInfo.auctionId,
                 adUnit = adInfo.adUnit,
                 country = adInfo.country,
@@ -30,6 +31,7 @@ namespace AtoGame.Mediation
         {
             return new ImpressionData()
             {
+                adPlatform = "ironSource",
                 auctionId = adInfo.auctionId,
                 adUnit = adInfo.adUnit,
                 country = adInfo.country,

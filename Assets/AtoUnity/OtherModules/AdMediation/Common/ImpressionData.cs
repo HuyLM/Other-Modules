@@ -6,6 +6,7 @@ namespace AtoGame.Mediation
 {
     public class ImpressionData
     {
+        public string adPlatform;
         public string auctionId;
         public string adUnit;
         public string country;

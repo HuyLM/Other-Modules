@@ -8,10 +8,12 @@ namespace AtoGame.Base.UI
     public class DOTweenActive : DOTweenTransition
     {
         [SerializeField] private Transform target;
+        [SerializeField] private bool fromCurrent;
         [SerializeField] private bool active;
 
 
         public Transform Target { get => target; set => target = value; }
+        public bool FromCurrent { get => fromCurrent; set => fromCurrent = value; }
         public bool Active { get => active; set => active = value; }
 
         private void Reset()
@@ -21,7 +23,11 @@ namespace AtoGame.Base.UI
 
         public override void ResetState()
         {
-            target.gameObject.SetActive(!active);
+
+            if (!fromCurrent)
+            {
+                target.gameObject.SetActive(!active);
+            }
         }
 
         public override void ToEndState()

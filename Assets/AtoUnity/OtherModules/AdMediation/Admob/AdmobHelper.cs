@@ -4,13 +4,14 @@ using UnityEngine;
 
 namespace AtoGame.Mediation
 {
-#if ATO_ADMOB_MEDIATION_ENABLE
+#if ATO_ADMOB_MEDIATION_ENABLE || ATO_ADMOB_ENABLE
     public static class AdmobHelper
     {
         public static AdInfo Convert(this GoogleMobileAds.Api.AdValue adInfo)
         {
             return new AdInfo()
             {
+                adPlatform = "admob",
                 auctionId = string.Empty,
                 adUnit = string.Empty,
                 country = string.Empty,
@@ -30,6 +31,7 @@ namespace AtoGame.Mediation
         {
             return new ImpressionData()
             {
+                adPlatform = "admob",
                 auctionId = string.Empty,
                 adUnit = string.Empty,
                 country = string.Empty,

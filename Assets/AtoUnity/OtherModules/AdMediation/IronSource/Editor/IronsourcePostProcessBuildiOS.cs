@@ -1,3 +1,4 @@
+#if ATO_IRONSOURCE_MEDIATION_ENABLE
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -8,7 +9,7 @@ using UnityEngine;
 
 namespace AtoGame.Mediation
 {
-#if ATO_IRONSOURCE_MEDIATION_ENABLE
+#if UNITY_IOS
     public class IronsourcePostProcessBuildiOS
     {
         private const string AdvertisingAttributionEndpoint = "https://postbacks-is.com";
@@ -72,3 +73,4 @@ namespace AtoGame.Mediation
     }
 #endif
 }
+#endif

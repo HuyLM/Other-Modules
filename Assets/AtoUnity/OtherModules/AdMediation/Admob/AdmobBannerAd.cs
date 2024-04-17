@@ -4,14 +4,21 @@ using UnityEngine;
 
 namespace AtoGame.Mediation
 {
-#if ATO_ADMOB_MEDIATION_ENABLE
+#if ATO_ADMOB_MEDIATION_ENABLE || ATO_ADMOB_ENABLE
     public class AdmobBannerAd : BaseAd
     {
         private string adUnitId;
         private GoogleMobileAds.Api.AdSize size;
         private GoogleMobileAds.Api.AdPosition position;
+        private bool useCollapsiable;
 
         GoogleMobileAds.Api.BannerView _bannerView;
+        private bool isFirstRequest = true;
+
+        private bool requesting;
+        private readonly float[] retryTimes = { 0.1f, 1, 2, 4, 8, 16, 32, 64 }; // sec
+        private int retryCounting;
+        private DelayTask delayRequestTask;
 
         public override bool IsAvailable
         {
@@ -25,8 +32,10 @@ namespace AtoGame.Mediation
             }
         }
 
-        public AdmobBannerAd(string adUnitId, GoogleMobileAds.Api.AdSize size, GoogleMobileAds.Api.AdPosition position)
+        public AdmobBannerAd(string adUnitId, GoogleMobileAds.Api.AdSize size, GoogleMobileAds.Api.AdPosition position, bool useCollapsiable)
         {
+            isFirstRequest = true;
+            this.useCollapsiable = useCollapsiable;
             this.adUnitId = adUnitId;
             this.size = size;
             this.position = position;
@@ -34,6 +43,11 @@ namespace AtoGame.Mediation
             if (_bannerView != null)
             {
                 _bannerView.Destroy();
+            }
+
+            if (useCollapsiable)
+            {
+                size = GoogleMobileAds.Api.AdSize.GetCurrentOrientationAnchoredAdaptiveBannerAdSizeWithWidth(GoogleMobileAds.Api.AdSize.FullWidth);
             }
 
             _bannerView = new GoogleMobileAds.Api.BannerView(adUnitId, size, position);
@@ -50,18 +64,88 @@ namespace AtoGame.Mediation
                 _bannerView.OnAdFullScreenContentOpened += OnAdFullScreenContentOpened;
                 _bannerView.OnBannerAdLoaded += OnAdLoadedEvent;
                 _bannerView.OnBannerAdLoadFailed += OnAdLoadFailedEvent;
+                _bannerView.OnAdClicked += OnAdClicked;
             }
         }
 
         protected override void CallRequest()
         {
+            
+        }
+
+        private void BannerRequest()
+        {
+            if (requesting)
+            {
+                return;
+            }
+            if (Application.internetReachability == NetworkReachability.NotReachable)
+            {
+                return;
+            }
+
+            requesting = true;
+            float delayRequest = GetRetryTime(retryCounting);
+            Debug.Log($"AdmobBannerAd Request: delay={delayRequest}s, retry={retryCounting}");
+
+            delayRequestTask = new DelayTask(delayRequest, () =>
+            {
+                AdsEventExecutor.Remove(delayRequestTask);
+                CallRequest();
+
+            });
+            delayRequestTask.Start();
+            AdsEventExecutor.AddTask(delayRequestTask);
+        }
+
+        private float GetRetryTime(int retry)
+        {
+            if (retry >= 0 && retry < retryTimes.Length)
+            {
+                return retryTimes[retry];
+            }
+            return retryTimes[retryTimes.Length - 1];
         }
 
         protected override void CallShow()
         {
+            if(requesting == true)
+            {
+                return;
+            }
+            if (_bannerView == null)
+            {
+                _bannerView = new GoogleMobileAds.Api.BannerView(adUnitId, size, position);
+                CallAddEvent();
+            }
             if (_bannerView != null)
             {
+                requesting = true;
                 var adRequest = new GoogleMobileAds.Api.AdRequest();
+                if(useCollapsiable)
+                {
+                    string positionString = "bottom";
+                    switch(this.position)
+                    {
+                        case GoogleMobileAds.Api.AdPosition.Top:
+                            {
+                                positionString = "top";
+                                break;
+                            }
+                        case GoogleMobileAds.Api.AdPosition.Bottom:
+                            {
+                                positionString = "bottom";
+                                break;
+                            }
+                    }
+                    adRequest.Extras.Add("collapsible", positionString);
+                    if(isFirstRequest)
+                    {
+                        System.Guid myuuid = System.Guid.NewGuid();
+                        string myuuidAsString = myuuid.ToString();
+                        adRequest.Extras.Add("collapsible_request_id", myuuidAsString);
+                    }
+                }
                 _bannerView.LoadAd(adRequest);
             }
         }
@@ -75,57 +159,58 @@ namespace AtoGame.Mediation
                 _bannerView.OnAdFullScreenContentOpened -= OnAdFullScreenContentOpened;
                 _bannerView.OnBannerAdLoaded -= OnAdLoadedEvent;
                 _bannerView.OnBannerAdLoadFailed -= OnAdLoadFailedEvent;
-                Debug.Log("Destroying banner ad.");
+                _bannerView.OnAdClicked -= OnAdClicked;
                 _bannerView.Destroy();
                 _bannerView = null;
+                requesting = false;
             }
         }
 
-#region Listeners
+    #region Listeners
 
         private void OnAdFullScreenContentOpened()
         {
             Debug.Log($"[AdMediation-AdmobBannerAd]: {adUnitId} got OnAdFullScreenContentOpened");
-            OnCompleted(true, string.Empty, new AdInfo());
-            AdMediation.onBannerCompletedEvent?.Invoke(adUnitId, new AdInfo());
+            AdMediation.onBannerFullOpenedEvent?.Invoke();
         }
 
         private void OnAdLoadedEvent()
         {
+            requesting = false;
+            isFirstRequest = false;
             Debug.Log($"[AdMediation-AdmobBannerAd]: {adUnitId} got OnAdLoadedEvent");
             OnAdLoadSuccess(new AdInfo());
-            if (_bannerView != null)
-            {
-                _bannerView.Show();
-            }
+            OnCompleted(true, string.Empty, new AdInfo());
+            AdMediation.onBannerCompletedEvent?.Invoke(adUnitId, new AdInfo());
         }
 
         private void OnAdLoadFailedEvent(GoogleMobileAds.Api.LoadAdError error)
         {
-            Debug.Log($"[AdMediation-AdmobBannerAd]: {adUnitId} got OnAdLoadFailedEvent");
-            OnAdLoadFailed(error.GetCause().ToString());
-            AdMediation.onBannerFailedEvent?.Invoke(error.GetCause().ToString());
+            requesting = false;
+            Debug.Log($"[AdMediation-AdmobBannerAd]: {adUnitId} got OnAdLoadFailedEvent with error {error}");
+            OnAdShowFailed(error.ToString(), new AdInfo());
+            AdMediation.onBannerFailedEvent?.Invoke(error.ToString());
+            BannerRequest();
         }
 
         private void OnAdFullScreenContentClosed()
         {
             Debug.Log($"[AdMediation-AdmobBannerAd]: {adUnitId} got OnAdFullScreenContentClosed");
+            AdMediation.onBannerFullClosedEvent?.Invoke();
         }
 
         private void OnAdPaid(GoogleMobileAds.Api.AdValue obj)
         {
-            if(obj == null)
-            {
-                Debug.Log($"[AdMediation-AdmobBannerAd]: {adUnitId} got OnAdPaid With AdInfo null");
-                return;
-            }
             Debug.Log($"[AdMediation-AdmobBannerAd]: {adUnitId} got OnAdPaid With AdInfo " + obj.ToString());
             OnAdOpening(obj.ConvertToImpression());
-            AdMediation.onAdRevenuePaidEvent?.Invoke(obj.ConvertToImpression());
         }
 
-
-#endregion
+        private void OnAdClicked()
+        {
+            Debug.Log($"[AdMediation-AdmobBannerAd]: {adUnitId} got OnAdClicked");
+            AdMediation.onBannerClicked?.Invoke(new AdInfo());
+        }
+    #endregion
 
     }
 #endif

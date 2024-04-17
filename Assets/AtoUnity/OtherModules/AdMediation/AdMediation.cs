@@ -66,6 +66,7 @@ namespace AtoGame.Mediation
         public static Action<ImpressionData> onAdRevenuePaidEvent;
         // video reward
         public static Action<AdInfo> onVideoRewardLoadedEvent;
+        public static Action<AdInfo> onVideoRewardLoadFailedEvent;
         public static Action<AdInfo> onVideoRewardDisplayedEvent;
         public static Action<string, AdInfo> onVideoRewardCompletedEvent;
         public static Action<string, AdInfo> onVideoRewardFailedEvent;
@@ -80,5 +81,15 @@ namespace AtoGame.Mediation
         // banner
         public static Action<string, AdInfo> onBannerCompletedEvent;
         public static Action<string> onBannerFailedEvent;
+        public static Action onBannerFullOpenedEvent;
+        public static Action onBannerFullClosedEvent;
+        public static Action<AdInfo> onBannerClicked;
+        // app open ad
+        public static Action<AdInfo> onAppOpenLoadedEvent;
+        public static Action<string> onAppOpenLoadFailed;
+        public static Action<AdInfo> onAppOpenOpenedEvent;
+        public static Action<string, AdInfo> onAppOpenFailedEvent;
+        public static Action<string, AdInfo> onAppOpenCompletedEvent;
+        public static Action<AdInfo> onAppOpenClicked;
     }
 }

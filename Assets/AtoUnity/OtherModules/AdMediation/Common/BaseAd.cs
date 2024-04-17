@@ -41,6 +41,7 @@ namespace AtoGame.Mediation
 
         protected void OnAdOpening(ImpressionData impressionData)
         {
+            AdMediation.onAdRevenuePaidEvent?.Invoke(impressionData);
         }
 
         protected void OnAdShowFailed(string errorMsg, AdInfo adInfo)

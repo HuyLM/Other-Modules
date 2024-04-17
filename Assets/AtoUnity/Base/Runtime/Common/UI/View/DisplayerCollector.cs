@@ -76,6 +76,7 @@ namespace AtoGame.Base.UI
                 }
             }
         }
+
         public virtual void AddDisplayer(TDisplayer displayer)
         {
             displayers.Add(displayer);

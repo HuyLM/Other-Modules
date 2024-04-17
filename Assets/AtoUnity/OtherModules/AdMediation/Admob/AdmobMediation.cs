@@ -16,22 +16,23 @@ namespace AtoGame.Mediation
         [SerializeField] private string androidInterstitialAdId;
         [SerializeField] private string androidVideoAdId;
         [SerializeField] private string androidBannerAdId;
-        [SerializeField] private string androidInterstitialAdTestId = "ca-app-pub-3940256099942544/1033173712";
-        [SerializeField] private string androidVideoAdTestId = "ca-app-pub-3940256099942544/5224354917";
-        [SerializeField] private string androidBannerAdTestId = "ca-app-pub-3940256099942544/6300978111";
+        [SerializeField] private string androidInterstitialAdTestId;
+        [SerializeField] private string androidVideoAdTestId;
+        [SerializeField] private string androidBannerAdTestId;
         [Header("IOS")]
         [SerializeField] private string iosInterstitialAdId;
         [SerializeField] private string iosVideoAdId;
         [SerializeField] private string iosBannerAdId;
-        [SerializeField] private string iosInterstitialAdTestId = "ca-app-pub-3940256099942544/4411468910";
-        [SerializeField] private string iosVideoAdTestId = "ca-app-pub-3940256099942544/1712485313";
-        [SerializeField] private string iosBannerAdTestId = "ca-app-pub-3940256099942544/2934735716";
+        [SerializeField] private string iosInterstitialAdTestId;
+        [SerializeField] private string iosVideoAdTestId;
+        [SerializeField] private string iosBannerAdTestId;
         [Header("Privacy")]
         [SerializeField] private bool isAgeRestrictedUser = false;
         [SerializeField] private string maxAdContent = "MA";
         [Space(20)]
         [Header("Default Banner")]
         [SerializeField] private BannerSize defaultBannerSize;
+        [SerializeField] private bool useCollapsiable;
         [SerializeField] private BannerPosition defaultBannerPosition = BannerPosition.BOTTOM_CENTER;
 
         private AdmobVideoRewardAd rewardedAd;
@@ -124,7 +125,7 @@ namespace AtoGame.Mediation
                 return;
             }
 
-            if (string.IsNullOrEmpty(RewardedAdUnitId) == false)
+            if(string.IsNullOrEmpty(RewardedAdUnitId) == false)
             {
                 rewardedAd = new AdmobVideoRewardAd(RewardedAdUnitId);
             }
@@ -152,7 +153,7 @@ namespace AtoGame.Mediation
 
 
 
-            var debugGeography = GoogleMobileAds.Ump.Api.DebugGeography.EEA;
+            var debugGeography = GoogleMobileAds.Ump.Api.DebugGeography.Disabled;
             var tagForUnderAgeOfConsent = isAgeRestrictedUser;
             // Confugre the ConsentDebugSettings.
             // The ConsentDebugSettings is serializable so you may expose this to your monobehavior.
@@ -173,33 +174,70 @@ namespace AtoGame.Mediation
                     {
                         // The consent information updated successfully.
                         Debug.Log(string.Format(
-                            "Consent information updated to {0}. You may load the consent " +
-                            "form.", GoogleMobileAds.Ump.Api.ConsentInformation.ConsentStatus));
+                                "Consent information updated to {0}. You may load the consent " +
+                                "form.", GoogleMobileAds.Ump.Api.ConsentInformation.ConsentStatus));
 
-                        GoogleMobileAds.Ump.Api.ConsentForm.LoadAndShowConsentFormIfRequired((GoogleMobileAds.Ump.Api.FormError formError) => {
-                            if (formError != null)
+                        if(GoogleMobileAds.Ump.Api.ConsentInformation.IsConsentFormAvailable())
+                        {
+                            GoogleMobileAds.Ump.Api.ConsentForm.Load(
+                            // OnConsentFormLoad
+                            (GoogleMobileAds.Ump.Api.ConsentForm form, GoogleMobileAds.Ump.Api.FormError error) =>
                             {
-                                // Consent gathering failed.
-                                UnityEngine.Debug.LogError(formError);
-                            }
+                                if (form != null)
+                                {
+                                    // The consent form was loaded.
+                                    // We cache the consent form for showing later.
+                                    
+                                    Debug.Log("Consent form is loaded and is ready to show.");
+                                    if(GoogleMobileAds.Ump.Api.ConsentInformation.ConsentStatus == GoogleMobileAds.Ump.Api.ConsentStatus.Required)
+                                    {
+                                        form.Show(
+                                       // OnConsentFormShow
+                                       (GoogleMobileAds.Ump.Api.FormError error) =>
+                                       {
+                                           if (error == null)
+                                           {
+                                               InitAdmob();
+                                           }
+                                           else
+                                           {
+                                                // The consent form failed to show.
+                                                Debug.LogError("Failed to show consent form with error: " +
+                                                               error.Message);
+                                           }
+                                       });
+                                    }
+                                    else
+                                    {
+                                        InitAdmob();
+                                    }
+                                }
+                                else
+                                {
+                                    // The consent form failed to load.
+                                    string error1 = "Failed to load consent form with error11111: ";
+                                    string error2 = error == null ? "unknown error" : error.Message;
+                                    Debug.LogError(error1);
+                                    Debug.LogError(error2);
+                                    Debug.LogError(error1 + error2);
 
-                            if (ConsentInformation.CanRequestAds())
-                            {
-                                Debug.Log("ConsentInformation.CanRequestAds = true");
-                                InitAdmob();
-                            }
-                        });
+                                }
+                            });
+                        }
+                        else
+                        {
+                            InitAdmob();
+                        }
+                       
                     }
                     else
                     {
                         // The consent information failed to update.
                         Debug.LogError("Failed to update consent information with error: " +
                                 error.Message);
-                        InitAdmob();
                     }
-                }
-            );
 
+                });
 
 
             void InitAdmob()
@@ -325,7 +363,7 @@ namespace AtoGame.Mediation
                 bannerAd = null;
             }
 
-            bannerAd = new AdmobBannerAd(BannerAdUnitId, AdmobHelper.GetBannerSize(defaultBannerSize), AdmobHelper.GetBannerPosition(defaultBannerPosition));
+            bannerAd = new AdmobBannerAd(BannerAdUnitId, AdmobHelper.GetBannerSize(defaultBannerSize), AdmobHelper.GetBannerPosition(defaultBannerPosition), useCollapsiable);
             bannerAd.Show(onCompleted, onFailed);
         }
 

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 
-namespace StickerBook
+namespace AtoGame.OtherModules.SoundManager
 {
     public class SoundManager<T> : SingletonBindAlive<T> where T : SoundManager<T>
     {
@@ -24,27 +24,27 @@ namespace StickerBook
 
         public void Load()
         {
-            if(saver.GetMasterEnable())
+            if(MasterEnable)
             {
-                mixer.SetFloat("MasterVolume", SoundHelper.ConvertToDecibel(saver.GetMasterVolume()));
+                mixer.SetFloat("MasterVolume", SoundHelper.ConvertToDecibel(MasterVolume));
             }
             else
             {
                 mixer.SetFloat("MasterVolume", SoundHelper.ConvertToDecibel(0));
             }
 
-            if(saver.GetMusicEnable())
+            if(MusicEnable)
             {
-                mixer.SetFloat("MusicVolume", SoundHelper.ConvertToDecibel(saver.GetMusicVolume()));
+                mixer.SetFloat("MusicVolume", SoundHelper.ConvertToDecibel(MusicVolume));
             }
             else
             {
                 mixer.SetFloat("MusicVolume", SoundHelper.ConvertToDecibel(0));
             }
 
-            if(saver.GetMusicEnable())
+            if(SFXEnable)
             {
-                mixer.SetFloat("SFXVolume", SoundHelper.ConvertToDecibel(saver.GetMusicVolume()));
+                mixer.SetFloat("SFXVolume", SoundHelper.ConvertToDecibel(SFXVolume));
             }
             else
             {
@@ -59,44 +59,51 @@ namespace StickerBook
             set 
             {
                 saver.SetMasterEnable(value);
-                if(value)
-                {
-                    mixer.SetFloat("MasterVolume", SoundHelper.ConvertToDecibel(saver.GetMasterVolume()));
-                }
-                else
-                {
-                    mixer.SetFloat("MasterVolume", SoundHelper.ConvertToDecibel(0));
-                }
             }
         }
         public float MasterVolume
         {
             get => saver.GetMasterVolume();
-            set => saver.SetMasterVolume(value);
+            set
+            {
+                saver.SetMasterVolume(value);
+                mixer.SetFloat("MasterVolume", SoundHelper.ConvertToDecibel(MasterVolume));
+                if(value == 0)
+                {
+                    MasterEnable = false;
+                }
+                else
+                {
+                    MasterEnable = true;
+                }
+            }
         }
         #endregion
 
         #region Music
         public bool MusicEnable
         {
-            get => saver.GetMusicEnable() && saver.GetMasterEnable();
+            get => saver.GetMusicEnable() && MasterEnable;
             set
             {
                 saver.SetMusicEnable(value);
-                if(value)
-                {
-                    mixer.SetFloat("MusicVolume", SoundHelper.ConvertToDecibel(saver.GetMusicVolume()));
-                }
-                else
-                {
-                    mixer.SetFloat("MusicVolume", SoundHelper.ConvertToDecibel(0));
-                }
             }
         }
         public float MusicVolume
         {
             get => saver.GetMusicVolume();
-            set => saver.SetMusicVolume(value);
+            set {
+                saver.SetMusicVolume(value);
+                mixer.SetFloat("MusicVolume", SoundHelper.ConvertToDecibel(MusicVolume));
+                if(value == 0)
+                {
+                    MusicEnable = false;
+                }
+                else
+                {
+                    MusicEnable = true;
+                }
+            }
         }
 
         public void PlayMusic(AudioClip clip, bool fadein = false, float fadeDuration = 1f, bool loop = true, float volume = 1f)
@@ -184,24 +191,28 @@ namespace StickerBook
         #region SFX
         public bool SFXEnable
         {
-            get => saver.GetSFXEnable() && saver.GetMasterEnable();
+            get => saver.GetSFXEnable() && MasterEnable;
             set
             {
                 saver.SetSFXEnable(value);
-                if(value)
-                {
-                    mixer.SetFloat("SFXVolume", SoundHelper.ConvertToDecibel(saver.GetSFXVolume()));
-                }
-                else
-                {
-                    mixer.SetFloat("SFXVolume", SoundHelper.ConvertToDecibel(0));
-                }
             }
         }
         public float SFXVolume
         {
             get => saver.GetSFXVolume();
-            set => saver.SetSFXVolume(value);
+            set
+            {
+                saver.SetSFXVolume(value);
+                mixer.SetFloat("SFXVolume", SoundHelper.ConvertToDecibel(SFXVolume));
+                if(value == 0)
+                {
+                    SFXEnable = false;
+                }
+                else
+                {
+                    SFXEnable = true;
+                }
+            }
         }
 
         public void PlaySFX(AudioClip clip, float volume = 1f)
@@ -211,6 +222,28 @@ namespace StickerBook
                 return;
             }
             sfxAudioSource.PlayOneShot(clip, volume);
+        }
+
+        public void PlayLoopSFX(AudioClip clip, float volume = 1)
+        {
+            if (sfxAudioSource == null || SFXEnable == false)
+            {
+                return;
+            }
+            sfxAudioSource.clip = clip;
+            sfxAudioSource.loop = true;
+            sfxAudioSource.volume = volume;
+            sfxAudioSource.Play();
+        }
+
+        public void StopLoopSFX()
+        {
+            if (sfxAudioSource == null || sfxAudioSource.isPlaying == false)
+            {
+                return;
+            }
+            sfxAudioSource.loop = false;
+            sfxAudioSource.Stop();
         }
         #endregion
 

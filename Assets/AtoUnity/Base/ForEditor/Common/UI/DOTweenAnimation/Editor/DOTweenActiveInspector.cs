@@ -8,6 +8,7 @@ namespace AtoGame.Base.UI
     {
         private DOTweenActive dOTween;
         private SerializedProperty targetProperty;
+        private SerializedProperty fromCurrentProperty;
         private SerializedProperty activeCurrentProperty;
 
         protected override void OnEnable()
@@ -15,12 +16,14 @@ namespace AtoGame.Base.UI
             base.OnEnable();
             dOTween = transition as DOTweenActive;
             targetProperty = serializedObject.FindProperty("target");
+            fromCurrentProperty = serializedObject.FindProperty("fromCurrent");
             activeCurrentProperty = serializedObject.FindProperty("active");
         }
         public override void OnInspectorGUI()
         {
             base.OnInspectorGUI();
             EditorGUILayout.PropertyField(targetProperty);
+            EditorGUILayout.PropertyField(fromCurrentProperty);
             EditorGUILayout.PropertyField(activeCurrentProperty);
             if (GUI.changed)
             {

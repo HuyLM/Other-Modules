@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace AtoGame.Mediation
 {
-    #if ATO_ADMOB_MEDIATION_ENABLE
+#if ATO_ADMOB_MEDIATION_ENABLE || ATO_ADMOB_ENABLE
     public class AdmobVideoRewardAd : BaseAd
     {
         private bool getRewarded = false;
@@ -44,7 +44,7 @@ namespace AtoGame.Mediation
 
         protected override void CallAddEvent()
         {
-            if(_rewardedAd == null)
+            if (_rewardedAd == null)
             {
                 return;
             }
@@ -52,9 +52,10 @@ namespace AtoGame.Mediation
             _rewardedAd.OnAdFullScreenContentClosed += OnAdFullScreenContentClosed;
             _rewardedAd.OnAdFullScreenContentFailed += OnAdFullScreenContentFailed;
             _rewardedAd.OnAdFullScreenContentOpened += OnAdFullScreenContentOpened;
+            _rewardedAd.OnAdClicked += OnAdClicked;
         }
 
-       
+
 
         protected override void CallRequest()
         {
@@ -117,7 +118,7 @@ namespace AtoGame.Mediation
             }
         }
 
-#region Listeners
+        #region Listeners
 
         private void OnAdFullScreenContentOpened()
         {
@@ -132,16 +133,14 @@ namespace AtoGame.Mediation
             // If the operation failed with a reason.
             if (error != null)
             {
-                Debug.LogError("Rewarded ad failed to load an ad with error : " + error);
-                OnRewardedAdLoadFailedEvent();
+                OnRewardedAdLoadFailedEvent(error.ToString());
                 return;
             }
             // If the operation failed for unknown reasons.
             // This is an unexpected error, please report this bug if it happens.
             if (ad == null)
             {
-                Debug.LogError("Unexpected error: Rewarded load event fired with null ad and null error.");
-                OnRewardedAdLoadFailedEvent();
+                OnRewardedAdLoadFailedEvent("null ad");
                 return;
             }
 
@@ -154,15 +153,16 @@ namespace AtoGame.Mediation
             requesting = false;
             retryCounting = 0;
             OnAdLoadSuccess(new AdInfo());
-            AdMediation.onVideoRewardLoadedEvent?.Invoke(null);
+            AdMediation.onVideoRewardLoadedEvent?.Invoke(new AdInfo());
         }
 
-        private void OnRewardedAdLoadFailedEvent()
+        private void OnRewardedAdLoadFailedEvent(string error)
         {
             requesting = false;
             retryCounting++;
             OnAdLoadFailed(string.Empty);
-            Debug.Log($"[AdMediation-AdmobVideoRewardAd]: {adUnitId} got OnRewardedAdLoadFailedEvent");
+            Debug.Log($"[AdMediation-AdmobVideoRewardAd]: {adUnitId} got OnRewardedAdLoadFailedEvent with error {error}");
+            AdMediation.onVideoRewardLoadFailedEvent?.Invoke(new AdInfo());
         }
 
 
@@ -205,7 +205,13 @@ namespace AtoGame.Mediation
             Debug.Log($"[AdMediation-AdmobVideoRewardAd]: {adUnitId} got OnAdPaid With AdInfo " + obj.ToString());
         }
 
-#endregion
+        private void OnAdClicked()
+        {
+            Debug.Log($"[AdMediation-AdmobVideoRewardAd]: {adUnitId} got OnAdClicked");
+            AdMediation.onVideoRewardClicked?.Invoke(adUnitId, new AdInfo());
+
+            #endregion
+        }
     }
 #endif
 }

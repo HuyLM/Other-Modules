@@ -41,7 +41,7 @@ namespace AtoGame.Mediation
 
         protected override void CallRequest()
         {
-            Debug.Log("ISBannerAd can't request");
+
         }
 
         protected override void CallShow()
@@ -90,6 +90,7 @@ namespace AtoGame.Mediation
 
         void BannerOnAdLoadedEvent(IronSourceAdInfo adInfo)
         {
+            curState = State.SHOWING;
             OnCompleted(true, placement, adInfo.Convert());
             AdMediation.onBannerCompletedEvent?.Invoke(placement, adInfo.Convert());
             Debug.Log("[AdMediation-ISBannerAd]: I got BannerOnAdLoadedEvent With AdInfo " + adInfo.ToString());
@@ -106,6 +107,7 @@ namespace AtoGame.Mediation
         void BannerOnAdClickedEvent(IronSourceAdInfo adInfo)
         {
             Debug.Log("[AdMediation-ISBannerAd]: I got BannerOnAdClickedEvent With AdInfo " + adInfo.ToString());
+            AdMediation.onBannerClicked?.Invoke(adInfo.Convert());
         }
 
         //Notifies the presentation of a full screen content following user click
@@ -124,11 +126,10 @@ namespace AtoGame.Mediation
             if (isCallingShow)
             {
                 isCallingShow = false;
-                curState = State.SHOWING;
                 placement = impressionData.placement;
                 OnAdOpening(impressionData.Convert());
-                Debug.Log("unity - script: I got ImpressionDataReadyEvent ToString(): " + impressionData.ToString());
-                Debug.Log("unity - script: I got ImpressionDataReadyEvent allData: " + impressionData.allData);
+                Debug.Log("[AdMediation-ISBannerAd] unity - script: I got ImpressionDataReadyEvent ToString(): " + impressionData.ToString());
+                Debug.Log("[AdMediation-ISBannerAd] unity - script: I got ImpressionDataReadyEvent allData: " + impressionData.allData);
             }
         }
 

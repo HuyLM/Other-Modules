@@ -10,6 +10,7 @@ namespace AtoGame.Base.UI
     {
         private bool isPlaying;
         protected DOTweenTransition transition;
+        private SerializedProperty stopOnDisableProperty;
         private SerializedProperty delayProperty;
         private SerializedProperty durationProperty;
         private SerializedProperty isSpeedBaseProperty;
@@ -26,6 +27,7 @@ namespace AtoGame.Base.UI
             isPlaying = false;
             transition = target as DOTweenTransition;
 
+            stopOnDisableProperty = serializedObject.FindProperty("stopOnDisable");
             delayProperty = serializedObject.FindProperty("delay");
             durationProperty = serializedObject.FindProperty("duration");
             isSpeedBaseProperty = serializedObject.FindProperty("isSpeedBase");
@@ -65,6 +67,7 @@ namespace AtoGame.Base.UI
             GUILayout.EndHorizontal();
             //////
             GUILayout.Space(20);
+            EditorGUILayout.PropertyField(stopOnDisableProperty);
             // Delay
             EditorGUILayout.PropertyField(delayProperty);
             // Duration

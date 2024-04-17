@@ -11,6 +11,7 @@ namespace AtoGame.Mediation
         {
             return new AdInfo()
             {
+                adPlatform = "applovin",
                 auctionId = string.Empty,
                 adUnit = adInfo.AdFormat,
                 country = MaxSdk.GetSdkConfiguration().CountryCode,
@@ -30,6 +31,7 @@ namespace AtoGame.Mediation
         {
             return new ImpressionData()
             {
+                adPlatform = "applovin",
                 auctionId = string.Empty,
                 adUnit = adInfo.AdFormat,
                 country = MaxSdk.GetSdkConfiguration().CountryCode,

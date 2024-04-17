@@ -42,7 +42,7 @@ namespace AtoGame.Mediation
 
         protected override void CallRequest()
         {
-            Debug.Log("ISVideoRewardAd is auto request ad");
+            Debug.Log("[AdMediation-ISVideoRewardAd]: ISVideoRewardAd is auto request ad");
         }
 
         protected override void CallShow()
@@ -110,6 +110,7 @@ namespace AtoGame.Mediation
         {
             OnAdLoadFailed("ReardedVideoOnAdUnavailable");
             Debug.Log("[AdMediation-ISVideoRewardAd]: I got ReardedVideoOnAdUnavailable");
+            AdMediation.onVideoRewardLoadFailedEvent?.Invoke(new AdInfo());
         }
         void ImpressionDataReadyEvent(IronSourceImpressionData impressionData)
         {
@@ -118,8 +119,8 @@ namespace AtoGame.Mediation
                 isCallingShow = false;
                 placement = impressionData.placement;
                 OnAdOpening(impressionData.Convert());
-                Debug.Log("unity - script: I got ImpressionDataReadyEvent ToString(): " + impressionData.ToString());
-                Debug.Log("unity - script: I got ImpressionDataReadyEvent allData: " + impressionData.allData);
+                Debug.Log("[AdMediation-ISVideoRewardAd]: unity - script: I got ImpressionDataReadyEvent ToString(): " + impressionData.ToString());
+                Debug.Log("[AdMediation-ISVideoRewardAd]: unity - script: I got ImpressionDataReadyEvent allData: " + impressionData.allData);
             }
         }
 

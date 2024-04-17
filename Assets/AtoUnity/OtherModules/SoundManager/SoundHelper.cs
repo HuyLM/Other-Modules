@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace StickerBook
+namespace AtoGame.OtherModules.SoundManager
 {
     public static class SoundHelper 
     {

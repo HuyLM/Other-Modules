@@ -1,4 +1,3 @@
-using StickerBook;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -159,10 +158,10 @@ namespace AtoGame.IAP
             {
                 if(isPurchasing == true)
                 {
-#if APPSFLYER_ENABLE
-                    Tracking.Appsflyer.AtoAppsflyerTracking.AppsFlyerPurchaseEvent(product);
-#endif
-                    //SBTracking.LogIAP(product.definition.id, product.metadata.isoCurrencyCode, product.metadata.localizedPrice, product.transactionID, string.Empty, "Shop");
+                    AtoGame.Base.EventDispatcher.Instance.Dispatch(new EventKey.OnBoughtIap()
+                    {
+                        Product = product
+                    });
                     isPurchasing = false;
                     if (onBuyCompleted != null) onBuyCompleted.Invoke(product.definition.id);
                 }
@@ -402,7 +401,7 @@ namespace AtoGame.IAP
 
 
 
-        #endregion
+#endregion
     }
 }
 

@@ -79,13 +79,12 @@ namespace AtoGame.Mediation
 
             if (Application.internetReachability == NetworkReachability.NotReachable)
             {
-                Debug.Log("Request failed: No internet available.");
                 return;
             }
 
             requesting = true;
             float delayRequest = GetRetryTime(retryCounting);
-            Debug.Log($"ISInterstitialAd Request: delay={delayRequest}s, retry={retryCounting}");
+            Debug.Log($"[AdMediation-ISInterstitialAd]: Request: delay={delayRequest}s, retry={retryCounting}");
 
             delayRequestTask = new DelayTask(delayRequest, () =>
             {
@@ -159,8 +158,8 @@ namespace AtoGame.Mediation
                 isCallingShow = false;
                 placement = impressionData.placement;
                 OnAdOpening(impressionData.Convert());
-                Debug.Log("unity - script: I got ImpressionDataReadyEvent ToString(): " + impressionData.ToString());
-                Debug.Log("unity - script: I got ImpressionDataReadyEvent allData: " + impressionData.allData);
+                Debug.Log("[AdMediation-ISInterstitialAd]: unity - script: I got ImpressionDataReadyEvent ToString(): " + impressionData.ToString());
+                Debug.Log("[AdMediation-ISInterstitialAd]: unity - script: I got ImpressionDataReadyEvent allData: " + impressionData.allData);
             }
         }
 

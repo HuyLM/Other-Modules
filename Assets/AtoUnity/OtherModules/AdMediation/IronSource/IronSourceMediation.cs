@@ -51,10 +51,8 @@ namespace AtoGame.Mediation
                 Debug.Log("[AdMediation-IronSourceMediation]: IronSource.Agent.validateIntegration");
                 IronSource.Agent.validateIntegration();
             }
-			if(AdIronSourceSettings.Instance.HasUserConsent)
-			{
-				IronSource.Agent.setConsent(true);
-			}
+
+            //IronSource.Agent.setConsent(AdIronSourceSettings.Instance.HasUserConsent);
             IronSource.Agent.setMetaData("is_child_directed", AdIronSourceSettings.Instance.IsAgeRestrictedUser.ToString());
             IronSource.Agent.setMetaData("do_not_sell", AdIronSourceSettings.Instance.DoNotSell.ToString());
             if(AdIronSourceSettings.Instance.UseFacebookAd)

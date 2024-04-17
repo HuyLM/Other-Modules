@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace AtoGame.Mediation
 {
-  #if ATO_ADMOB_MEDIATION_ENABLE
+#if ATO_ADMOB_MEDIATION_ENABLE || ATO_ADMOB_ENABLE
     public class AdmobInterstitialAd : BaseAd
     {
         private string adUnitId;
@@ -53,7 +53,10 @@ namespace AtoGame.Mediation
             _interstitialAd.OnAdFullScreenContentClosed += OnAdFullScreenContentClosed;
             _interstitialAd.OnAdFullScreenContentFailed += OnAdFullScreenContentFailed;
             _interstitialAd.OnAdFullScreenContentOpened += OnAdFullScreenContentOpened;
+            _interstitialAd.OnAdClicked += OnAdClicked;
         }
+
+      
 
         protected override void CallRequest()
         {
@@ -62,7 +65,6 @@ namespace AtoGame.Mediation
             {
                 DestroyAd();
             }
-            Debug.Log("Loading interstitial ad.");
 
             // Create our request used to load the ad.
             var adRequest = new GoogleMobileAds.Api.AdRequest();
@@ -86,13 +88,12 @@ namespace AtoGame.Mediation
             }
             if (Application.internetReachability == NetworkReachability.NotReachable)
             {
-                Debug.Log("Request failed: No internet available.");
                 return;
             }
 
             requesting = true;
             float delayRequest = GetRetryTime(retryCounting);
-            Debug.Log($"AdmobInterstitialAd Request: delay={delayRequest}s, retry={retryCounting}");
+            Debug.Log($"[AdMediation-AdmobInterstitialAd]: Request: delay={delayRequest}s, retry={retryCounting}");
 
             delayRequestTask = new DelayTask(delayRequest, () =>
             {
@@ -105,24 +106,22 @@ namespace AtoGame.Mediation
         }
 
 
-
         public void DestroyAd()
         {
             if (_interstitialAd != null)
             {
-                Debug.Log("Destroying interstitial ad.");
                 _interstitialAd.Destroy();
                 _interstitialAd = null;
             }
         }
 
-#region Listeners
+    #region Listeners
 
         private void OnAdFullScreenContentOpened()
         {
             OnAdShowed(new AdInfo());
             AdMediation.onInterstitialDisplayedEvent?.Invoke(new AdInfo());
-            Debug.Log($"[AdMediation-MaxVideoRewardAd]: {adUnitId} got OnAdFullScreenContentOpened");
+            Debug.Log($"[AdMediation-AdmobInterstitialAd]: {adUnitId} got OnAdFullScreenContentOpened");
         }
 
         private void OnInterstitialAdLoadedEvent(GoogleMobileAds.Api.InterstitialAd ad, GoogleMobileAds.Api.LoadAdError error)
@@ -130,16 +129,14 @@ namespace AtoGame.Mediation
             // If the operation failed with a reason.
             if (error != null)
             {
-                Debug.LogError("Interstitial ad failed to load an ad with error : " + error);
-                OnInterstitialAdLoadFailedEvent();
+                OnInterstitialAdLoadFailedEvent(error.ToString());
                 return;
             }
             // If the operation failed for unknown reasons.
             // This is an unexpected error, please report this bug if it happens.
             if (ad == null)
             {
-                Debug.LogError("Unexpected error: Interstitial load event fired with null ad and null error.");
-                OnInterstitialAdLoadFailedEvent();
+                OnInterstitialAdLoadFailedEvent("ad null");
                 return;
             }
 
@@ -155,12 +152,13 @@ namespace AtoGame.Mediation
             AdMediation.onInterstitialLoadedEvent?.Invoke(new AdInfo());
         }
 
-        private void OnInterstitialAdLoadFailedEvent()
+        private void OnInterstitialAdLoadFailedEvent(string error)
         {
             requesting = false;
             retryCounting++;
             OnAdLoadFailed(string.Empty);
-            Debug.Log($"[AdMediation-AdmobInterstitialAd]: {adUnitId} got OnInterstitialAdLoadFailedEvent");
+            Debug.Log($"[AdMediation-AdmobInterstitialAd]: {adUnitId} got OnInterstitialAdLoadFailedEvent " + error);
+            AdMediation.onInterstitialLoadFailed?.Invoke(error);
         }
 
 
@@ -175,7 +173,7 @@ namespace AtoGame.Mediation
         private void OnAdFullScreenContentClosed()
         {
             OnCompleted(true, string.Empty, new AdInfo());
-            AdMediation.onVideoRewardCompletedEvent?.Invoke(string.Empty, new AdInfo());
+            AdMediation.onInterstitialCompletedEvent?.Invoke(string.Empty, new AdInfo());
             Debug.Log($"[AdMediation-AdmobInterstitialAd]: {adUnitId} got OnAdFullScreenContentClosed");
         }
 
@@ -185,7 +183,13 @@ namespace AtoGame.Mediation
             Debug.Log($"[AdMediation-AdmobInterstitialAd]: {adUnitId} got OnAdPaid With AdInfo " + obj.ToString());
         }
 
-#endregion
+
+        private void OnAdClicked()
+        {
+            Debug.Log($"[AdMediation-AdmobInterstitialAd]: {adUnitId} got OnAdClicked");
+            AdMediation.onInterstitiaClicked?.Invoke(new AdInfo());
+        }
+    #endregion
 
     }
 #endif

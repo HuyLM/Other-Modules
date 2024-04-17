@@ -6,6 +6,7 @@ namespace AtoGame.Base.UI
 {
     public abstract class DOTweenTransition : MonoBehaviour
     {
+        [SerializeField] private bool stopOnDisable = true;
         [SerializeField, Range(0f, 10f)] private float delay = 0f;
         [SerializeField] private float duration = 0.5f;
         [SerializeField] private bool isSpeedBase;
@@ -17,6 +18,7 @@ namespace AtoGame.Base.UI
 
         private bool isCompleted;
 
+        public bool StopOnDisable { get => stopOnDisable; set => stopOnDisable = value; }
         public bool IsSpeedBase { get => isSpeedBase; set => isSpeedBase = value; }
         public float Duration { get => duration; set => duration = value; }
         public float Delay { get => delay; set => delay = value; }
@@ -33,9 +35,20 @@ namespace AtoGame.Base.UI
 
         public bool IsCompleted { get => isCompleted; }
 
+        private void OnDisable()
+        {
+            if(stopOnDisable == true)
+            {
+                Stop();
+            }
+        }
+
         public void OnDestroy()
         {
-            Stop();
+            if(stopOnDisable == false)
+            {
+                Stop();
+            }
         }
 
         public void Stop(bool onComplete = false)

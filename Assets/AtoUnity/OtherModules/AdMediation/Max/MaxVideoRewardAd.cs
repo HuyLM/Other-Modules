@@ -150,7 +150,7 @@ namespace AtoGame.Mediation
         private void OnRewardedAdFailedToDisplayEvent(string adUnitId, MaxSdkBase.ErrorInfo errorInfo, MaxSdkBase.AdInfo adInfo)
         {
             OnAdShowFailed(errorInfo.ToString(), adInfo.Convert());
-            AdMediation.onVideoRewardFailedEvent?.Invoke(errorInfo.ToString(), adInfo.Convert());
+            AdMediation.onVideoRewardFailedEvent(errorInfo.ToString(), adInfo.Convert());
          
             Debug.Log($"[AdMediation-MaxVideoRewardAd]: {adUnitId} got OnRewardedAdFailedToDisplayEvent With AdInfo " + adInfo.ToString());
             Debug.Log($"[AdMediation-MaxVideoRewardAd]: {adUnitId} got OnRewardedAdFailedToDisplayEvent With ErrorInfo " + errorInfo.ToString());
