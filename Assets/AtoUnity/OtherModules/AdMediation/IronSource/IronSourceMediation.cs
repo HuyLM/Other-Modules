@@ -261,7 +261,7 @@ namespace AtoGame.Mediation
 
         private void ImpressionDataReadyEvent(IronSourceImpressionData impressionData)
         {
-            AdMediation.onAdRevenuePaidEvent?.Invoke(impressionData.Convert());
+            //AdMediation.onAdRevenuePaidEvent?.Invoke(impressionData.Convert());
         }
     }
 
