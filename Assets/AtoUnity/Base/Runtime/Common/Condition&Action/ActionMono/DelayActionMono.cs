@@ -35,5 +35,14 @@ namespace AtoGame.Base
                 }
             }
         }
+
+        public override void ValidateObject()
+        {
+            base.ValidateObject();
+            if(delayTime <= 0)
+            {
+                Debug.Log($"{name} ValidateObject: delayTime <= 0", this);
+            }
+        }
     }
 }

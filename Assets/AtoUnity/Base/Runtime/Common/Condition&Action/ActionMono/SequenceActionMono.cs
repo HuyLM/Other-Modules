@@ -31,5 +31,27 @@ namespace AtoGame.Base
                 OnComplete(onCompleted);
             }
         }
+
+        public override void ValidateObject()
+        {
+            base.ValidateObject();
+            if(actions == null)
+            {
+                Debug.Log($"{name} ValidateObject: actions null", this);
+                return;
+            }
+
+            foreach(var a in actions)
+            {
+                if(a == null)
+                {
+                    Debug.Log($"{name} ValidateObject: actions HAS null", this);
+                }
+                else
+                {
+                    a.ValidateObject();
+                }
+            }
+        }
     }
 }

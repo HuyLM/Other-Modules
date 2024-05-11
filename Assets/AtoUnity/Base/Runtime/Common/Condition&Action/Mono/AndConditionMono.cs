@@ -18,5 +18,27 @@ namespace AtoGame.Base
             }
             return true;
         }
+
+        public override void ValidateObject()
+        {
+            base.ValidateObject();
+            if(subConditions == null)
+            {
+                Debug.Log($"{name} ValidateObject: subConditions null", this);
+                return;
+            }
+
+            foreach(var c in subConditions)
+            {
+                if(c == null)
+                {
+                    Debug.Log($"{name} ValidateObject: subConditions HAS null", this);
+                }
+                else
+                {
+                    c.ValidateObject();
+                }
+            }
+        }
     }
 }
