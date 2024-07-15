@@ -1,4 +1,7 @@
+using AtoGame.AtoFirebase;
 using AtoGame.Base;
+using AtoGame.Mediation;
+
 #if FIREBASE_ENABLE
 using Firebase;
 using Firebase.Analytics;
@@ -7,7 +10,6 @@ using Firebase.Crashlytics;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace AtoGame.Tracking.FB
 {
@@ -24,33 +26,26 @@ namespace AtoGame.Tracking.FB
             if (Initialized)
                 return;
 
-            //available = false;
-
-            available = true;
+            AtoFirebaseInitializer.AddOnFirebaseInitialized(OnFirebaseInitialized);
+            available = false;
             return;
-
-#if FIREBASE_ENABLE
-            FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith((Task<DependencyStatus> task) =>
-            {
-                var dependencyStatus = task.Result;
-
-                if (dependencyStatus == DependencyStatus.Available)
-                {
-                    OnFirebaseAvailable();
-                }
-                else
-                {
-                    TrackingLogger.Log($"[FIREBASE] Could not resolve all Firebase dependencies: {dependencyStatus}");
-                }
-            });
-#else
-            TrackingLogger.Log("FIREBASE_ENABLE flag has't defined");
-#endif
         }
 
-#if FIREBASE_ENABLE
+        private void OnFirebaseInitialized(bool result, string errorMessage)
+        {
+            if(result == true)
+            {
+                OnFirebaseAvailable();
+            }
+            else
+            {
+                TrackingLogger.Log($"[FIREBASE-Analytics] Firebase Initialize failed: " + errorMessage);
+            }
+        }
+
         private void OnFirebaseAvailable()
         {
+#if FIREBASE_ENABLE
             if (available) return;
             // Create and hold a reference to your FirebaseApp,
             // where app is a Firebase.FirebaseApp property of your application class.
@@ -74,9 +69,9 @@ namespace AtoGame.Tracking.FB
                 callOnAvailable = null;
             }
             available = true;
+#endif
         }
-
-
+#if FIREBASE_ENABLE
         private void LogEvent(string eventName, params Parameter[] para)
         {
             Push((bool isPush) =>
@@ -88,7 +83,7 @@ namespace AtoGame.Tracking.FB
             });
         }
 #endif
-        public void LogEvent(string eventName, ParameterBuilder parameterBuilder)
+    public void LogEvent(string eventName, ParameterBuilder parameterBuilder)
         {
 #if FIREBASE_ENABLE
             this.LogEvent(eventName, parameterBuilder != null ? parameterBuilder.BuildFirebase() : null);
@@ -111,6 +106,14 @@ namespace AtoGame.Tracking.FB
             }
             TrackingLogger.Log($"[FIREBASE-Analytics:" + " EventName = " + eventName + paramLogs.ToString());
         }
+
+        public void LogAdRevenue(ParameterBuilder parameterBuilder)
+        {
+#if FIREBASE_ENABLE
+            Firebase.Analytics.FirebaseAnalytics.LogEvent("ad_impression", parameterBuilder.BuildFirebase());
+#endif
+        }
+          
 
         private void Push(System.Action<bool> action)
         {

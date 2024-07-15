@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace AtoGame.Mediation
 {
-    #if ATO_ADMOB_MEDIATION_ENABLE || ATO_ADMOB_ENABLE
+#if ATO_ADMOB_MEDIATION_ENABLE || ATO_ADMOB_ENABLE
     public class AdmobAppOpenAd : BaseAd
     {
         private string adUnitId;
@@ -162,12 +162,13 @@ namespace AtoGame.Mediation
         }
 
 
-        private void OnAdFullScreenContentFailed(GoogleMobileAds.Api.AdError errorInfo)
+       private void OnAdFullScreenContentFailed(GoogleMobileAds.Api.AdError errorInfo)
         {
-            OnAdShowFailed(errorInfo.ToString(), new AdInfo());
+            string errorString = errorInfo != null ? errorInfo.ToString() : string.Empty;
+            OnAdShowFailed(errorString, new AdInfo());
 
-            Debug.Log($"[AdMediation-AdmobAppOpenAd]: {adUnitId} got OnAdFullScreenContentFailed With ErrorInfo " + errorInfo.ToString());
-            AdMediation.onAppOpenFailedEvent(errorInfo.ToString(), new AdInfo());
+            Debug.Log($"[AdMediation-AdmobAppOpenAd]: {adUnitId} got OnAdFullScreenContentFailed With ErrorInfo " + errorString);
+            AdMediation.onAppOpenFailedEvent(errorString, new AdInfo());
 
         }
 

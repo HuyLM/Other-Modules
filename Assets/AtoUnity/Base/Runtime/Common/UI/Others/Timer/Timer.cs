@@ -22,6 +22,13 @@ namespace AtoGame.Base.UI
         {
             Stop();
         }
+        public void TogglePause()
+        {
+            if (tween != null)
+            {
+                tween.TogglePause();
+            }
+        }
 
         public void Stop()
         {
