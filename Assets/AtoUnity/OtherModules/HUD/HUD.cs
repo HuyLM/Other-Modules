@@ -24,6 +24,7 @@ namespace AtoGame.OtherModules.HUD
         [SerializeField] private Frame defaulFrame;
         [SerializeField] private Transform container;
         [SerializeField] private bool useBackToPrevious;
+        [SerializeField] private bool mustHaveAFrame;
 
         [ReadOnly]
         [SerializeField] private List<Frame> loadedFrames = new List<Frame>();
@@ -129,17 +130,21 @@ namespace AtoGame.OtherModules.HUD
             frame.Initialize(this);
         }
 
-        public void BackToPrevious(Action onCompleted)
+        public bool BackToPrevious(Action onCompleted)
         {
             if(useBackToPrevious)
             {
-                if(previousFrames.Count == 0)
+                if (mustHaveAFrame && activeFrames.Count <= 1)
                 {
-                    return;
+                    return false;
                 }
-				// Hide Current;
+                // Hide Current;
                 Hide(()=> {
                     // Show Previous frame
+                    if (previousFrames.Count == 0)
+                    {
+                        return;
+                    }
                     Frame previousFrame = previousFrames.Pop();
                     if (previousFrame.IsHidding)
                     {
@@ -150,36 +155,26 @@ namespace AtoGame.OtherModules.HUD
                         Resume(previousFrame, onCompleted, false);
                     }
                 }, false, false);
-            }
-        }
-
-        public virtual void Back()
-        {
-            if(active == false)
-            {
-                return;
-            }
-            Frame frameOnTop = GetFrameOnTop();
-            if (frameOnTop == null)
-            {
-                return;
-            }
-            frameOnTop.Back();
-        }
-
-        public virtual bool OnUpdate()
-        {
-            if (active == false)
-            {
-                return false;
-            }
-            if (Input.GetKeyDown(KeyCode.Escape) && GetActiveFrameCount() > 0)
-            {
-                Back();
                 return true;
             }
             return false;
         }
+
+        public virtual bool Back()
+        {
+            if(active == false)
+            {
+                return false;
+            }
+            Frame frameOnTop = GetFrameOnTop();
+            if (frameOnTop == null)
+            {
+                return false;
+            }
+            return frameOnTop.Back();
+        }
+
+    
 
         public void SetActive(bool active)
         {
@@ -504,7 +499,8 @@ namespace AtoGame.OtherModules.HUD
             {
                 activeFrames[i].HideByHUD(null, true);
             }
-            if(useBackToPrevious)
+            activeFrames.Clear();
+            if (useBackToPrevious)
             {
                 previousFrames.Clear();
             }

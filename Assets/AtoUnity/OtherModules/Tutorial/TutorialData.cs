@@ -11,8 +11,8 @@ namespace AtoGame.OtherModules.Tutorial
     public class TutorialData : ScriptableObject
     {
         [Header("Keys")]
-        public int Key;
-        public string KeyName;
+        public int Key;//1
+        public string KeyName; // ShopBuyTutorial
         public int[] NeedDoneKeys;
         public int[] NotShowWhenDoneKeys;
         [Header("Steps")]

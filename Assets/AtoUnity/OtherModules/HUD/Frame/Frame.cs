@@ -111,6 +111,7 @@ namespace AtoGame.OtherModules.HUD
         {
             gameObject.SetActive(false);
             this.onCompleted?.Invoke();
+            _onHidden?.Invoke();
         }
 
         public Frame PauseByHUD(Action onCompleted = null, bool instant = false)
@@ -134,6 +135,7 @@ namespace AtoGame.OtherModules.HUD
         protected virtual void OnPausedFrame()
         {
             this.onCompleted?.Invoke();
+            _onPaused?.Invoke();
         }
 
         public Frame ResumeByHUD(Action onCompleted = null, bool instant = false)
@@ -159,10 +161,9 @@ namespace AtoGame.OtherModules.HUD
             this.onCompleted?.Invoke();
         }
 
-        public virtual Frame Back()
+        public virtual bool Back()
         {
-            Hud.BackToPrevious(null);
-            return this;
+            return Hud.BackToPrevious(null);
         }
 
         public void Hide(bool instant = false)

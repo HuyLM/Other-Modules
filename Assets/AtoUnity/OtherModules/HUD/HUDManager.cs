@@ -1,4 +1,5 @@
 using AtoGame.Base;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -65,14 +66,27 @@ namespace AtoGame.OtherModules.HUD
             }
         }
 
-        private void Update()
+        private bool Back()
         {
             for (int i = huds.Count - 1; i >= 0; i--)
             {
-                if (huds[i].OnUpdate())
+                if (huds[i].Back())
                 {
-                    return;
+                    return true;
                 }
+            }
+            return false;
+        }
+
+        public void Update()
+        {
+            if (Initialized == false)
+            {
+                return;
+            }
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                Back();
             }
         }
     }
