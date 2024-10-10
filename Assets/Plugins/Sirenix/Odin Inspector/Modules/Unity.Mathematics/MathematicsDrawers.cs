@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------
-// <copyright file="MathematicsDrawers.cs" company="Sirenix IVS">
-// Copyright (c) Sirenix IVS. All rights reserved.
+// <copyright file="MathematicsDrawers.cs" company="Sirenix ApS">
+// Copyright (c) Sirenix ApS. All rights reserved.
 // </copyright>
 //-----------------------------------------------------------------------
 
@@ -724,7 +724,7 @@ namespace Sirenix.OdinInspector.Modules.UnityMathematics.Editor
         }
     }
 
-    public class Int2Drawer : OdinValueDrawer<int3>
+    public class Int2Drawer : OdinValueDrawer<int2>
     {
         private bool isMatrixChild;
 
@@ -802,7 +802,7 @@ namespace Sirenix.OdinInspector.Modules.UnityMathematics.Editor
         }
     }
 
-    public class UInt2Drawer : OdinValueDrawer<uint3>
+    public class UInt2Drawer : OdinValueDrawer<uint2>
     {
         private bool isMatrixChild;
 
