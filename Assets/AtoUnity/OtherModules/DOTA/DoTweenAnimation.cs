@@ -10,8 +10,7 @@ using AtoGame.Base.UI;
 
 namespace AtoGame.OtherModules.DOTA
 {
-    public class DoTweenAnimation : MonoBehaviour
-    {
+    public class DoTweenAnimation : BaseDoTweenAnimation {
         [SerializeField, LabelText("Select Animation"), TabGroup("Tab1", "Animation Setting"), OnValueChanged(nameof(OnAnimationNameValueChanged))]
         private EName _animationName;
         [SerializeField, LabelText("Play Type"), TabGroup("Tab1", "Animation Setting", order: 1)]
@@ -73,16 +72,15 @@ namespace AtoGame.OtherModules.DOTA
         public bool _boolValue_1; // ShakePosition, ShakeRotation, ShakeScale  
         #endregion Other Values
 
-        [SerializeField, HideLabel, EnumToggleButtons, TabGroup("Tab1", "Callback Setting")]
-        private ECallbackType callbackType;
-        [SerializeField, LabelText("On Start"), TabGroup("Tab1", "Callback Setting"), ShowIf(nameof(callbackType), ECallbackType.OnStart), Space]
-        private UnityEvent startCallback;
-        [SerializeField, LabelText("On Tween Start"), TabGroup("Tab1", "Callback Setting"), ShowIf(nameof(callbackType), ECallbackType.OnTweenStart), Space]
+        [SerializeField, PropertyOrder(1), LabelText("On Tween Start"), TabGroup("Tab1", "Callback Setting"), ShowIf(nameof(callbackType), ECallbackType.OnTweenStart), Space]
+        protected BaseDoTweenAnimation tweenStartDota;
+        [SerializeField, PropertyOrder(1), LabelText("On Tween Complete"), TabGroup("Tab1", "Callback Setting"), ShowIf(nameof(callbackType), ECallbackType.OnTweenComplete), Space]
+        protected BaseDoTweenAnimation tweenCompleteDota;
+        [SerializeField, PropertyOrder(1), LabelText("On Tween Start"), TabGroup("Tab1", "Callback Setting"), ShowIf(nameof(callbackType), ECallbackType.OnTweenStart), Space]
         private UnityEvent tweenStartCallback;
-        [SerializeField, LabelText("On Tween Complete"), TabGroup("Tab1", "Callback Setting"), ShowIf(nameof(callbackType), ECallbackType.OnTweenComplete), Space]
+        [SerializeField, PropertyOrder(1), LabelText("On Tween Complete"), TabGroup("Tab1", "Callback Setting"), ShowIf(nameof(callbackType), ECallbackType.OnTweenComplete), Space]
         private UnityEvent tweenCompleteCallback;
-        [SerializeField, LabelText("On Complete"), TabGroup("Tab1", "Callback Setting"), ShowIf(nameof(callbackType), ECallbackType.OnComplete), Space]
-        private UnityEvent completeCallback;
+        
 
         private BaseDoTween _baseDoTween;
         private Component _target;
@@ -285,18 +283,20 @@ namespace AtoGame.OtherModules.DOTA
             }
         }
 
-        public void Play()
+        public override void Play(Action onCompleted)
         {
+            base.Play(onCompleted);
             if (Application.isPlaying)
             {
-                Play(null, true);
+                Play(true);
             }
             else
             {
+
                 if (_baseDoTween != null)
                 {
                     _baseDoTween.PlayPreview(this);
-                    if(prepareTweenForPreviewFunc != null)
+                    if (prepareTweenForPreviewFunc != null)
                     {
                         prepareTweenForPreviewFunc.Invoke(this, _baseDoTween.Tween);
                     }
@@ -304,7 +304,8 @@ namespace AtoGame.OtherModules.DOTA
             }
         }
 
-        public void Play(System.Action onCompleted, bool restart)
+
+        public void Play(bool restart)
         {
             Stop();
             if (restart)
@@ -313,7 +314,9 @@ namespace AtoGame.OtherModules.DOTA
             }
             if (_baseDoTween != null)
             {
-                _baseDoTween.Play(this, onCompleted);
+                _baseDoTween.Play(this, () => {
+                    CheckOnCompleted();
+                });
             }
         }
 
@@ -326,7 +329,7 @@ namespace AtoGame.OtherModules.DOTA
             }
         }
 
-        public void Stop()
+        public override void Stop()
         {
             Stop(false);
         }
@@ -352,24 +355,28 @@ namespace AtoGame.OtherModules.DOTA
             _baseDoTween = DoTweenFactory.CreateDoTween();
         }
 
-        public void OnStartEvent()
-        {
-            startCallback?.Invoke();
-        }
-
         public void OnTweenStartEvent()
         {
             tweenStartCallback?.Invoke();
+            if (tweenStartDota != null)
+            {
+                dotaCallingCounter++;
+                tweenStartDota.Play(() => {
+                    CheckOnCompleted();
+                });
+            }
         }
 
         public void OnTweenCompleteEvent()
         {
             tweenCompleteCallback?.Invoke();
-        }
-
-        public void OnCompleteEvent()
-        {
-            completeCallback?.Invoke();
+            if (tweenCompleteDota != null)
+            {
+                dotaCallingCounter++;
+                tweenCompleteDota.Play(() => {
+                    CheckOnCompleted();
+                });
+            }
         }
     }
 }

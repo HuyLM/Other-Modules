@@ -188,7 +188,6 @@ namespace AtoGame.OtherModules.DOTA
 
         public virtual void CreateTween(DoTweenAnimation dota, Action onCompleted)
         {
-            dota.OnStartEvent();
             if (Tween != null)
             {
                 Tween.SetSpeedBased(dota._baseOptions.IsSpeedBase).SetUpdate(dota._baseOptions.IgnoreTimeScale)

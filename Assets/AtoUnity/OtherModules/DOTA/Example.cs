@@ -1,43 +1,39 @@
+using AtoGame.OtherModules.DOTA;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-public class Example : MonoBehaviour {
-    // Define an enum
-    public enum WeaponType {
-        Sword,
-        Bow,
-        Staff,
-        Dagger
-    }
+public class Example : Example1 {
 
-    // Apply the EnumToggleButtons attribute
-    [EnumToggleButtons]
-    public WeaponType selectedWeapon;
+    // Tab B declared first, but displayed second
+    [TabGroup("Tabs", "B"), PropertyOrder(1)]
+    public string tabB1;
 
-    // Show a property or method based on the selected enum
-    [ShowIf("selectedWeapon", WeaponType.Sword)]
-    public int swordDamage = 100;
+    // Tab A declared second, but displayed first
+    [TabGroup("Tabs", "A")]
+    public string tabA1;
 
-    [ShowIf("selectedWeapon", WeaponType.Bow)]
-    public int bowRange = 50;
 
-    [ShowIf("selectedWeapon", WeaponType.Staff)]
-    public int staffMagicPower = 120;
-
-    [ShowIf("selectedWeapon", WeaponType.Dagger)]
-    public int daggerSpeed = 80;
-
-    [Button]
-    public void Attack()
+    public BaseDoTweenAnimation dota;
+    private void Start()
     {
-        Debug.Log("Attacking with: " + selectedWeapon);
+        dota.Play(() => {
+            Debug.Log("Ato");
+        });
     }
 }
 
- // bo Values
- // gan Tween
- // OnCompleteEvent
- // bo UnityEvent ?
- // test play runtime
- // them Paralle/Sequence
- // 
+public class Example1 : MonoBehaviour {
+
+    // Tab B declared first, but displayed second
+    [TabGroup("Tabs", "B"), PropertyOrder(1)]
+    public string tabB;
+
+}
+
+// bo Values
+// gan Tween
+// OnCompleteEvent v
+// bo UnityEvent ? v
+// test play runtime
+// them Paralle/Sequence 
+// 
