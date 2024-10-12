@@ -18,58 +18,88 @@ namespace AtoGame.OtherModules.DOTA
 
         #region Target
         [SerializeField, TabGroup("Tab1", "Animation Setting"), ShowIf(nameof(CheckShowTransformTarget)), OnValueChanged(nameof(OnTransformTargetValueChanged))]
-        public Transform _transformTarget;
+        public Transform TransformTarget;
         [SerializeField, TabGroup("Tab1", "Animation Setting"), ShowIf(nameof(CheckShowGraphicTarget)), OnValueChanged(nameof(OnGraphicTargetValueChanged))]
-        public Graphic _graphicTarget;
+        public Graphic GraphicTarget;
         [SerializeField, TabGroup("Tab1", "Animation Setting"), ShowIf(nameof(CheckShowRectTransformTarget)), OnValueChanged(nameof(OnRectTransformTargetValueChanged))]
-        public RectTransform _rectTransformTarget;
+        public RectTransform RectTransformTarget;
         [SerializeField, TabGroup("Tab1", "Animation Setting"), ShowIf(nameof(CheckShowCanvasGroupTarget)), OnValueChanged(nameof(OnCanvasGroupTargetValueChanged))]
-        public CanvasGroup _canvasGroupTarget;
+        public CanvasGroup CanvasGroupTarget;
         [SerializeField, TabGroup("Tab1", "Animation Setting"), ShowIf(nameof(CheckShowImageTarget)), OnValueChanged(nameof(OnImageTargetValueChanged))]
-        public Image _imageTarget;
+        public Image ImageTarget;
         [SerializeField, TabGroup("Tab1", "Animation Setting"), ShowIf(nameof(CheckShowSpriteRendererTarget)), OnValueChanged(nameof(OnSpriteRendererTargetValueChanged))]
-        public SpriteRenderer _spriteRendererTarget;
-        [SerializeField, TabGroup("Tab1", "Animation Setting"), ShowIf(nameof(CheckShowHorizontalOrVerticalLayoutGroupTarget)), OnValueChanged(nameof(OnHorizontalOrVerticalLayoutGroupTargetValueChanged))]
-        public HorizontalOrVerticalLayoutGroup _horizontalOrVerticalLayoutGroupTarget;
-
+        public SpriteRenderer SpriteRendererTarget;
+        [SerializeField, TabGroup("Tab1", "Animation Setting"), ShowIf(nameof(CheckShowFloatGetSetTarget)), OnValueChanged(nameof(OnFloatGetSetTargetValueChanged))]
+        public FloatGetSet FloatGetSetTarget;
         #endregion Target
 
         [SerializeField, HideLabel, TabGroup("Tab1", "Animation Setting"), ShowIf(nameof(CheckShowProperties))]
-        public BaseOptions _baseOptions = BaseOptions.Default;
+        public BaseOptions BaseOptions = BaseOptions.Default;
 
         #region Values
-        [FoldoutGroup("Tab1/Animation Setting/Custom Options"), HideLabel, SerializeField, ShowIf(nameof(CheckShowFloatValues))]
-        public FloatValues _floatValues; // Alpha, CanvasGroup, FillAmount, SpriteAlpha, GroupLayoutSpacing
+        [FoldoutGroup("Tab1/Animation Setting/Custom Options"), SerializeField, ShowIf(nameof(CheckShowProperties))]
+        public bool FromCurrent;
 
-        [FoldoutGroup("Tab1/Animation Setting/Custom Options"), HideLabel, SerializeField, ShowIf(nameof(CheckShowVector2Values))]
-        public Vector2Values _vector2Values; // PunchAnchorPosition
+        [FoldoutGroup("Tab1/Animation Setting/Custom Options"), SerializeField, ShowIf(nameof(CheckShowFloatFrom)), LabelText("$" + nameof(GetFromLable))]
+        public float FloatFrom;
+        private bool CheckShowFloatFrom => CheckShowFloatValues() && !FromCurrent;
 
-        [FoldoutGroup("Tab1/Animation Setting/Custom Options"), HideLabel, SerializeField, ShowIf(nameof(CheckShowRelativeVector2Values))]
-        public RelativeVector2Values _relavtiveVector2Values; // AnchorPosition, SizeDelta
+        [FoldoutGroup("Tab1/Animation Setting/Custom Options"), SerializeField, ShowIf(nameof(CheckShowFloatValues)), LabelText("$" + nameof(GetToLable))]
+        public float FloatTo; 
 
-        [FoldoutGroup("Tab1/Animation Setting/Custom Options"), HideLabel, SerializeField, ShowIf(nameof(CheckShowColorValues))]
-        public ColorValues _colorValues = ColorValues.Default; // Color
+        [FoldoutGroup("Tab1/Animation Setting/Custom Options"), SerializeField, ShowIf(nameof(CheckShowUniform)), OnValueChanged(nameof(OnUniformValueChanged))]
+        public bool Uniform;
 
-        [FoldoutGroup("Tab1/Animation Setting/Custom Options"), HideLabel, SerializeField, ShowIf(nameof(CheckShowVector3Values))]
-        public Vector3Values _vector3Values; // LocalRotation, Rotate, PunchPosition, PunchRotation, PunchScale, 
-                                             // ShakePosition, ShakeRotation, ShakeScale
+        [FoldoutGroup("Tab1/Animation Setting/Custom Options"), SerializeField, ShowIf(nameof(CheckShowFromUniformValue)), LabelText("$" + nameof(GetFromLable)), OnValueChanged(nameof(OnFromUniformValueChanged))]
+        public float FromUniformValue;
+        private bool CheckShowFromUniformValue => CheckShowUniform() && !FromCurrent && Uniform;
 
-        [FoldoutGroup("Tab1/Animation Setting/Custom Options"), HideLabel, SerializeField, ShowIf(nameof(CheckShowRelativeVector3Values))]
-        public RelativeVector3Values _relavtiveVector3Values; // LocalPosition, Position, LocalScale, Scale
+        [FoldoutGroup("Tab1/Animation Setting/Custom Options"), SerializeField, ShowIf(nameof(CheckShowToUniformValue)), LabelText("$" + nameof(GetToLable)), OnValueChanged(nameof(OnToUniformValueChanged))]
+        public float ToUniformValue;
+        private bool CheckShowToUniformValue => CheckShowUniform() && Uniform;
+
+        [FoldoutGroup("Tab1/Animation Setting/Custom Options"), SerializeField, LabelText("$" + nameof(GetFromLable)), ShowIf(nameof(CheckShowVector2From))]
+        public Vector2 Vector2From;
+        private bool CheckShowVector2From => CheckShowVector2Values() && !FromCurrent && !Uniform;
+
+        [FoldoutGroup("Tab1/Animation Setting/Custom Options"), SerializeField, ShowIf(nameof(CheckShowVector2To)), LabelText("$" + nameof(GetToLable))]
+        public Vector2 Vector2To;
+        private bool CheckShowVector2To => CheckShowVector2Values() && !Uniform;
+
+        [FoldoutGroup("Tab1/Animation Setting/Custom Options"), SerializeField, LabelText("$" + nameof(GetFromLable)), ShowIf(nameof(CheckShowVector3From))]
+        public Vector3 Vector3From;
+        public bool CheckShowVector3From => CheckShowVector3Values() && !FromCurrent && !Uniform;
+
+        [FoldoutGroup("Tab1/Animation Setting/Custom Options"), SerializeField, ShowIf(nameof(CheckShowVector3To)), LabelText("$" + nameof(GetToLable))]
+        public Vector3 Vector3To;
+        private bool CheckShowVector3To => CheckShowVector3Values() && !Uniform;
+
+        [FoldoutGroup("Tab1/Animation Setting/Custom Options"), SerializeField, ShowIf(nameof(CheckShowColorFrom)), LabelText("$" + nameof(GetFromLable))]
+        public Color ColorFrom = Color.white;
+        private bool CheckShowColorFrom => CheckShowColorValues() && !FromCurrent;
+
+        [FoldoutGroup("Tab1/Animation Setting/Custom Options"), SerializeField, ShowIf(nameof(CheckShowColorValues)), LabelText("$" + nameof(GetToLable))]
+        public Color ColorTo = Color.black;
+
+        [FoldoutGroup("Tab1/Animation Setting/Custom Options"), SerializeField, ShowIf(nameof(CheckShowIsRelative))]
+        public bool IsRelative;
         #endregion Values
 
         #region Other Values
+        [FoldoutGroup("Tab1/Animation Setting/Custom Options"), SerializeField, ShowIf(nameof(CheckShowShakeRandomnessMode))]
+        public ShakeRandomnessMode ShakeRandomnessMode;
+
         [FoldoutGroup("Tab1/Animation Setting/Custom Options"), SerializeField, ShowIf(nameof(CheckShowRotateMode))]
-        public RotateMode _rotateMode;// LocalRotation , Rotate
+        public RotateMode RotateMode;// LocalRotation , Rotate
 
         [FoldoutGroup("Tab1/Animation Setting/Custom Options"), SerializeField, ShowIf(nameof(CheckShowFloat1)), LabelText("$" + nameof(GetFloat1Lable))]
-        public float _floatValue_1; // PunchAnchorPosition, PunchPosition, PunchRotation, PunchScale, ShakePosition, ShakeRotation, ShakeScale
+        public float FloatValue_1; // PunchAnchorPosition, PunchPosition, PunchRotation, PunchScale, ShakePosition, ShakeRotation, ShakeScale
 
         [FoldoutGroup("Tab1/Animation Setting/Custom Options"), SerializeField, ShowIf(nameof(CheckShowInt1)), LabelText("$" + nameof(GetInt1Lable))]
-        public int _intValue_1; // PunchAnchorPosition, PunchPosition, PunchRotation, PunchScale, ShakePosition, ShakeRotation, ShakeScale
+        public int IntValue_1; // PunchAnchorPosition, PunchPosition, PunchRotation, PunchScale, ShakePosition, ShakeRotation, ShakeScale
 
         [FoldoutGroup("Tab1/Animation Setting/Custom Options"), SerializeField, ShowIf(nameof(CheckShowBool1)), LabelText("$" + nameof(GetBool1Lable))]
-        public bool _boolValue_1; // ShakePosition, ShakeRotation, ShakeScale  
+        public bool BoolValue_1; // ShakePosition, ShakeRotation, ShakeScale  
         #endregion Other Values
 
         [SerializeField, PropertyOrder(1), LabelText("On Tween Start"), TabGroup("Tab1", "Callback Setting"), ShowIf(nameof(callbackType), ECallbackType.OnTweenStart), Space]
@@ -95,13 +125,13 @@ namespace AtoGame.OtherModules.DOTA
             CreateDoTween();
             if(_target != null)
             {
-                _transformTarget = _target.transform;
-                _graphicTarget = _target.GetComponent<Graphic>();
-                _rectTransformTarget = _target.GetComponent<RectTransform>();
-                _canvasGroupTarget = _target.GetComponent<CanvasGroup>();
-                _imageTarget = _target.GetComponent<Image>();
-                _spriteRendererTarget = _target.GetComponent<SpriteRenderer>();
-                _horizontalOrVerticalLayoutGroupTarget = _target.GetComponent<HorizontalOrVerticalLayoutGroup>();
+                TransformTarget = _target.transform;
+                GraphicTarget = _target.GetComponent<Graphic>();
+                RectTransformTarget = _target.GetComponent<RectTransform>();
+                CanvasGroupTarget = _target.GetComponent<CanvasGroup>();
+                ImageTarget = _target.GetComponent<Image>();
+                SpriteRendererTarget = _target.GetComponent<SpriteRenderer>();
+                FloatGetSetTarget = _target.GetComponent<FloatGetSet>();
             }
         }
 
@@ -116,14 +146,19 @@ namespace AtoGame.OtherModules.DOTA
             return CheckShowProperties() && _baseDoTween.CheckShowFloatValues();
         }
 
+        private bool CheckShowUniform()
+        {
+            return CheckShowVector2Values() || CheckShowVector3Values();
+        }
+
+        private bool CheckShowIsRelative()
+        {
+            return CheckShowProperties() && _baseDoTween.CheckShowIsRelative();
+        }
+
         private bool CheckShowVector2Values()
         {
             return CheckShowProperties() && _baseDoTween.CheckShowVector2Values();
-        }
-
-        private bool CheckShowRelativeVector2Values()
-        {
-            return CheckShowProperties() && _baseDoTween.CheckShowRelativeVector2Values();
         }
 
         private bool CheckShowColorValues()
@@ -136,14 +171,14 @@ namespace AtoGame.OtherModules.DOTA
             return CheckShowProperties() && _baseDoTween.CheckShowVector3Values();
         }
 
-        private bool CheckShowRelativeVector3Values()
-        {
-            return CheckShowProperties() && _baseDoTween.CheckShowRelativeVector3Values();
-        }
-
         private bool CheckShowRotateMode()
         {
             return CheckShowProperties() && _baseDoTween.CheckShowRotateMode();
+        } 
+        
+        private bool CheckShowShakeRandomnessMode()
+        {
+            return CheckShowProperties() && _baseDoTween.CheckShowShakeRandomnessMode();
         }
 
         private bool CheckShowFloat1()
@@ -191,14 +226,24 @@ namespace AtoGame.OtherModules.DOTA
             return CheckShowProperties() && _baseDoTween.CheckShowSpriteRendererTarget();
         }
 
-        private bool CheckShowHorizontalOrVerticalLayoutGroupTarget()
+        private bool CheckShowFloatGetSetTarget()
         {
-            return CheckShowProperties() && _baseDoTween.CheckShowHorizontalOrVerticalLayoutGroupTarget();
+            return CheckShowProperties() && _baseDoTween.CheckShowFloatGetSetTarget();
         }
 
         #endregion Check Show Properties
 
         #region Lable Text
+        private string GetFromLable()
+        {
+            return _baseDoTween.GetFromLable();
+        }
+
+        private string GetToLable()
+        {
+            return _baseDoTween.GetToLable();
+        }
+
         private string GetFloat1Lable()
         {
             if(CheckShowFloat1())
@@ -232,35 +277,71 @@ namespace AtoGame.OtherModules.DOTA
         {
             CreateDoTween();
         }
+        private void OnUniformValueChanged()
+        {
+            if (Uniform)
+            {
+                if(CheckShowVector2Values())
+                {
+                    FromUniformValue = Vector2From.x;
+                    ToUniformValue = Vector2To.x;
+                }
+                if (CheckShowVector3Values())
+                {
+                    FromUniformValue = Vector3From.x;
+                    ToUniformValue = Vector3To.x;
+                }
+            }
+            else
+            {
+                Vector2From = Vector2.one * FromUniformValue;
+                Vector2To = Vector2.one * ToUniformValue;
+
+                Vector3From = Vector3.one * FromUniformValue;
+                Vector3To = Vector3.one * ToUniformValue;
+            }
+            
+        }
+        private void OnFromUniformValueChanged()
+        {
+            Vector2From = Vector2.one * FromUniformValue;
+            Vector3From = Vector3.one * FromUniformValue;
+        }
+        private void OnToUniformValueChanged()
+        {
+            Vector2To = Vector2.one * ToUniformValue;
+            Vector3To = Vector3.one * ToUniformValue;
+        }
 
         private void OnTransformTargetValueChanged()
         {
-            _target = _transformTarget;
+            _target = TransformTarget;
         }
         private void OnGraphicTargetValueChanged()
         {
-            _target = _graphicTarget;
+            _target = GraphicTarget;
         }
         private void OnRectTransformTargetValueChanged()
         {
-            _target = _rectTransformTarget;
+            _target = RectTransformTarget;
         }
         private void OnCanvasGroupTargetValueChanged()
         {
-            _target = _canvasGroupTarget;
+            _target = CanvasGroupTarget;
         }
         private void OnImageTargetValueChanged()
         {
-            _target = _imageTarget;
+            _target = ImageTarget;
         }
         private void OnSpriteRendererTargetValueChanged()
         {
-            _target = _spriteRendererTarget;
+            _target = SpriteRendererTarget;
         }
-        private void OnHorizontalOrVerticalLayoutGroupTargetValueChanged()
+        private void OnFloatGetSetTargetValueChanged()
         {
-            _target = _horizontalOrVerticalLayoutGroupTarget;
+            _target = FloatGetSetTarget;
         }
+
         #endregion On Value Changed 
 
         #region Play Editor
@@ -275,27 +356,19 @@ namespace AtoGame.OtherModules.DOTA
 #endif
         #endregion
 
-        public void PlayPreview()
-        {
-            if (_baseDoTween != null)
-            {
-                _baseDoTween.PlayPreview(this);
-            }
-        }
-
         public override void Play(Action onCompleted)
         {
             base.Play(onCompleted);
             if (Application.isPlaying)
             {
-                Play(true);
+                Play( true);
             }
             else
             {
 
                 if (_baseDoTween != null)
                 {
-                    _baseDoTween.PlayPreview(this);
+                    _baseDoTween.PlayPreview(this, onCompleted);
                     if (prepareTweenForPreviewFunc != null)
                     {
                         prepareTweenForPreviewFunc.Invoke(this, _baseDoTween.Tween);
@@ -305,7 +378,7 @@ namespace AtoGame.OtherModules.DOTA
         }
 
 
-        public void Play(bool restart)
+        private void Play(bool restart)
         {
             Stop();
             if (restart)
@@ -320,6 +393,12 @@ namespace AtoGame.OtherModules.DOTA
             }
         }
 
+        public void Play(Action onCompleted, bool restart)
+        {
+            base.Play(onCompleted);
+            Play(restart);
+        }
+
         public void ResetState()
         {
             if (_baseDoTween != null)
@@ -329,12 +408,7 @@ namespace AtoGame.OtherModules.DOTA
             }
         }
 
-        public override void Stop()
-        {
-            Stop(false);
-        }
-
-        public void Stop(bool complete)
+        public override void Stop(bool complete)
         {
             if (_baseDoTween != null)
             {
@@ -347,6 +421,10 @@ namespace AtoGame.OtherModules.DOTA
                     _baseDoTween.StopPreview(this);
                 }
             }
+
+            tweenStartDota?.Stop(complete);
+            tweenCompleteDota?.Stop(complete);
+            base.Stop(complete);
         }
 
         private void CreateDoTween()

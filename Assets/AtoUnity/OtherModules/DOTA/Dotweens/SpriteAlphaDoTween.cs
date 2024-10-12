@@ -1,3 +1,6 @@
+using AtoGame.Base.Helper;
+using DG.Tweening;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,12 +8,58 @@ using UnityEngine;
 namespace AtoGame.OtherModules.DOTA
 {
     public class SpriteAlphaDoTween : BaseDoTween {
+
+        private float preValue;
+
+        public override void CreateTween(DoTweenAnimation dota, Action onCompleted)
+        {
+            float endValue = dota.FloatTo;
+            if (dota.IsRelative)
+            {
+                if (dota.FromCurrent)
+                {
+                    endValue = dota.SpriteRendererTarget.color.a + dota.FloatTo;
+                }
+                else
+                {
+                    endValue = dota.FloatFrom + dota.FloatTo;
+                }
+            }
+            Tween = dota.SpriteRendererTarget.DOFade(endValue, dota.BaseOptions.Duration);
+            base.CreateTween(dota, onCompleted);
+        }
+        public override void ResetState(DoTweenAnimation dota)
+        {
+            base.ResetState(dota);
+            if (dota.FromCurrent == false)
+            {
+                dota.SpriteRendererTarget.ChangeAlpha(dota.FloatFrom);
+            }
+        }
+
+        public override void Save(DoTweenAnimation dota)
+        {
+            base.Save(dota);
+            preValue = dota.SpriteRendererTarget.color.a;
+        }
+
+        public override void Load(DoTweenAnimation dota)
+        {
+            base.Load(dota);
+            dota.SpriteRendererTarget.ChangeAlpha(preValue);
+        }
+
         public override bool CheckShowFloatValues()
         {
             return true;
         }
 
         public override bool CheckShowSpriteRendererTarget()
+        {
+            return true;
+        }
+
+        public override bool CheckShowIsRelative()
         {
             return true;
         }

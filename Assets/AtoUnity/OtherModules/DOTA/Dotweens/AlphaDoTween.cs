@@ -1,38 +1,50 @@
 using System;
 using DG.Tweening;
 using AtoGame.Base.Helper;
-using static UnityEngine.GraphicsBuffer;
+using UnityEngine;
 
 namespace AtoGame.OtherModules.DOTA
 {
     public class AlphaDoTween : BaseDoTween
     {
-        private float preAlpha;
+        private float preValue;
 
         public override void CreateTween(DoTweenAnimation dota, Action onCompleted)
         {
-            Tween = dota._graphicTarget.DOFade(dota._floatValues.To, dota._baseOptions.Duration);
+            float endValue = dota.FloatTo;
+            if (dota.IsRelative)
+            {
+                if (dota.FromCurrent)
+                {
+                    endValue = dota.GraphicTarget.color.a + dota.FloatTo;
+                }
+                else
+                {
+                    endValue = dota.FloatFrom + dota.FloatTo;
+                }
+            }
+            Tween = dota.GraphicTarget.DOFade(endValue, dota.BaseOptions.Duration);
             base.CreateTween(dota, onCompleted);
         }
         public override void ResetState(DoTweenAnimation dota)
         {
             base.ResetState(dota);
-            if (dota._floatValues.FromCurrent == false)
+            if (dota.FromCurrent == false)
             {
-                dota._graphicTarget.ChangeAlpha(dota._floatValues.From);
+                dota.GraphicTarget.ChangeAlpha(dota.FloatFrom);
             }
         }
 
         public override void Save(DoTweenAnimation dota)
         {
             base.Save(dota);
-            preAlpha = dota._graphicTarget.color.a;
+            preValue = dota.GraphicTarget.color.a;
         }
 
         public override void Load(DoTweenAnimation dota)
         {
             base.Load(dota);
-            dota._graphicTarget.ChangeAlpha(preAlpha);
+            dota.GraphicTarget.ChangeAlpha(preValue);
         }
 
         public override bool CheckShowFloatValues()
@@ -45,5 +57,9 @@ namespace AtoGame.OtherModules.DOTA
             return true;
         }
 
+        public override bool CheckShowIsRelative()
+        {
+            return true;
+        }
     }
 }

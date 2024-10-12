@@ -41,7 +41,18 @@ namespace AtoGame.OtherModules.DOTA
             }
         }
 
-        public abstract void Stop();
+        public void Stop()
+        {
+            Stop(false);
+        }
+
+        public virtual void Stop(bool complete)
+        {
+            if(startDota != null)
+            {
+                startDota.Stop(complete);
+            }
+        }
 
         protected void CheckOnCompleted()
         {
