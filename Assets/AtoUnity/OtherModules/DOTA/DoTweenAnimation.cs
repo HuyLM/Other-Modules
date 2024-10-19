@@ -2,7 +2,6 @@ using DG.Tweening;
 using UnityEditor;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using System.Security.Cryptography;
 using System;
 using UnityEngine.UI;
 using UnityEngine.Events;
@@ -13,8 +12,6 @@ namespace AtoGame.OtherModules.DOTA
     public class DoTweenAnimation : BaseDoTweenAnimation {
         [SerializeField, LabelText("Select Animation"), TabGroup("Tab1", "Animation Setting"), OnValueChanged(nameof(OnAnimationNameValueChanged))]
         private EName _animationName;
-        [SerializeField, LabelText("Play Type"), TabGroup("Tab1", "Animation Setting", order: 1)]
-        private EPlayType _playType = EPlayType.ManualPlay;
 
         #region Target
         [SerializeField, TabGroup("Tab1", "Animation Setting"), ShowIf(nameof(CheckShowTransformTarget)), OnValueChanged(nameof(OnTransformTargetValueChanged))]
@@ -102,13 +99,13 @@ namespace AtoGame.OtherModules.DOTA
         public bool BoolValue_1; // ShakePosition, ShakeRotation, ShakeScale  
         #endregion Other Values
 
-        [SerializeField, PropertyOrder(1), LabelText("On Tween Start"), TabGroup("Tab1", "Callback Setting"), ShowIf(nameof(callbackType), ECallbackType.OnTweenStart), Space]
+        [SerializeField, LabelText("On Tween Start"), TabGroup("Tab1", "Callback Setting"), ShowIf(nameof(callbackType), ECallbackType.OnTweenStart), Space]
         protected BaseDoTweenAnimation tweenStartDota;
-        [SerializeField, PropertyOrder(1), LabelText("On Tween Complete"), TabGroup("Tab1", "Callback Setting"), ShowIf(nameof(callbackType), ECallbackType.OnTweenComplete), Space]
+        [SerializeField, LabelText("On Tween Complete"), TabGroup("Tab1", "Callback Setting"), ShowIf(nameof(callbackType), ECallbackType.OnTweenComplete), Space]
         protected BaseDoTweenAnimation tweenCompleteDota;
-        [SerializeField, PropertyOrder(1), LabelText("On Tween Start"), TabGroup("Tab1", "Callback Setting"), ShowIf(nameof(callbackType), ECallbackType.OnTweenStart), Space]
+        [SerializeField, LabelText("On Tween Start"), TabGroup("Tab1", "Callback Setting"), ShowIf(nameof(callbackType), ECallbackType.OnTweenStart), Space]
         private UnityEvent tweenStartCallback;
-        [SerializeField, PropertyOrder(1), LabelText("On Tween Complete"), TabGroup("Tab1", "Callback Setting"), ShowIf(nameof(callbackType), ECallbackType.OnTweenComplete), Space]
+        [SerializeField, LabelText("On Tween Complete"), TabGroup("Tab1", "Callback Setting"), ShowIf(nameof(callbackType), ECallbackType.OnTweenComplete), Space]
         private UnityEvent tweenCompleteCallback;
         
 
@@ -356,11 +353,22 @@ namespace AtoGame.OtherModules.DOTA
 #endif
         #endregion
 
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+            CreateDoTween();
+        }
+
         public override void Play(Action onCompleted)
         {
+         
             base.Play(onCompleted);
             if (Application.isPlaying)
             {
+                if (isInitialized == false)
+                {
+                    return;
+                }
                 Play( true);
             }
             else
@@ -369,10 +377,12 @@ namespace AtoGame.OtherModules.DOTA
                 if (_baseDoTween != null)
                 {
                     _baseDoTween.PlayPreview(this, onCompleted);
+#if UNITY_EDITOR
                     if (prepareTweenForPreviewFunc != null)
                     {
                         prepareTweenForPreviewFunc.Invoke(this, _baseDoTween.Tween);
                     }
+#endif
                 }
             }
         }

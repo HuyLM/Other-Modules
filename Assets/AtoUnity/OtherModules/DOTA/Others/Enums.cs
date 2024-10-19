@@ -32,7 +32,7 @@ namespace AtoGame.OtherModules.DOTA
 
     }
 
-    public enum EPlayType { ManualPlay, AutoPlay }
+    public enum EPlayType { ManualPlay, AutoPlay, AutoInitialize }
 
     public enum ECallbackType { OnStart, OnTweenStart, OnTweenComplete, OnComplete }
 
