@@ -49,7 +49,7 @@ namespace AtoGame.OtherModules.DOTA
             {
                 dotas[i].Stop(complete);
             }
-            base.Stop();
+            base.Stop(complete);
         }
     }
 }
