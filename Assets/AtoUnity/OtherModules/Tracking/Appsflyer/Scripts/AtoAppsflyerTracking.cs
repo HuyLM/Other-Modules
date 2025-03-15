@@ -102,22 +102,19 @@ namespace AtoGame.Tracking.Appsflyer
 #endif
         }
 
+
         private void DebugLog(string eventName, ParameterBuilder parameterBuilder)
         {
-            StringBuilder paramLogs = new StringBuilder();
-            if (parameterBuilder != null && parameterBuilder.Params.Count > 0)
+            string log = $"[AtoAppsflyerTracking]: EventName = " + eventName + " ";
+            if(parameterBuilder != null)
             {
-                paramLogs.Append(" /");
-                foreach (KeyValuePair<string, object> entry in parameterBuilder.Params)
-                {
-                    paramLogs.Append(" " + entry.Key + "=" + entry.Value.ToString());
-                }
+                log += parameterBuilder.DebugLog();
             }
-            TrackingLogger.Log("[AtoAppsflyerTracking] EventName = " + eventName + paramLogs.ToString());
+            TrackingLogger.Log(log);
         }
-#endregion
+        #endregion
 
-#region Appsflyer Adrevenue Log
+        #region Appsflyer Adrevenue Log
 #if APPSFLYER_ADREVENUE_ENABLE
         public void LogAdRevenue(string monetizationNetwork,
             string mediationNetwork,
@@ -142,9 +139,9 @@ namespace AtoGame.Tracking.Appsflyer
             AppsFlyerAdRevenue.logAdRevenue(monetizationNetwork, type, eventRevenue, revenueCurrency, additionalParameters);
         }
 #endif
-#endregion
+        #endregion
 
-#region Appsflyer Callbacks
+        #region Appsflyer Callbacks
 
         void AppsFlyerOnRequestResponse(object sender, EventArgs e)
         {

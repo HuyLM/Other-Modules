@@ -7,18 +7,18 @@ namespace AtoGame.Mediation
 #if ATO_ADMOB_MEDIATION_ENABLE || ATO_ADMOB_ENABLE
     public static class AdmobHelper
     {
-        public static AdInfo Convert(this GoogleMobileAds.Api.AdValue adInfo)
+        public static AdInfo Convert(this GoogleMobileAds.Api.AdValue adInfo, string instanceName, string adUnit)
         {
             return new AdInfo()
             {
-                adPlatform = "admob",
+                adPlatform = ImpressionData.ADMOB_PLATFORM_NAME,
                 auctionId = string.Empty,
-                adUnit = string.Empty,
+                adUnit = adUnit,
                 country = string.Empty,
                 ab = string.Empty,
                 segmentName = string.Empty,
-                adNetwork = string.Empty,
-                instanceName = string.Empty,
+                adNetwork = ImpressionData.ADMOB_PLATFORM_NAME,
+                instanceName = instanceName,
                 instanceId = string.Empty,
                 revenue = adInfo.Value,
                 precision = adInfo.Precision.ToString(),
@@ -27,19 +27,19 @@ namespace AtoGame.Mediation
             };
         }
 
-        public static ImpressionData ConvertToImpression(this GoogleMobileAds.Api.AdValue adInfo)
+        public static ImpressionData ConvertToImpression(this GoogleMobileAds.Api.AdValue adInfo, string instanceName, string adUnit)
         {
             return new ImpressionData()
             {
-                adPlatform = "admob",
+                adPlatform = ImpressionData.ADMOB_PLATFORM_NAME,
                 auctionId = string.Empty,
-                adUnit = string.Empty,
+                adUnit = adUnit,
                 country = string.Empty,
                 ab = string.Empty,
                 segmentName = string.Empty,
                 placement = string.Empty,
-                adNetwork = string.Empty,
-                instanceName = string.Empty,
+                adNetwork = ImpressionData.ADMOB_PLATFORM_NAME,
+                instanceName = instanceName,
                 instanceId = string.Empty,
                 revenue = adInfo.Value,
                 precision = adInfo.Precision.ToString(),
@@ -52,7 +52,7 @@ namespace AtoGame.Mediation
 
         public static GoogleMobileAds.Api.AdSize GetBannerSize(BannerSize size)
         {
-            switch (size)
+            switch(size)
             {
                 case BannerSize.BANNER:
                 {
@@ -75,7 +75,7 @@ namespace AtoGame.Mediation
 
         public static GoogleMobileAds.Api.AdPosition GetBannerPosition(BannerPosition position)
         {
-            switch (position)
+            switch(position)
             {
                 case BannerPosition.BOTTOM_CENTER:
                 {

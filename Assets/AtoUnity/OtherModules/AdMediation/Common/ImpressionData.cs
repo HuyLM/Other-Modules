@@ -6,6 +6,12 @@ namespace AtoGame.Mediation
 {
     public class ImpressionData
     {
+
+        public static string ADMOB_PLATFORM_NAME = "Admob";
+        public static string MAX_PLATFORM_NAME = "applovin";
+        public static string IRONSOURCE_PLATFORM_NAME = "ironSource";
+
+
         public string adPlatform;
         public string auctionId;
         public string adUnit;

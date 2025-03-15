@@ -63,7 +63,11 @@ namespace AtoGame.AtoFirebase
 #if FIREBASE_ENABLE
             System.Threading.Tasks.Task fetchTask =
             Firebase.RemoteConfig.FirebaseRemoteConfig.DefaultInstance.FetchAsync(
+#if UNITY_EDITOR
+                TimeSpan.Zero);
+#else
                 TimeSpan.FromHours(12));
+#endif
             return fetchTask.ContinueWithOnMainThread(FetchComplete);
 #else
             return null;

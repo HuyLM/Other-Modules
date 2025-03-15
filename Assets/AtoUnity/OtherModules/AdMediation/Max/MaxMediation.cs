@@ -40,6 +40,7 @@ namespace AtoGame.Mediation
         private MaxInterstitialAd interstitialAd;
         private BaseMaxBannerAd bannerAd;
         private bool isInitialized;
+        private Action onInitSuccess;
 
         private string InterstitialAdUnitId
         {
@@ -88,8 +89,9 @@ namespace AtoGame.Mediation
             AdMediation.SetHandler(this);
         }
 
-        public void Init()
+        public void Init(Action onCompletedInit)
         {
+            this.onInitSuccess = onCompletedInit;
             isInitialized = false;
             rewardAd = new MaxVideoRewardAd(RewardedAdUnitId);
             interstitialAd = new MaxInterstitialAd(InterstitialAdUnitId);
@@ -102,7 +104,6 @@ namespace AtoGame.Mediation
 
             // Privacy
             MaxSdk.SetHasUserConsent(hasUserConsent);
-            MaxSdk.SetIsAgeRestrictedUser(isAgeRestrictedUser);
             MaxSdk.SetDoNotSell(doNotSell);
             if(useFacebookAd)
             {
@@ -115,8 +116,6 @@ namespace AtoGame.Mediation
                     AudienceNetwork.AdSettings.SetDataProcessingOptions(new string[] { });
                 }
             }
-
-            MaxSdk.SetSdkKey(sdkKey);
             MaxSdk.InitializeSdk();
         }
 
@@ -144,6 +143,7 @@ namespace AtoGame.Mediation
             MaxSdk.SetCreativeDebuggerEnabled(showCreativeDebugger);
             LoadInterstitial();
             LoadRewardVideo();
+            onInitSuccess?.Invoke();
         }
 
         public void ShowTestSuite()
@@ -154,7 +154,7 @@ namespace AtoGame.Mediation
             }
         }
 
-#region Video Reward
+        #region Video Reward
         public bool IsRewardVideoAvailable()
         {
             return rewardAd != null && rewardAd.IsAvailable;

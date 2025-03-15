@@ -83,9 +83,9 @@ namespace AtoGame.OtherModules.Inventory
             ItemInventoryController.Instance.Add(Id, amount, source, tags);
         }
 
-        public virtual void Remove(long amount)
+        public virtual void Remove(long amount, string source)
         {
-            ItemInventoryController.Instance.Remove(Id, amount);
+            ItemInventoryController.Instance.Remove(Id, amount, source);
         }
 
         public virtual long GetAvaliable()

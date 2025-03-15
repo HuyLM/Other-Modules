@@ -107,12 +107,12 @@ namespace AtoGame.OtherModules.Inventory
             }
         }
 
-        public void Remove()
+        public void Remove(string source)
         {
             ItemConfig item = ItemConfig;
             if (item != null)
             {
-                item.Remove(Amount);
+                item.Remove(Amount, source);
             }
         }
 

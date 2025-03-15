@@ -68,6 +68,7 @@ namespace AtoGame.OtherModules.SoundManager
             {
                 saver.SetMasterVolume(value);
                 mixer.SetFloat("MasterVolume", SoundHelper.ConvertToDecibel(MasterVolume));
+				return;
                 if(value == 0)
                 {
                     MasterEnable = false;
@@ -95,6 +96,7 @@ namespace AtoGame.OtherModules.SoundManager
             set {
                 saver.SetMusicVolume(value);
                 mixer.SetFloat("MusicVolume", SoundHelper.ConvertToDecibel(MusicVolume));
+				return;
                 if(value == 0)
                 {
                     MusicEnable = false;
@@ -204,6 +206,7 @@ namespace AtoGame.OtherModules.SoundManager
             {
                 saver.SetSFXVolume(value);
                 mixer.SetFloat("SFXVolume", SoundHelper.ConvertToDecibel(SFXVolume));
+				return;
                 if(value == 0)
                 {
                     SFXEnable = false;

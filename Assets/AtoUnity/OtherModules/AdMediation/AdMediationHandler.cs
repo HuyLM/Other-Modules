@@ -7,7 +7,7 @@ namespace AtoGame.Mediation
 {
     public interface IAdMediationHandler
     {
-        void Init();
+        void Init(Action onCompletedInit);
         void ShowTestSuite();
         bool IsRewardVideoAvailable();
         void ShowRewardVideo(Action<string, AdInfo> onCompleted = null, Action<string, AdInfo> onFailed = null);
@@ -24,7 +24,7 @@ namespace AtoGame.Mediation
 
     public class DefaultAdMediationHandler : IAdMediationHandler
     {
-        public void Init()
+        public void Init(Action onCompletedInit)
         {
         }
         public void ShowTestSuite()

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 namespace AtoGame.Base.UI
 {
@@ -20,6 +21,13 @@ namespace AtoGame.Base.UI
         [SerializeField] private Material disableMat;
         [SerializeField] private Sprite enableSprite;
         [SerializeField] private Sprite disableSprite;
+
+        [Header("Extends")]
+        [SerializeField] private UnityEvent onNormalState;
+        [SerializeField] private UnityEvent onHighlishtedState;
+        [SerializeField] private UnityEvent onPressedState;
+        [SerializeField] private UnityEvent onSelectedState;
+        [SerializeField] private UnityEvent onDisableState;
 
 #if UNITY_EDITOR
         public DisableType MyDisableType { get => disableType; }
@@ -91,6 +99,32 @@ namespace AtoGame.Base.UI
             if (mainBg)
                 mainBg.color = color;
         }
+
+        protected override void DoStateTransition(SelectionState state, bool instant)
+        {
+            base.DoStateTransition(state, instant);
+            if(state == SelectionState.Normal)
+            {
+                onNormalState?.Invoke();
+            }
+            else if(state == SelectionState.Highlighted)
+            {
+                onHighlishtedState?.Invoke();
+            }
+            else if(state == SelectionState.Pressed)
+            {
+                onPressedState?.Invoke();
+            }
+            else if(state == SelectionState.Selected)
+            {
+                onSelectedState?.Invoke();
+            }
+            else if(state == SelectionState.Disabled)
+            {
+                onDisableState?.Invoke();
+            }
+        }
+
 
         #endregion
     }

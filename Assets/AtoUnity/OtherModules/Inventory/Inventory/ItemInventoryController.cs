@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace AtoGame.OtherModules.Inventory
 {
-    public class ItemInventoryController : Singleton<ItemInventoryController>
+    public class ItemInventoryController : AtoGame.Base.Singleton<ItemInventoryController>
     {
         private ItemDatabase itemDatabase;
         private ItemInventory itemInventory;
@@ -63,24 +63,24 @@ namespace AtoGame.OtherModules.Inventory
             ItemInventory.Add(id, amount, source);
         }
 
-        public void Remove(params ItemData[] items)
+        public void Remove(string source, params ItemData[] items)
         {
             if(isInitialized == false)
             {
                 Log($"Can't Remove(params) Func, because it is not initialized");
                 return;
             }
-            ItemInventory.Remove(items);
+            ItemInventory.Remove(source, items);
         }
 
-        public void Remove(int id, long amount)
+        public void Remove(int id, long amount, string source)
         {
             if(isInitialized == false)
             {
                 Log($"Can't Remove Func, because it is not initialized");
                 return;
             }
-            ItemInventory.Remove(id, amount);
+            ItemInventory.Remove(id, amount, source);
         }
 
         public void Save(Action<bool> onSaveResult = null)

@@ -20,6 +20,13 @@ namespace AtoGame.Base.UI
         private SerializedProperty enableSpriteProperty;
         private SerializedProperty disableSpriteProperty;
 
+        private SerializedProperty onNormalStateProperty;
+        private SerializedProperty onHighlishtedStateProperty;
+        private SerializedProperty onPressedStateProperty;
+        private SerializedProperty onSelectedStateProperty;
+        private SerializedProperty onDisableStateProperty;
+
+
 
 
         protected override void OnEnable()
@@ -43,6 +50,12 @@ namespace AtoGame.Base.UI
 
             enableSpriteProperty = serializedObject.FindProperty("enableSprite");
             disableSpriteProperty = serializedObject.FindProperty("disableSprite");
+
+            onNormalStateProperty = serializedObject.FindProperty("onNormalState");
+            onHighlishtedStateProperty = serializedObject.FindProperty("onHighlishtedState");
+            onPressedStateProperty = serializedObject.FindProperty("onPressedState");
+            onSelectedStateProperty = serializedObject.FindProperty("onSelectedState");
+            onDisableStateProperty = serializedObject.FindProperty("onDisableState");
         }
 
         public override void OnInspectorGUI()
@@ -81,6 +94,12 @@ namespace AtoGame.Base.UI
                 EditorGUILayout.PropertyField(enableSpriteProperty);
                 EditorGUILayout.PropertyField(disableSpriteProperty);
             }
+
+            EditorGUILayout.PropertyField(onNormalStateProperty);
+            EditorGUILayout.PropertyField(onHighlishtedStateProperty);
+            EditorGUILayout.PropertyField(onPressedStateProperty);
+            EditorGUILayout.PropertyField(onSelectedStateProperty);
+            EditorGUILayout.PropertyField(onDisableStateProperty);
 
             if (GUI.changed)
             {

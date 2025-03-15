@@ -58,7 +58,8 @@ namespace AtoGame.Tracking.FB
             Crashlytics.ReportUncaughtExceptionsAsFatal = true;
 
             TrackingLogger.Log("[FIREBASE] OnFirebaseAvailable");
-            FirebaseAnalytics.SetAnalyticsCollectionEnabled(true);
+            Firebase.Analytics.FirebaseAnalytics.SetUserProperty(Firebase.Analytics.FirebaseAnalytics.UserPropertyAllowAdPersonalizationSignals, "true");
+            Firebase.Analytics.FirebaseAnalytics.SetAnalyticsCollectionEnabled(true);
             TrackingLogger.Log("[FIREBASE] OnFirebaseAvailable - After set analyticscollectionenable true");
 
             if (callOnAvailable != null)
@@ -95,16 +96,12 @@ namespace AtoGame.Tracking.FB
 
         private void DebugLog(string eventName, ParameterBuilder parameterBuilder)
         {
-            StringBuilder paramLogs = new StringBuilder();
-            if (parameterBuilder != null && parameterBuilder.Params.Count > 0)
+            string log = $"[FIREBASE-Analytics]:" + " EventName = " + eventName + " ";
+            if(parameterBuilder != null)
             {
-                paramLogs.Append(" /");
-                foreach (KeyValuePair<string, object> entry in parameterBuilder.Params)
-                {
-                    paramLogs.Append(" " + entry.Key + "=" + entry.Value.ToString());
-                }
+                log += parameterBuilder.DebugLog();
             }
-            TrackingLogger.Log($"[FIREBASE-Analytics:" + " EventName = " + eventName + paramLogs.ToString());
+            TrackingLogger.Log(log);
         }
 
         public void LogAdRevenue(ParameterBuilder parameterBuilder)

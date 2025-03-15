@@ -8,10 +8,10 @@ namespace AtoGame.Mediation
     public class AdMediation : HandlerManager<AdMediation, IAdMediationHandler, DefaultAdMediationHandler>
     {
         #region IAdMediationHandler
-        public static void Init()
+        public static void Init(Action onCompletedInit = null)
         {
             AdsEventExecutor.Initialize();
-            CurrentHandler.Init();
+            CurrentHandler.Init(onCompletedInit);
         }
         public static void ShowTestSuite()
         {

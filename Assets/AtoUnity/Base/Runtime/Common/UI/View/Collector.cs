@@ -8,11 +8,11 @@ namespace AtoGame.Base.UI
     {
         protected int Capacity
         {
-            get; private set;
+            get; set;
         }
         protected List<T> Items
         {
-            get; private set;
+            get; set;
         }
         public abstract int DisplayerCount
         {

@@ -33,6 +33,8 @@ namespace AtoGame.OtherModules.HUD
         [ReadOnly]
         [SerializeField] private Stack<Frame> previousFrames = new Stack<Frame>();
         private bool active;
+		
+		public bool IsActive => active;
 
         protected virtual void Awake()
         {

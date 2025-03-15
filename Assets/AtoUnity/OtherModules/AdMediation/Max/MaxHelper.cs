@@ -11,14 +11,14 @@ namespace AtoGame.Mediation
         {
             return new AdInfo()
             {
-                adPlatform = "applovin",
+                adPlatform = ImpressionData.MAX_PLATFORM_NAME,
                 auctionId = string.Empty,
                 adUnit = adInfo.AdFormat,
                 country = MaxSdk.GetSdkConfiguration().CountryCode,
                 ab = string.Empty,
                 segmentName = string.Empty,
                 adNetwork = adInfo.NetworkName,
-                instanceName = string.Empty,
+                instanceName = adInfo.AdUnitIdentifier,
                 instanceId = adInfo.AdUnitIdentifier,
                 revenue = adInfo.Revenue,
                 precision = adInfo.RevenuePrecision,
@@ -31,7 +31,7 @@ namespace AtoGame.Mediation
         {
             return new ImpressionData()
             {
-                adPlatform = "applovin",
+                adPlatform = ImpressionData.MAX_PLATFORM_NAME,
                 auctionId = string.Empty,
                 adUnit = adInfo.AdFormat,
                 country = MaxSdk.GetSdkConfiguration().CountryCode,
@@ -39,7 +39,7 @@ namespace AtoGame.Mediation
                 segmentName = string.Empty,
                 placement = adInfo.Placement,
                 adNetwork = adInfo.NetworkName,
-                instanceName = string.Empty,
+                instanceName = adInfo.AdUnitIdentifier,
                 instanceId = adInfo.AdUnitIdentifier,
                 revenue = adInfo.Revenue,
                 precision = adInfo.RevenuePrecision,

@@ -39,21 +39,29 @@ namespace AtoGame.OtherModules.Inventory
 
         }
 
-        public virtual void Remove(params ItemData[] items)
+        public virtual void Remove(string source, params ItemData[] items)
         {
             foreach (ItemData item in items)
             {
-                Remove(item.Id, item.Amount);
+                Remove(item.Id, item.Amount, source);
             }
         }
 
-        public virtual void Remove(int id, long amount)
+        public virtual void Remove(int id, long amount, string source)
         {
             if (itemDictionary.ContainsKey(id))
             {
                 itemDictionary[id].Destack(amount);
                 isDirty = true;
             }
+
+            AtoGame.Base.EventDispatcher.Instance.Dispatch(new EventKey.OnRemoveItemInventory()
+            {
+                id = id,
+                name = itemDictionary[id].NameKey.ToLower(),
+                value = amount,
+                source = source,
+            });
         }
 
         private bool IsInfinite(int id)
@@ -78,7 +86,7 @@ namespace AtoGame.OtherModules.Inventory
             return new ItemData(id, 0);
         }
 
-        public void AddInfiniteItem(int id)
+        public void AddInfiniteItem(int id, string source)
         {
             if (itemDictionary.ContainsKey(id))
             {
@@ -90,9 +98,19 @@ namespace AtoGame.OtherModules.Inventory
                 InfiniteItemIds.Add(id);
                 isDirty = true;
             }
+            if(isDirty)
+            {
+                AtoGame.Base.EventDispatcher.Instance.Dispatch(new EventKey.OnAddItemInventory()
+                {
+                    id = id,
+                    name = itemDictionary[id].NameKey.ToLower(),
+                    value = INFINITE_AMOUNT,
+                    source = source,
+                });
+            }
         }
 
-        public void RemoveInfiniteItem(int id)
+        public void RemoveInfiniteItem(int id, string source)
         {
             if (InfiniteItemIds != null)
             {
@@ -100,15 +118,23 @@ namespace AtoGame.OtherModules.Inventory
                 {
                     InfiniteItemIds.Remove(id);
                     isDirty = true;
+
+                    AtoGame.Base.EventDispatcher.Instance.Dispatch(new EventKey.OnRemoveItemInventory()
+                    {
+                        id = id,
+                        name = itemDictionary[id].NameKey.ToLower(),
+                        value = INFINITE_AMOUNT,
+                        source = source,
+                    });
                 }
             }
         }
 
-        public void PushEvent(NotifyType notifyType)
+        public void PushEvent(NotifyType notifyType = NotifyType.InventoryChanged)
         {
             if (notifyType == NotifyType.InventoryChanged)
             {
-                AtoGame.Base.EventDispatcher.Instance.Dispatch<EventKey.OnItemInventoryChanged>();
+                AtoGame.Base.EventDispatcher.Instance.Dispatch(new EventKey.OnItemInventoryChanged());
             }
         }
 

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace AtoGame.IAP
+namespace AtoGame.AtoUnity.IAP
 {
     public abstract class IapAction : ScriptableObject
     {

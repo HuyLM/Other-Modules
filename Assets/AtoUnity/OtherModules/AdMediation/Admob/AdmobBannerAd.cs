@@ -40,12 +40,12 @@ namespace AtoGame.Mediation
             this.size = size;
             this.position = position;
 
-            if (_bannerView != null)
+            if(_bannerView != null)
             {
                 _bannerView.Destroy();
             }
 
-            if (useCollapsiable)
+            if(useCollapsiable)
             {
                 size = GoogleMobileAds.Api.AdSize.GetCurrentOrientationAnchoredAdaptiveBannerAdSizeWithWidth(GoogleMobileAds.Api.AdSize.FullWidth);
             }
@@ -70,16 +70,16 @@ namespace AtoGame.Mediation
 
         protected override void CallRequest()
         {
-            
+
         }
 
         private void BannerRequest()
         {
-            if (requesting)
+            if(requesting)
             {
                 return;
             }
-            if (Application.internetReachability == NetworkReachability.NotReachable)
+            if(Application.internetReachability == NetworkReachability.NotReachable)
             {
                 return;
             }
@@ -100,7 +100,7 @@ namespace AtoGame.Mediation
 
         private float GetRetryTime(int retry)
         {
-            if (retry >= 0 && retry < retryTimes.Length)
+            if(retry >= 0 && retry < retryTimes.Length)
             {
                 return retryTimes[retry];
             }
@@ -113,12 +113,12 @@ namespace AtoGame.Mediation
             {
                 return;
             }
-            if (_bannerView == null)
+            if(_bannerView == null)
             {
                 _bannerView = new GoogleMobileAds.Api.BannerView(adUnitId, size, position);
                 CallAddEvent();
             }
-            if (_bannerView != null)
+            if(_bannerView != null)
             {
                 requesting = true;
                 var adRequest = new GoogleMobileAds.Api.AdRequest();
@@ -128,15 +128,15 @@ namespace AtoGame.Mediation
                     switch(this.position)
                     {
                         case GoogleMobileAds.Api.AdPosition.Top:
-                            {
-                                positionString = "top";
-                                break;
-                            }
+                        {
+                            positionString = "top";
+                            break;
+                        }
                         case GoogleMobileAds.Api.AdPosition.Bottom:
-                            {
-                                positionString = "bottom";
-                                break;
-                            }
+                        {
+                            positionString = "bottom";
+                            break;
+                        }
                     }
                     adRequest.Extras.Add("collapsible", positionString);
                     if(isFirstRequest)
@@ -152,7 +152,7 @@ namespace AtoGame.Mediation
 
         public void DestroyBanner()
         {
-            if (_bannerView != null)
+            if(_bannerView != null)
             {
                 _bannerView.OnAdPaid -= OnAdPaid;
                 _bannerView.OnAdFullScreenContentClosed -= OnAdFullScreenContentClosed;
@@ -166,43 +166,56 @@ namespace AtoGame.Mediation
             }
         }
 
-    #region Listeners
+        #region Listeners
 
         private void OnAdFullScreenContentOpened()
         {
-            Debug.Log($"[AdMediation-AdmobBannerAd]: {adUnitId} got OnAdFullScreenContentOpened");
-            AdMediation.onBannerFullOpenedEvent?.Invoke();
+            AdsEventExecutor.ExecuteInUpdate(() =>
+            {
+                Debug.Log($"[AdMediation-AdmobBannerAd]: {adUnitId} got OnAdFullScreenContentOpened");
+                AdMediation.onBannerFullOpenedEvent?.Invoke();
+            });
         }
 
         private void OnAdLoadedEvent()
         {
-            requesting = false;
-            isFirstRequest = false;
-            Debug.Log($"[AdMediation-AdmobBannerAd]: {adUnitId} got OnAdLoadedEvent");
-            OnAdLoadSuccess(new AdInfo());
-            OnCompleted(true, string.Empty, new AdInfo());
-            AdMediation.onBannerCompletedEvent?.Invoke(adUnitId, new AdInfo());
+            AdsEventExecutor.ExecuteInUpdate(() =>
+            {
+                requesting = false;
+                isFirstRequest = false;
+                Debug.Log($"[AdMediation-AdmobBannerAd]: {adUnitId} got OnAdLoadedEvent");
+                OnAdLoadSuccess(new AdInfo());
+                OnCompleted(true, string.Empty, new AdInfo());
+                AdMediation.onBannerCompletedEvent?.Invoke(adUnitId, new AdInfo());
+            });
         }
 
         private void OnAdLoadFailedEvent(GoogleMobileAds.Api.LoadAdError error)
         {
-            requesting = false;
-            Debug.Log($"[AdMediation-AdmobBannerAd]: {adUnitId} got OnAdLoadFailedEvent with error {error}");
-            OnAdShowFailed(error.ToString(), new AdInfo());
-            AdMediation.onBannerFailedEvent?.Invoke(error.ToString());
-            BannerRequest();
+            AdsEventExecutor.ExecuteInUpdate(() =>
+            {
+                requesting = false;
+                retryCounting++;
+                Debug.Log($"[AdMediation-AdmobBannerAd]: {adUnitId} got OnAdLoadFailedEvent with error {error}");
+                OnAdShowFailed(error.ToString(), new AdInfo());
+                AdMediation.onBannerFailedEvent?.Invoke(error.ToString());
+                BannerRequest();
+            });
         }
 
         private void OnAdFullScreenContentClosed()
         {
-            Debug.Log($"[AdMediation-AdmobBannerAd]: {adUnitId} got OnAdFullScreenContentClosed");
-            AdMediation.onBannerFullClosedEvent?.Invoke();
+            AdsEventExecutor.ExecuteInUpdate(() =>
+            {
+                Debug.Log($"[AdMediation-AdmobBannerAd]: {adUnitId} got OnAdFullScreenContentClosed");
+                AdMediation.onBannerFullClosedEvent?.Invoke();
+            });
         }
 
         private void OnAdPaid(GoogleMobileAds.Api.AdValue obj)
         {
             Debug.Log($"[AdMediation-AdmobBannerAd]: {adUnitId} got OnAdPaid With AdInfo " + obj.ToString());
-            OnAdOpening(obj.ConvertToImpression());
+            OnAdOpening(obj.ConvertToImpression("banner_ad", "banner_ad"));
         }
 
         private void OnAdClicked()
@@ -210,7 +223,7 @@ namespace AtoGame.Mediation
             Debug.Log($"[AdMediation-AdmobBannerAd]: {adUnitId} got OnAdClicked");
             AdMediation.onBannerClicked?.Invoke(new AdInfo());
         }
-    #endregion
+        #endregion
 
     }
 #endif

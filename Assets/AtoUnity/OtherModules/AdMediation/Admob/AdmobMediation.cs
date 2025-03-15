@@ -43,6 +43,7 @@ namespace AtoGame.Mediation
         private AdmobBannerAd bannerAd;
 
         private bool isInitialized;
+        private Action onCompletedInit;
 
         private string InterstitialAdUnitId
         {
@@ -117,7 +118,7 @@ namespace AtoGame.Mediation
             AdMediation.SetHandler(this);
         }
 
-        public void Init()
+        public void Init(Action onCompletedInit)
         {
 #if UNITY_STANDALONE
             return;
@@ -127,6 +128,7 @@ namespace AtoGame.Mediation
             {
                 return;
             }
+            this.onCompletedInit = onCompletedInit;
 
             if(string.IsNullOrEmpty(RewardedAdUnitId) == false)
             {
@@ -251,6 +253,7 @@ namespace AtoGame.Mediation
 
             LoadInterstitial();
             LoadRewardVideo();
+            onCompletedInit?.Invoke();
         }
 
         public void ShowTestSuite()

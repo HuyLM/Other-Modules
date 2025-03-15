@@ -6,7 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace DP
+namespace AtoGame.Mediation
 {
     public class AdmobNativeAd : BaseAd
     {
@@ -21,6 +21,9 @@ namespace DP
         private List<Sprite> sprites;
         private bool isUsed;
 
+        public string AdUnitID => adUnitId;
+        public bool IsUsed => isUsed; 
+
         public override bool IsAvailable
         {
             get
@@ -34,7 +37,8 @@ namespace DP
             }
         }
         public Action<string> OnLoadFail { get; set; }
-        public Action OnLoadSuccess { get; set; }
+        public Action<AdmobNativeAd, string> OnLoadSuccess { get; set; }
+        public Action<string> OnClicked { get; set; }
 
         public AdmobNativeAd(string adUnitId)
         {
@@ -93,7 +97,13 @@ namespace DP
 
             adLoader.OnNativeAdLoaded += this.HandleNativeAdLoaded;
             adLoader.OnAdFailedToLoad += this.HandleAdFailedToLoad;
+            adLoader.OnNativeAdClicked += AdLoader_OnNativeAdClicked;
             adLoader.LoadAd(new AdRequest());
+        }
+
+        private void AdLoader_OnNativeAdClicked(object sender, EventArgs e)
+        {
+            OnClicked?.Invoke(adUnitId);
         }
 
         protected override void CallShow()
@@ -140,7 +150,7 @@ namespace DP
                 requesting = false;
                 retryCounting = 0;
                 OnAdLoadSuccess(new AdInfo());
-                OnLoadSuccess?.Invoke();
+                OnLoadSuccess?.Invoke(this, adUnitId);
             });
         }
 

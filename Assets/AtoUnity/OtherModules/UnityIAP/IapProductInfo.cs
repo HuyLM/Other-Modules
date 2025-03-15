@@ -5,7 +5,7 @@ using UnityEngine;
 #if UNITY_IAP_ENABLE
 using UnityEngine.Purchasing;
 
-namespace AtoGame.IAP
+namespace AtoGame.AtoUnity.IAP
 {
     [System.Serializable]
     public class IapProductInfo

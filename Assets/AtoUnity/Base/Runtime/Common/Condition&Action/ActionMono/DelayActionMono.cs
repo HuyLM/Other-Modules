@@ -10,6 +10,7 @@ namespace AtoGame.Base
     public class DelayActionMono : ActionMono
     {
         [SerializeField] private float delayTime; // second
+	[SerializeField] private bool canRestart = false;
 
         private Countdowner countdowner;
         private Action onCompleted;
@@ -18,6 +19,10 @@ namespace AtoGame.Base
             if(countdowner.IsCountdowning())
             {
                 Debug.LogError($"{gameObject.name} Delay Action Mono is countdowning", this);
+		if(canRestart)
+		{
+			countdowner.StartCountdown(delayTime);
+		}
                 return;
             }    
             this.onCompleted = onCompleted;

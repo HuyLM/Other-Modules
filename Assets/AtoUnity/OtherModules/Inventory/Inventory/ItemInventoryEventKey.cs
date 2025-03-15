@@ -17,5 +17,13 @@ namespace AtoGame.OtherModules.Inventory
             public long value;
             public string source;
         }
+
+        public struct OnRemoveItemInventory : Base.IEventParams
+        {
+            public int id;
+            public string name;
+            public long value;
+            public string source;
+        }
     }
 }

@@ -201,7 +201,7 @@ namespace AtoGame.Mediation
 
         private void OnAdPaid(GoogleMobileAds.Api.AdValue obj)
         {
-            OnAdOpening(obj.ConvertToImpression());
+            OnAdOpening(obj.ConvertToImpression("reward_ad", "reward_ad"));
             Debug.Log($"[AdMediation-AdmobVideoRewardAd]: {adUnitId} got OnAdPaid With AdInfo " + obj.ToString());
         }
 

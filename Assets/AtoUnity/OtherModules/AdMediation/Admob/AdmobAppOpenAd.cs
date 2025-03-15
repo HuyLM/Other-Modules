@@ -19,7 +19,7 @@ namespace AtoGame.Mediation
         {
             get
             {
-                if (_appOpenAd != null && _appOpenAd.CanShowAd())
+                if(_appOpenAd != null && _appOpenAd.CanShowAd())
                 {
                     return true;
                 }
@@ -35,7 +35,7 @@ namespace AtoGame.Mediation
 
         private float GetRetryTime(int retry)
         {
-            if (retry >= 0 && retry < retryTimes.Length)
+            if(retry >= 0 && retry < retryTimes.Length)
             {
                 return retryTimes[retry];
             }
@@ -44,7 +44,7 @@ namespace AtoGame.Mediation
 
         protected override void CallAddEvent()
         {
-            if (_appOpenAd == null)
+            if(_appOpenAd == null)
             {
                 return;
             }
@@ -59,7 +59,7 @@ namespace AtoGame.Mediation
         protected override void CallRequest()
         {
             // Clean up the old ad before loading a new one.
-            if (_appOpenAd != null)
+            if(_appOpenAd != null)
             {
                 DestroyAd();
             }
@@ -73,7 +73,7 @@ namespace AtoGame.Mediation
 
         protected override void CallShow()
         {
-            if (IsAvailable)
+            if(IsAvailable)
             {
                 _appOpenAd.Show();
             }
@@ -81,11 +81,11 @@ namespace AtoGame.Mediation
 
         public override void Request()
         {
-            if (requesting)
+            if(requesting)
             {
                 return;
             }
-            if (Application.internetReachability == NetworkReachability.NotReachable)
+            if(Application.internetReachability == NetworkReachability.NotReachable)
             {
                 return;
             }
@@ -107,7 +107,7 @@ namespace AtoGame.Mediation
 
         public void DestroyAd()
         {
-            if (_appOpenAd != null)
+            if(_appOpenAd != null)
             {
                 Debug.Log("[AdMediation-AdmobAppOpenAd]: Destroying app open ad.");
                 _appOpenAd.Destroy();
@@ -115,7 +115,7 @@ namespace AtoGame.Mediation
             }
         }
 
-#region Listeners
+        #region Listeners
 
         private void OnAdFullScreenContentOpened()
         {
@@ -127,14 +127,14 @@ namespace AtoGame.Mediation
         private void OnAppOpenAdLoadedEvent(GoogleMobileAds.Api.AppOpenAd ad, GoogleMobileAds.Api.LoadAdError error)
         {
             // If the operation failed with a reason.
-            if (error != null)
+            if(error != null)
             {
                 OnAppOpenAdLoadFailedEvent(error.ToString());
                 return;
             }
             // If the operation failed for unknown reasons.
             // This is an unexpected error, please report this bug if it happens.
-            if (ad == null)
+            if(ad == null)
             {
                 OnAppOpenAdLoadFailedEvent("null ad");
                 return;
@@ -162,13 +162,12 @@ namespace AtoGame.Mediation
         }
 
 
-       private void OnAdFullScreenContentFailed(GoogleMobileAds.Api.AdError errorInfo)
+        private void OnAdFullScreenContentFailed(GoogleMobileAds.Api.AdError errorInfo)
         {
-            string errorString = errorInfo != null ? errorInfo.ToString() : string.Empty;
-            OnAdShowFailed(errorString, new AdInfo());
+            OnAdShowFailed(errorInfo.ToString(), new AdInfo());
 
-            Debug.Log($"[AdMediation-AdmobAppOpenAd]: {adUnitId} got OnAdFullScreenContentFailed With ErrorInfo " + errorString);
-            AdMediation.onAppOpenFailedEvent(errorString, new AdInfo());
+            Debug.Log($"[AdMediation-AdmobAppOpenAd]: {adUnitId} got OnAdFullScreenContentFailed With ErrorInfo " + errorInfo.ToString());
+            AdMediation.onAppOpenFailedEvent(errorInfo.ToString(), new AdInfo());
 
         }
 
@@ -181,7 +180,7 @@ namespace AtoGame.Mediation
 
         private void OnAdPaid(GoogleMobileAds.Api.AdValue obj)
         {
-            OnAdOpening(obj.ConvertToImpression());
+            OnAdOpening(obj.ConvertToImpression("open_ad", "open_ad"));
             Debug.Log($"[AdMediation-AdmobAppOpenAd]: {adUnitId} got OnAdPaid With AdInfo " + obj.ToString());
         }
 
@@ -196,7 +195,7 @@ namespace AtoGame.Mediation
             AdMediation.onAppOpenClicked?.Invoke(new AdInfo());
         }
 
-#endregion
+        #endregion
     }
 #endif
 }

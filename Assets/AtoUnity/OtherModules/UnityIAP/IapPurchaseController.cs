@@ -7,7 +7,7 @@ using UnityEngine.Purchasing;
 using UnityEngine.Purchasing.Extension;
 using UnityEngine.Purchasing.Security;
 
-namespace AtoGame.IAP
+namespace AtoGame.AtoUnity.IAP
 {
     public class IapPurchaseController : IapSingleton<IapPurchaseController>, IDetailedStoreListener
     {
@@ -43,8 +43,17 @@ namespace AtoGame.IAP
             return isInitialized;
         }
 
-        public void InitializePurchasing()
+        public void Initialize()
         {
+            AtoUnityInitializer.AddOnInitialized(InitializePurchasing);
+        }
+
+        private void InitializePurchasing(bool result, string errorMessage)
+        {
+            if(result == false)
+            {
+                LogError(errorMessage);
+            }
             StandardPurchasingModule standardPurchasingModule = StandardPurchasingModule.Instance();
 #if UNITY_EDITOR
             standardPurchasingModule.useFakeStoreAlways = true;
@@ -158,7 +167,7 @@ namespace AtoGame.IAP
             {
                 if(isPurchasing == true)
                 {
-                    AtoGame.Base.EventDispatcher.Instance.Dispatch(new EventKey.OnBoughtIap()
+                    AtoGame.Base.EventDispatcher.Instance.Dispatch(new AtoGame.IAP.EventKey.OnBoughtIap()
                     {
                         Product = product
                     });

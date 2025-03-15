@@ -1,4 +1,4 @@
-﻿
+﻿﻿
 using AtoGame.Base.Helper;
 using System;
 using System.Collections;
@@ -28,6 +28,10 @@ namespace AtoGame.Base.UI
 
         public void Initialize()
         {
+            if(isLoaded)
+            {
+                return;
+            }
             isUseLerp = imgCurrentValueLerp != null;
 
             if (!isLoaded)
@@ -42,6 +46,10 @@ namespace AtoGame.Base.UI
 
         private void FillBar(Image img, float fillAmount)
         {
+            if(img == null)
+            {
+                return;
+            }
             if (!isLoaded)
             {
                 if (useSetWidth)
@@ -124,10 +132,7 @@ namespace AtoGame.Base.UI
         public virtual void ForceFillBar(float pct)
         {
             pct = Mathf.Clamp(pct, 0, 1);
-            if (isUseLerp)
-            {
-                FillBar(imgCurrentValueLerp, pct);
-            }
+            FillBar(imgCurrentValueLerp, pct);
             FillBar(imgCurrentValueReal, pct);
 
         }
