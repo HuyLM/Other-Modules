@@ -191,7 +191,7 @@ namespace AtoGame.OtherModules.DOTA
             return false;
         }
 
-        public virtual void CreateTween(DoTweenAnimation dota, Action onCompleted)
+        public virtual void CreateTween(TweenAnimation dota, Action onCompleted)
         {
             if (Tween != null)
             {
@@ -219,12 +219,12 @@ namespace AtoGame.OtherModules.DOTA
             }
         }
 
-        public virtual void Play(DoTweenAnimation dota, System.Action onCompleted)
+        public virtual void Play(TweenAnimation dota, System.Action onCompleted)
         {
             CreateTween(dota, onCompleted);
         }
 
-        public virtual void Stop(DoTweenAnimation dota, bool complete = false)
+        public virtual void Stop(TweenAnimation dota, bool complete = false)
         {
             Tween?.Kill(complete);
             if (complete && dota.BaseOptions.LoopNumber < 0)
@@ -233,32 +233,32 @@ namespace AtoGame.OtherModules.DOTA
             }
         }
 
-        public virtual void ResetState(DoTweenAnimation dota)
+        public virtual void ResetState(TweenAnimation dota)
         {
 
         }
 
-        public virtual void ToEndValue(DoTweenAnimation dota)
+        public virtual void ToEndValue(TweenAnimation dota)
         {
 
         }
 
-        public virtual void Save(DoTweenAnimation dota)
+        public virtual void Save(TweenAnimation dota)
         {
         }
 
-        public virtual void Load(DoTweenAnimation dota)
+        public virtual void Load(TweenAnimation dota)
         {
         }
 
-        public virtual void PlayPreview(DoTweenAnimation dota, Action onCompleted)
+        public virtual void PlayPreview(TweenAnimation dota, Action onCompleted)
         {
             Save(dota);
             ResetState(dota);
             CreateTween(dota, onCompleted);
         }
 
-        public virtual void StopPreview(DoTweenAnimation dota)
+        public virtual void StopPreview(TweenAnimation dota)
         {
             Tween?.Rewind();
             Tween?.Kill(false);

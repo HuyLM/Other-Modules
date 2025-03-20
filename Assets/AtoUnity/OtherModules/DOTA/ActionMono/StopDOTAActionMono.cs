@@ -1,14 +1,14 @@
-using AtoGame.Base.UI;
+#if ATOGAME_ENABLE
+using AtoGame.Base;
+#endif
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-
-namespace AtoGame.Base
+namespace AtoGame.OtherModules.DOTA
 {
-    public class StopAtoDotweenActionMono : ActionMono
+#if ATOGAME_ENABLE
+    public class StopDOTAActionMono : ActionMono
     {
-        [SerializeField] private DOTweenAnimation anim;
+        [SerializeField] private DoTweenAnimation anim;
         [SerializeField] private bool completed = false;
 
         private Action onCompleted;
@@ -29,4 +29,14 @@ namespace AtoGame.Base
             }
         }
     }
+#else
+    public class StopDOTAActionMono : MonoBehaviour
+    {
+        [SerializeField] private DoTweenAnimation anim;
+        [SerializeField] private bool completed = false;
+
+
+    }
+
+#endif
 }

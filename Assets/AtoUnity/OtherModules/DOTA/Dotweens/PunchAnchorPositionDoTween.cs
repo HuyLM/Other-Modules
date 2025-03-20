@@ -9,13 +9,13 @@ namespace AtoGame.OtherModules.DOTA
     public class PunchAnchorPositionDoTween : BaseDoTween {
         private Vector2 preValue;
 
-        public override void CreateTween(DoTweenAnimation dota, Action onCompleted)
+        public override void CreateTween(TweenAnimation dota, Action onCompleted)
         {
             Vector2 endValue = dota.Vector2To;
             Tween = dota.RectTransformTarget.DOPunchAnchorPos(endValue, dota.BaseOptions.Duration, dota.IntValue_1, dota.FloatValue_1);
             base.CreateTween(dota, onCompleted);
         }
-        public override void ResetState(DoTweenAnimation dota)
+        public override void ResetState(TweenAnimation dota)
         {
             base.ResetState(dota);
             if (dota.FromCurrent == false)
@@ -24,13 +24,13 @@ namespace AtoGame.OtherModules.DOTA
             }
         }
 
-        public override void Save(DoTweenAnimation dota)
+        public override void Save(TweenAnimation dota)
         {
             base.Save(dota);
             preValue = dota.RectTransformTarget.anchoredPosition;
         }
 
-        public override void Load(DoTweenAnimation dota)
+        public override void Load(TweenAnimation dota)
         {
             base.Load(dota);
             dota.RectTransformTarget.anchoredPosition = (preValue);

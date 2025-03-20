@@ -15,6 +15,17 @@ namespace AtoGame.Base
                 nextAction.ValidateObject();
             }
         }
+
+        public virtual void Initialize()
+        {
+
+        }
+
+        public void Execute()
+        {
+            Execute(null);
+        }
+
         public abstract void Execute(Action onCompleted = null);
 
         protected virtual void OnComplete(Action onComplete)

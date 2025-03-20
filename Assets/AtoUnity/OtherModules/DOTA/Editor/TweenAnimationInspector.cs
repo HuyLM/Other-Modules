@@ -5,8 +5,8 @@ using UnityEngine;
 
 namespace AtoGame.OtherModules.DOTA
 {
-    [CustomEditor(typeof(ParallelDoTweenAnimation)), CanEditMultipleObjects]
-    public class ParallelDoTweenAnimationInspector : DoTweenAnimationInspector {
+    [CustomEditor(typeof(TweenAnimation)), CanEditMultipleObjects]
+    public class TweenAnimationInspector : DoTweenAnimationInspector {
         public override void OnInspectorGUI()
         {
             base.OnInspectorGUI();

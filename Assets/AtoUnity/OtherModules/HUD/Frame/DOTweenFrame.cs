@@ -1,4 +1,5 @@
 using AtoGame.Base.UI;
+using AtoGame.OtherModules.DOTA;
 using NaughtyAttributes;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,13 +12,13 @@ namespace AtoGame.OtherModules.HUD
 
 
         [Foldout("Frame Animations")]
-        [SerializeField] protected DOTweenAnimation showAnimation;
+        [SerializeField] protected DoTweenAnimation showAnimation;
         [Foldout("Frame Animations")]
-        [SerializeField] protected DOTweenAnimation hideAnimation;
+        [SerializeField] protected DoTweenAnimation hideAnimation;
         [Foldout("Frame Animations")]
-        [SerializeField] protected DOTweenAnimation pauseAnimation;
+        [SerializeField] protected DoTweenAnimation pauseAnimation;
         [Foldout("Frame Animations")]
-        [SerializeField] protected DOTweenAnimation resumeAnimation;
+        [SerializeField] protected DoTweenAnimation resumeAnimation;
 
         protected override void OnInitialize(HUD hud)
         {

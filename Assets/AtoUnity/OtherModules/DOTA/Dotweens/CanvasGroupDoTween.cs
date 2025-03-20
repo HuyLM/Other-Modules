@@ -10,7 +10,7 @@ namespace AtoGame.OtherModules.DOTA
     {
         private float preAlpha;
 
-        public override void CreateTween(DoTweenAnimation dota, Action onCompleted)
+        public override void CreateTween(TweenAnimation dota, Action onCompleted)
         {
             float endValue = dota.FloatTo;
             if (dota.IsRelative)
@@ -27,7 +27,7 @@ namespace AtoGame.OtherModules.DOTA
             Tween = dota.CanvasGroupTarget.DOFade(endValue, dota.BaseOptions.Duration);
             base.CreateTween(dota, onCompleted);
         }
-        public override void ResetState(DoTweenAnimation dota)
+        public override void ResetState(TweenAnimation dota)
         {
             base.ResetState(dota);
             if (dota.FromCurrent == false)
@@ -36,13 +36,13 @@ namespace AtoGame.OtherModules.DOTA
             }
         }
 
-        public override void Save(DoTweenAnimation dota)
+        public override void Save(TweenAnimation dota)
         {
             base.Save(dota);
             preAlpha = dota.CanvasGroupTarget.alpha;
         }
 
-        public override void Load(DoTweenAnimation dota)
+        public override void Load(TweenAnimation dota)
         {
             base.Load(dota);
             dota.CanvasGroupTarget.alpha = preAlpha;

@@ -1,31 +1,26 @@
-using AtoGame.Base.UI;
+#if ATOGAME_ENABLE
+using AtoGame.Base;
+#endif
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-
-namespace AtoGame.Base
+namespace AtoGame.OtherModules.DOTA
 {
-    public class PlayAtoDotweenActionMono : ActionMono
+#if ATOGAME_ENABLE
+    public class PlayDOTAActionMono : ActionMono
     {
-        [SerializeField] private DOTweenAnimation anim;
+        [SerializeField] private DoTweenAnimation anim;
         [SerializeField] private bool restart = true;
         [SerializeField] private bool immediateComplete = false;
-        [SerializeField, NaughtyAttributes.ShowIf("immediateComplete")] private ActionMono endAction;
 
         private Action onCompleted;
 
         public override void Execute(Action onCompleted = null)
         {
             this.onCompleted = onCompleted;
-            anim?.Play(()=>{
+            anim?.Play(() => {
                 if(immediateComplete == false)
                 {
                     OnComplete(this.onCompleted);
-                }
-                else
-                {
-                    endAction?.Execute();
                 }
             }, restart);
             if(immediateComplete == true)
@@ -43,4 +38,12 @@ namespace AtoGame.Base
             }
         }
     }
+#else
+    public class PlayDOTAActionMono : MonoBehaviour
+    {
+        [SerializeField] private DoTweenAnimation anim;
+        [SerializeField] private bool restart = true;
+        [SerializeField] private bool immediateComplete = false;
+    }
+#endif
 }

@@ -10,13 +10,13 @@ namespace AtoGame.OtherModules.DOTA
 
         private Vector3 preValue;
 
-        public override void CreateTween(DoTweenAnimation dota, Action onCompleted)
+        public override void CreateTween(TweenAnimation dota, Action onCompleted)
         {
             Vector3 endValue = dota.Vector3To;
             Tween = dota.TransformTarget.DOShakePosition(dota.BaseOptions.Duration, endValue, dota.IntValue_1, dota.FloatValue_1, false, dota.BoolValue_1, dota.ShakeRandomnessMode);
             base.CreateTween(dota, onCompleted);
         }
-        public override void ResetState(DoTweenAnimation dota)
+        public override void ResetState(TweenAnimation dota)
         {
             base.ResetState(dota);
             if (dota.FromCurrent == false)
@@ -25,13 +25,13 @@ namespace AtoGame.OtherModules.DOTA
             }
         }
 
-        public override void Save(DoTweenAnimation dota)
+        public override void Save(TweenAnimation dota)
         {
             base.Save(dota);
             preValue = dota.TransformTarget.localPosition;
         }
 
-        public override void Load(DoTweenAnimation dota)
+        public override void Load(TweenAnimation dota)
         {
             base.Load(dota);
             dota.TransformTarget.localPosition = (preValue);
