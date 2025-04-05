@@ -65,7 +65,7 @@ namespace AtoGame.OtherModules.Tutorial
         }
 
 
-        public void ShowTutorial(int key, Action onCompleted = null, Action onFailed = null)
+        public void ShowTutorial(int key, Action onShowed = null, Action onCompleted = null, Action onFailed = null)
         {
             if (!isInitialized)
             {
@@ -95,6 +95,7 @@ namespace AtoGame.OtherModules.Tutorial
             }
             if(curTutorialData.CanShowTutorial())
             {
+                onShowed?.Invoke();
                 this.onCompleted = onCompleted;
                 ShowingTutorial(curTutorialData);
             }

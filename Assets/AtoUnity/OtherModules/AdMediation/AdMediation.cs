@@ -45,10 +45,11 @@ namespace AtoGame.Mediation
         {
             CurrentHandler.ShowBanner(onCompleted, onFailed);
         }
-        public static void ShowBanner(BannerPosition position, bool isAdaptive, BannerSize size, int width, int height, Action<string, AdInfo> onCompleted = null, Action<string, AdInfo> onFailed = null)
+        public static void ReloadBanner()
         {
-            CurrentHandler.ShowBanner(position, isAdaptive, size, width, height, onCompleted, onFailed);
+            CurrentHandler.ReloadBanner();
         }
+
         public static void DestroyBanner()
         {
             CurrentHandler.DestroyBanner();
@@ -79,7 +80,7 @@ namespace AtoGame.Mediation
         public static Action<string, AdInfo> onInterstitialFailedEvent;
         public static Action<AdInfo> onInterstitiaClicked;
         // banner
-        public static Action<string, AdInfo> onBannerCompletedEvent;
+        public static Action<string, AdInfo> onBannerLoadedEvent;
         public static Action<string> onBannerFailedEvent;
         public static Action onBannerFullOpenedEvent;
         public static Action onBannerFullClosedEvent;
@@ -91,5 +92,116 @@ namespace AtoGame.Mediation
         public static Action<string, AdInfo> onAppOpenFailedEvent;
         public static Action<string, AdInfo> onAppOpenCompletedEvent;
         public static Action<AdInfo> onAppOpenClicked;
+
+        //
+
+        #region Extend Params
+        private static Dictionary<string, object> ExtendParams = new Dictionary<string, object>();
+
+        public static void AddExtendParams(string key, object value)
+        {
+            if(ExtendParams.ContainsKey(key))
+            {
+                ExtendParams[key] = value;
+            }
+            else
+            {
+                ExtendParams.Add(key, value);
+            }
+        }
+
+        public static int GetExtendParams(string key, int defaultValue)
+        {
+            if(ExtendParams.ContainsKey(key))
+            {
+                object value;
+                AdMediation.ExtendParams.TryGetValue(key, out value);
+                if(value == null)
+                {
+                    return defaultValue;
+                }
+                if(value is int i)
+                    return i;
+                if(int.TryParse(value.ToString(), out int result))
+                {
+                    return result;
+                }
+                return defaultValue;
+            }
+            else
+            {
+                return defaultValue;
+            }
+        }
+
+        public static float GetExtendParams(string key, float defaultValue)
+        {
+            if(ExtendParams.ContainsKey(key))
+            {
+                object value;
+                AdMediation.ExtendParams.TryGetValue(key, out value);
+                if(value == null)
+                {
+                    return defaultValue;
+                }
+                if(value is float i)
+                    return i;
+                if(float.TryParse(value.ToString(), out float result))
+                {
+                    return result;
+                }
+                return defaultValue;
+            }
+            else
+            {
+                return defaultValue;
+            }
+        }
+
+        public static bool GetExtendParams(string key, bool defaultValue)
+        {
+            if(ExtendParams.ContainsKey(key))
+            {
+                object value;
+                AdMediation.ExtendParams.TryGetValue(key, out value);
+                if(value == null)
+                {
+                    return defaultValue;
+                }
+                if(value is bool i)
+                    return i;
+                if(bool.TryParse(value.ToString(), out bool result))
+                {
+                    return result;
+                }
+                return defaultValue;
+            }
+            else
+            {
+                return defaultValue;
+            }
+        }
+
+        public static string GetExtendParams(string key, string defaultValue)
+        {
+            if(ExtendParams.ContainsKey(key))
+            {
+                object value;
+                AdMediation.ExtendParams.TryGetValue(key, out value);
+                if(value == null)
+                {
+                    return defaultValue;
+                }
+                if(value is string i)
+                    return i;
+               
+                return value.ToString();
+            }
+            else
+            {
+                return defaultValue;
+            }
+        }
+        #endregion Extend Params
     }
 }

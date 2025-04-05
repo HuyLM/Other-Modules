@@ -12,7 +12,7 @@ namespace AtoGame.Mediation
         private bool isAdaptive;
         private Color backgroundColor;
 
-
+        private bool isCreated;
         public override bool IsAvailable
         {
             get
@@ -28,6 +28,7 @@ namespace AtoGame.Mediation
             this.isAdaptive = isAdaptive;
             this.backgroundColor = backgroundColor;
             CallAddEvent();
+            isCreated = false;
         }
 
         protected override void CallAddEvent()
@@ -38,19 +39,26 @@ namespace AtoGame.Mediation
             MaxSdkCallbacks.Banner.OnAdExpandedEvent += OnBannerAdExpandedEvent;
             MaxSdkCallbacks.Banner.OnAdCollapsedEvent += OnBannerAdCollapsedEvent;
             MaxSdkCallbacks.Banner.OnAdRevenuePaidEvent += OnBannerAdRevenuePaidEvent;
-
         }
 
         protected override void CallRequest()
         {
-            Debug.Log("MaxBannerAd can't request");
+            if(isCreated == false)
+            {
+                int bannerCappingTime = AdMediation.GetExtendParams("banner_capping_time", -1);
+                if(bannerCappingTime > 0)
+                {
+                    MaxSdk.StopBannerAutoRefresh(adUnitId);
+                }
+                MaxSdk.CreateBanner(adUnitId, position);
+                MaxSdk.SetBannerExtraParameter(adUnitId, "adaptive_banner", isAdaptive ? "true" : "false");
+                MaxSdk.SetBannerBackgroundColor(adUnitId, backgroundColor);
+                isCreated = true;
+            }
         }
 
         protected override void CallShow()
         {
-            MaxSdk.CreateBanner(adUnitId, position);
-            MaxSdk.SetBannerExtraParameter(adUnitId, "adaptive_banner", isAdaptive ? "true" : "false");
-            MaxSdk.SetBannerBackgroundColor(adUnitId, backgroundColor);
             MaxSdk.ShowBanner(adUnitId);
         }
 
@@ -90,14 +98,19 @@ namespace AtoGame.Mediation
             DisplayerBanner();
         }
 
+        public override void Reload()
+        {
+            MaxSdk.StopBannerAutoRefresh(adUnitId);
+            MaxSdk.LoadBanner(adUnitId);
+        }
 
 
-#region Listners
+
+        #region Listners
 
         private void OnBannerAdLoadedEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)
         {
-            OnCompleted(true, adInfo.Placement, adInfo.Convert());
-            AdMediation.onBannerCompletedEvent?.Invoke(adInfo.Placement, adInfo.Convert());
+            AdMediation.onBannerLoadedEvent?.Invoke(adInfo.Placement, adInfo.Convert());
             Debug.Log($"[AdMediation-MaxBannerAd]: {adUnitId} got OnBannerAdLoadedEvent With AdInfo " + adInfo.ToString());
 
             Debug.Log("Waterfall Name: " + adInfo.WaterfallInfo.Name + " and Test Name: " + adInfo.WaterfallInfo.TestName);
@@ -134,6 +147,7 @@ namespace AtoGame.Mediation
         private void OnBannerAdClickedEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)
         {
             Debug.Log($"[AdMediation-MaxBannerAd]: {adUnitId} got OnBannerAdClickedEvent With AdInfo " + adInfo.ToString());
+            AdMediation.onBannerClicked?.Invoke(adInfo.Convert());
         }
 
         private void OnBannerAdRevenuePaidEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)

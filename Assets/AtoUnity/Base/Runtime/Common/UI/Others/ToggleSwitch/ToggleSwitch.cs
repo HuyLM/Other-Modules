@@ -8,8 +8,8 @@ namespace AtoGame.Base.UI
 {
     public class ToggleSwitch : MonoBehaviour
     {
-        [SerializeField] DOTweenAnimation daOn;
-        [SerializeField] DOTweenAnimation daOff;
+        [SerializeField] ActionMono onAction;
+        [SerializeField] ActionMono offAction;
         [SerializeField] Button btn;
 
         protected bool _curState;
@@ -17,8 +17,8 @@ namespace AtoGame.Base.UI
 
         protected void Awake()
         {
-            daOff?.Initialize();
-            daOn?.Initialize();
+            onAction?.Initialize();
+            offAction?.Initialize();
             btn.onClick.AddListener(OnButtonClicked);
         }
 
@@ -28,11 +28,11 @@ namespace AtoGame.Base.UI
 
             if(_curState == true)
             {
-                daOn?.PlayImmediate(null, true);
+                onAction?.Execute();
             }
             else
             {
-                daOff.PlayImmediate(null, true);
+                offAction.Execute();
             }
         }
 
@@ -46,11 +46,11 @@ namespace AtoGame.Base.UI
         {
             if(_curState == true)
             {
-                daOn?.Play();
+                onAction?.Execute();
             }
             else
             {
-                daOff.Play();
+                offAction.Execute();
             }
             OnChangeSwitch?.Invoke(_curState);
         }

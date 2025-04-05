@@ -1,4 +1,6 @@
 ﻿using AtoGame.Base;
+using AtoGame.Mediation;
+
 #if ADJUST_ENABLE
 using com.adjust.sdk;
 #endif
@@ -103,14 +105,7 @@ namespace AtoGame.Tracking.Adjust
             {
                 adjustConfig.setLogDelegate(msg => Debug.Log(msg));
             }
-#if USE_ADJUST
-            FalconAppsFlyerAndAdjust.PreStart();
-            adjustConfig.setAttributionChangedDelegate(FalconAppsFlyerAndAdjust.OnAttributionChanged);
-#endif
             com.adjust.sdk.Adjust.start(adjustConfig);
-#if USE_ADJUST
-            FalconAppsFlyerAndAdjust.PostStart();
-#endif
             TrackingLogger.Log($"<color=green>[AtoAdjustTracking] Call Initialize: SDK Version={com.adjust.sdk.Adjust.getSdkVersion()}</color>");
         }
 
@@ -166,15 +161,15 @@ namespace AtoGame.Tracking.Adjust
       string placement)
         {
             string type = AdjustConfig.AdjustAdRevenueSourceIronSource;
-            if(adPlatform == "admob")
+            if(adPlatform == ImpressionData.ADMOB_PLATFORM_NAME)
             {
                 type = AdjustConfig.AdjustAdRevenueSourceAdMob;
             }
-            else if(adPlatform == "ironSource")
+            else if(adPlatform == ImpressionData.IRONSOURCE_PLATFORM_NAME)
             {
                 type = AdjustConfig.AdjustAdRevenueSourceIronSource;
             }
-            else if(adPlatform == "applovin")
+            else if(adPlatform == ImpressionData.MAX_PLATFORM_NAME)
             {
                 type = AdjustConfig.AdjustAdRevenueSourceAppLovinMAX;
             }

@@ -15,8 +15,8 @@ namespace AtoGame.Mediation
         bool IsInterstitialAvailable();
         void ShowInterstitial(Action<string, AdInfo> onCompleted = null, Action<string, AdInfo> onFailed = null);
         void LoadInterstitial();
+        void ReloadBanner();
         void ShowBanner(Action<string, AdInfo> onCompleted = null, Action<string, AdInfo> onFailed = null);
-        void ShowBanner(BannerPosition position, bool isAdaptive, BannerSize size, int width, int height, Action<string, AdInfo> onCompleted = null, Action<string, AdInfo> onFailed = null);
         void DestroyBanner();
         void HideBanner();
         void DisplayBanner();
@@ -50,11 +50,10 @@ namespace AtoGame.Mediation
         public void LoadInterstitial()
         {
         }
-        public void ShowBanner(Action<string, AdInfo> onCompleted = null, Action<string, AdInfo> onFailed = null)
+        public void ReloadBanner()
         {
         }
-
-        public void ShowBanner(BannerPosition position, bool isAdaptive, BannerSize size, int width, int height, Action<string, AdInfo> onCompleted = null, Action<string, AdInfo> onFailed = null)
+        public void ShowBanner(Action<string, AdInfo> onCompleted = null, Action<string, AdInfo> onFailed = null)
         {
         }
 

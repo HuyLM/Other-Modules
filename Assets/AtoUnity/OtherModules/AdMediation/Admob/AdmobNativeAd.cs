@@ -1,4 +1,4 @@
-#if ATO_ADMOB_MEDIATION_ENABLE || ATO_ADMOB_ENABLE
+#if ATO_ADMOB_MEDIATION_ENABLE || (ATO_ADMOB_ENABLE && ATO_NATIVE_ADMOB_ENABLE)
 using AtoGame.Mediation;
 using GoogleMobileAds.Api;
 using System;

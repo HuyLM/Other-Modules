@@ -173,9 +173,13 @@ namespace AtoGame.Mediation
 
         private void OnAdFullScreenContentClosed()
         {
-            OnCompleted(true, string.Empty, new AdInfo());
-            Debug.Log($"[AdMediation-AdmobAppOpenAd]: {adUnitId} got OnAdFullScreenContentClosed");
-            AdMediation.onAppOpenCompletedEvent?.Invoke(string.Empty, new AdInfo());
+            AdsEventExecutor.ExecuteInUpdate(() =>
+            {
+                OnCompleted(true, string.Empty, new AdInfo());
+                Debug.Log($"[AdMediation-AdmobAppOpenAd]: {adUnitId} got OnAdFullScreenContentClosed");
+                AdMediation.onAppOpenCompletedEvent?.Invoke(string.Empty, new AdInfo());
+            });
+         
         }
 
         private void OnAdPaid(GoogleMobileAds.Api.AdValue obj)

@@ -92,7 +92,7 @@ namespace AtoGame.Mediation
         {
             curState = State.SHOWING;
             OnCompleted(true, placement, adInfo.Convert());
-            AdMediation.onBannerCompletedEvent?.Invoke(placement, adInfo.Convert());
+            AdMediation.onBannerLoadedEvent?.Invoke(placement, adInfo.Convert());
             Debug.Log("[AdMediation-ISBannerAd]: I got BannerOnAdLoadedEvent With AdInfo " + adInfo.ToString());
         }
 

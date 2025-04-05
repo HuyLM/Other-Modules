@@ -82,12 +82,17 @@ namespace AtoGame.Mediation
             DisplayerMREC();
         }
 
-#region Listners
+        public override void Reload()
+        {
+            MaxSdk.LoadMRec(adUnitId);
+        }
+
+        #region Listners
 
         private void OnMRecAdLoadedEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)
         {
             OnCompleted(true, adInfo.Placement, adInfo.Convert());
-            AdMediation.onBannerCompletedEvent?.Invoke(adInfo.Placement, adInfo.Convert());
+            AdMediation.onBannerLoadedEvent?.Invoke(adInfo.Placement, adInfo.Convert());
             Debug.Log($"[AdMediation-MaxMRECAd]: {adUnitId} got OnMRecAdLoadedEvent With AdInfo " + adInfo.ToString());
 
             Debug.Log("Waterfall Name: " + adInfo.WaterfallInfo.Name + " and Test Name: " + adInfo.WaterfallInfo.TestName);
@@ -123,8 +128,8 @@ namespace AtoGame.Mediation
 
         private void OnMRecAdClickedEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)
         {
-
             Debug.Log($"[AdMediation-MaxMRECAd]: {adUnitId} got OnMRecAdClickedEvent With AdInfo " + adInfo.ToString());
+            AdMediation.onBannerClicked?.Invoke(adInfo.Convert());
         }
 
         private void OnMRecAdRevenuePaidEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)

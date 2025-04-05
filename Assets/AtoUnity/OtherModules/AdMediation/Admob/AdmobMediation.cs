@@ -338,11 +338,6 @@ namespace AtoGame.Mediation
             bannerAd.Show(onCompleted, onFailed);
         }
 
-        public void ShowBanner(BannerPosition position, bool isAdaptive, BannerSize size, int width, int height, Action<string, AdInfo> onCompleted = null, Action<string, AdInfo> onFailed = null)
-        {
-            Debug.Log("Coming Soon!!!");
-        }
-
         public void DestroyBanner()
         {
             if (bannerAd != null)
@@ -354,14 +349,24 @@ namespace AtoGame.Mediation
 
         public void HideBanner()
         {
-            Debug.Log("Admob Mediation not support!!!");
+            if (bannerAd != null)
+            {
+                bannerAd.Hide();
+            }
         }
 
         public void DisplayBanner()
         {
-            Debug.Log("Admob Mediation not support!!!");
+             if (bannerAd != null)
+            {
+                bannerAd.Display();
+            }
         }
-    #endregion
+
+        public void ReloadBanner()
+        {
+        }
+        #endregion
     }
 #endif
 }

@@ -9,5 +9,6 @@ namespace AtoGame.Mediation
         public abstract void Destroy();
         public abstract void Hide();
         public abstract void Display();
+        public abstract void Reload();
     }
 }

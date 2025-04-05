@@ -166,6 +166,22 @@ namespace AtoGame.Mediation
             }
         }
 
+        public void Hide()
+        {
+            if(_bannerView != null)
+            {
+                _bannerView.Hide();
+            }
+        }
+
+        public void Display()
+        {
+            if(_bannerView != null)
+            {
+                _bannerView.Show();
+            }
+        }
+
         #region Listeners
 
         private void OnAdFullScreenContentOpened()
@@ -186,7 +202,7 @@ namespace AtoGame.Mediation
                 Debug.Log($"[AdMediation-AdmobBannerAd]: {adUnitId} got OnAdLoadedEvent");
                 OnAdLoadSuccess(new AdInfo());
                 OnCompleted(true, string.Empty, new AdInfo());
-                AdMediation.onBannerCompletedEvent?.Invoke(adUnitId, new AdInfo());
+                AdMediation.onBannerLoadedEvent?.Invoke(adUnitId, new AdInfo());
             });
         }
 

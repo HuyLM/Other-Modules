@@ -12,15 +12,15 @@ namespace AtoGame.Mediation
         [SerializeField] private bool showCreativeDebugger;
         [SerializeField] private string sdkKey;
         [Header("Android Keys")]
-        [SerializeField] private string androidInterstitialAdUnitId = "ENTER_ANDROID_INTERSTITIAL_AD_UNIT_ID_HERE";
-        [SerializeField] private string androidRewardedAdUnitId = "ENTER_ANDROID_REWARD_AD_UNIT_ID_HERE";
-        [SerializeField] private string androidBannerAdUnitId = "ENTER_ANDROID_BANNER_AD_UNIT_ID_HERE";
-        [SerializeField] private string androidMRecAdUnitId = "ENTER_ANDROID_MREC_AD_UNIT_ID_HERE";
+        [SerializeField] private string androidInterstitialAdUnitId = "";
+        [SerializeField] private string androidRewardedAdUnitId = "";
+        [SerializeField] private string androidBannerAdUnitId = "";
+        [SerializeField] private string androidMRecAdUnitId = "";
         [Header("Ios Keys")]
-        [SerializeField] private string iosInterstitialAdUnitId = "ENTER_IOS_INTERSTITIAL_AD_UNIT_ID_HERE";
-        [SerializeField] private string iosRewardedAdUnitId = "ENTER_IOS_REWARD_AD_UNIT_ID_HERE";
-        [SerializeField] private string iosBannerAdUnitId = "ENTER_IOS_BANNER_AD_UNIT_ID_HERE";
-        [SerializeField] private string iosMRecAdUnitId = "ENTER_IOS_MREC_AD_UNIT_ID_HERE";
+        [SerializeField] private string iosInterstitialAdUnitId = "";
+        [SerializeField] private string iosRewardedAdUnitId = "";
+        [SerializeField] private string iosBannerAdUnitId = "";
+        [SerializeField] private string iosMRecAdUnitId = "";
         [Space(20)]
         [Header("Default Banner")]
         [SerializeField] private bool useAdaptiveBanner = true;
@@ -38,7 +38,7 @@ namespace AtoGame.Mediation
 
         private MaxVideoRewardAd rewardAd;
         private MaxInterstitialAd interstitialAd;
-        private BaseMaxBannerAd bannerAd;
+        private MaxBannerAd bannerAd;
         private bool isInitialized;
         private Action onInitSuccess;
 
@@ -93,8 +93,18 @@ namespace AtoGame.Mediation
         {
             this.onInitSuccess = onCompletedInit;
             isInitialized = false;
-            rewardAd = new MaxVideoRewardAd(RewardedAdUnitId);
-            interstitialAd = new MaxInterstitialAd(InterstitialAdUnitId);
+            if(string.IsNullOrEmpty(RewardedAdUnitId) == false)
+            {
+                rewardAd = new MaxVideoRewardAd(RewardedAdUnitId);
+            }
+            if(string.IsNullOrEmpty(InterstitialAdUnitId) == false)
+            {
+                interstitialAd = new MaxInterstitialAd(InterstitialAdUnitId);
+            }
+            if(string.IsNullOrEmpty(BannerAdUnitId) == false)
+            {
+                bannerAd = new MaxBannerAd(BannerAdUnitId, MaxHelper.GetBannerPosition(defaultBannerPosition), useAdaptiveBanner, backgroundColor);
+            }
 
             MaxSdkCallbacks.Interstitial.OnAdRevenuePaidEvent += OnAdRevenuePaidEvent;
             MaxSdkCallbacks.Rewarded.OnAdRevenuePaidEvent += OnAdRevenuePaidEvent;
@@ -143,6 +153,7 @@ namespace AtoGame.Mediation
             MaxSdk.SetCreativeDebuggerEnabled(showCreativeDebugger);
             LoadInterstitial();
             LoadRewardVideo();
+            LoadBanner();
             onInitSuccess?.Invoke();
         }
 
@@ -204,51 +215,19 @@ namespace AtoGame.Mediation
 
         #region Banner
 
+        public void LoadBanner()
+        {
+            bannerAd?.Request();
+        }
+
+        public void ReloadBanner()
+        {
+            bannerAd?.Reload();
+        }
+
         public void ShowBanner(Action<string, AdInfo> onCompleted = null, Action<string, AdInfo> onFailed = null)
         {
             if(bannerAd != null)
-            {
-                bannerAd.Destroy();
-                bannerAd = null;
-            }
-
-            if(bannerSize == BannerSize.RECTANGLE)
-            {
-                bannerAd = new MaxMRECAd(MRecAdUnitId, MaxHelper.GetViewPosition(defaultBannerPosition));
-            }
-            else if(bannerSize == BannerSize.BANNER)
-            {
-                bannerAd = new MaxBannerAd(BannerAdUnitId, MaxHelper.GetBannerPosition(defaultBannerPosition), useAdaptiveBanner, backgroundColor);
-            }
-            
-            if(bannerAd != null)
-            {
-                bannerAd.Show(onCompleted, onFailed);
-            }
-            else
-            {
-                onFailed?.Invoke("bannerAd null", null);
-            }
-        }
-
-        public void ShowBanner(BannerPosition position, bool isAdaptive, BannerSize size, int width, int height, Action<string, AdInfo> onCompleted = null, Action<string, AdInfo> onFailed = null)
-        {
-            if (bannerAd != null)
-            {
-                bannerAd.Destroy();
-                bannerAd = null;
-            }
-
-            if (size == BannerSize.RECTANGLE)
-            {
-                bannerAd = new MaxMRECAd(MRecAdUnitId, MaxHelper.GetViewPosition(position));
-            }
-            else if (bannerSize == BannerSize.BANNER)
-            {
-                bannerAd = new MaxBannerAd(BannerAdUnitId, MaxHelper.GetBannerPosition(position), isAdaptive, backgroundColor);
-            }
-
-            if (bannerAd != null)
             {
                 bannerAd.Show(onCompleted, onFailed);
             }
@@ -285,7 +264,7 @@ namespace AtoGame.Mediation
 
         public void OnAdRevenuePaidEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)
         {
-            AdMediation.onAdRevenuePaidEvent?.Invoke(adInfo.ConvertToImpression());
+            //AdMediation.onAdRevenuePaidEvent?.Invoke(adInfo.ConvertToImpression());
         }
     }
 #endif
