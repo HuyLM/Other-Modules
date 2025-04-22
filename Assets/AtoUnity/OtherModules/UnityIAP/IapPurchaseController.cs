@@ -167,12 +167,13 @@ namespace AtoGame.AtoUnity.IAP
             {
                 if(isPurchasing == true)
                 {
-                    AtoGame.Base.EventDispatcher.Instance.Dispatch(new AtoGame.IAP.EventKey.OnBoughtIap()
+                   
+                    isPurchasing = false;
+                    if (onBuyCompleted != null) onBuyCompleted.Invoke(product.definition.id);
+					AtoGame.Base.EventDispatcher.Instance.Dispatch(new AtoGame.IAP.EventKey.OnBoughtIap()
                     {
                         Product = product
                     });
-                    isPurchasing = false;
-                    if (onBuyCompleted != null) onBuyCompleted.Invoke(product.definition.id);
                 }
                 else
                 {

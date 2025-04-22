@@ -1,8 +1,7 @@
-﻿using AtoGame.Base.UI;
+﻿using AtoGame.OtherModules.DOTA;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -30,8 +29,8 @@ namespace AtoGame.OtherModules.Tutorial.Demo
         [SerializeField] private RectTransform rtCharacterRight;
 
         [Header("Animation")]
-        [SerializeField] private DOTweenAnimation showBoxAnim;
-        [SerializeField] private DOTweenAnimation hideBoxAnim;
+        [SerializeField] private DoTweenAnimation showBoxAnim;
+        [SerializeField] private DoTweenAnimation hideBoxAnim;
 
 
         private Action onTapContinue;

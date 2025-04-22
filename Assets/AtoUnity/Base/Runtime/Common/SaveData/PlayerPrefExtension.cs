@@ -6,9 +6,12 @@ namespace AtoGame.Base
 {
     public class PlayerPrefExtension
     {
+        private static int lastFrame = -1;
+
         public static void SetBool(string key, bool value)
         {
             PlayerPrefs.SetInt(key, value ? 1 : 0);
+            Save();
         }
 
         public static bool GetBool(string key, bool defaultValue = false)
@@ -19,6 +22,7 @@ namespace AtoGame.Base
         public static void SetEnum(string key, Enum value)
         {
             PlayerPrefs.SetString(key, value.ToString());
+            Save();
         }
 
         public static T GetEnum<T>(string key, T defaultValue = default(T)) where T : struct
@@ -30,6 +34,7 @@ namespace AtoGame.Base
         public static void SetDateTime(string key, DateTime value)
         {
             PlayerPrefs.SetString(key, value.ToString("o", CultureInfo.InvariantCulture));
+            Save();
         }
 
 
@@ -45,6 +50,7 @@ namespace AtoGame.Base
         public static void SetTimeSpan(string key, TimeSpan value)
         {
             PlayerPrefs.SetString(key, value.ToString());
+            Save();
         }
 
 
@@ -73,6 +79,7 @@ namespace AtoGame.Base
         public static void SetUInt(string key, uint value)
         {
             PlayerPrefs.SetString(key, value.ToString());
+            Save();
         }
 
         public static ulong ToULong(object value)
@@ -93,6 +100,7 @@ namespace AtoGame.Base
         public static void SetULong(string key, ulong value)
         {
             PlayerPrefs.SetString(key, value.ToString());
+            Save();
         }
 
         public static float GetFloat(string key, float defaultValue = 0)
@@ -103,6 +111,7 @@ namespace AtoGame.Base
         public static void SetFloat(string key, float value)
         {
             PlayerPrefs.SetFloat(key, value);
+            Save();
         }
 
         public static int GetInt(string key, int defaultValue = 0)
@@ -113,6 +122,7 @@ namespace AtoGame.Base
         public static void SetInt(string key, int value)
         {
             PlayerPrefs.SetInt(key, value);
+            Save();
         }
 
         public static string GetString(string key, string defaultValue = "")
@@ -123,6 +133,16 @@ namespace AtoGame.Base
         public static void SetString(string key, string value)
         {
             PlayerPrefs.SetString(key, value);
+            Save();
+        }
+
+        public static void Save()
+        {
+            if(lastFrame != Time.frameCount)
+            {
+                PlayerPrefs.Save();
+                lastFrame = Time.frameCount;
+            }
         }
     }
 }

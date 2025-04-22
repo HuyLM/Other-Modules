@@ -13,6 +13,8 @@ namespace AtoGame.Mediation
         private Color backgroundColor;
 
         private bool isCreated;
+        private bool isHiding;
+
         public override bool IsAvailable
         {
             get
@@ -23,6 +25,7 @@ namespace AtoGame.Mediation
 
         public MaxBannerAd(string adUnitId, MaxSdkBase.BannerPosition position, bool isAdaptive, Color backgroundColor)
         {
+            isHiding = true;
             this.adUnitId = adUnitId;
             this.position = position;
             this.isAdaptive = isAdaptive;
@@ -59,6 +62,7 @@ namespace AtoGame.Mediation
 
         protected override void CallShow()
         {
+            isHiding = false;
             MaxSdk.ShowBanner(adUnitId);
         }
 
@@ -75,16 +79,19 @@ namespace AtoGame.Mediation
 
         public void HideBanner()
         {
+            isHiding = true;
             MaxSdk.HideBanner(adUnitId);
         }
 
         public void DisplayerBanner()
         {
+            isHiding = false;
             MaxSdk.ShowBanner(adUnitId);
         }
 
         public override void Destroy()
         {
+            isHiding = true;
             DestroyBanner();
         }
 
@@ -124,6 +131,15 @@ namespace AtoGame.Mediation
                                    "\n...credentials: " + networkResponse.Credentials;
             }
             Debug.Log(waterfallInfoStr);
+
+            if(isHiding)
+            {
+                MaxSdk.HideBanner(adUnitId);
+            }
+            else
+            {
+                MaxSdk.ShowBanner(adUnitId);
+            }
         }
 
         private void OnBannerAdLoadFailedEvent(string adUnitId, MaxSdkBase.ErrorInfo errorInfo) 
