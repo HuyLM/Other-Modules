@@ -28,18 +28,23 @@ namespace AtoGame.OtherModules.DOTA
         public override void OnInspectorGUI()
         {
             GUILayout.BeginHorizontal();
-            EditorGUI.BeginDisabledGroup(isPlaying);
-            if (GUILayout.Button("Play", GUILayout.Height(50)))
+            if(isPlaying)
             {
-                Play();
+                Color oldColor = GUI.backgroundColor;
+                GUI.backgroundColor = Color.red;
+                if(GUILayout.Button("Stop", GUILayout.Height(50)))
+                {
+                    Stop();
+                }
+                GUI.backgroundColor = oldColor;
             }
-            EditorGUI.EndDisabledGroup();
-            EditorGUI.BeginDisabledGroup(!isPlaying);
-            if (GUILayout.Button("Stop", GUILayout.Height(50)))
+            else
             {
-                Stop();
+                if(GUILayout.Button("Play", GUILayout.Height(50)))
+                {
+                    Play();
+                }
             }
-            EditorGUI.EndDisabledGroup();
             GUILayout.EndHorizontal();
             base.OnInspectorGUI();
         }
